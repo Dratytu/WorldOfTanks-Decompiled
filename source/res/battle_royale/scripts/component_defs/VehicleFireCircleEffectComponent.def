@@ -1,9 +1,12 @@
 <VehicleFireCircleEffectComponent.def>
+  <!-- Defines the properties for a vehicle fire circle effect component. -->
   <Properties>
+    <!-- The finish time for the fire circle effect, in seconds. This value is sent to all clients. -->
     <finishTime>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </finishTime>
   </Properties>
+  <!-- The default key name for this component. -->
   <DefaultKeyName>	vehicleFireCircleEffectComponent	</DefaultKeyName>
 </VehicleFireCircleEffectComponent.def>

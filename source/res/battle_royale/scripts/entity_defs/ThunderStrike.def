@@ -1,18 +1,27 @@
 <ThunderStrike.def>
+  <!--- Defines the methods and properties for the ThunderStrike equipment --->
   <ClientMethods>
-    <hitThunderStrike></hitThunderStrike>
+    <hitThunderStrike>
+      <!--- This method is called when the ThunderStrike equipment is used to hit a target --->
+    </hitThunderStrike>
   </ClientMethods>
   <Properties>
     <equipmentID>
+      <!--- The unique identifier for the ThunderStrike equipment --->
       <Type>	UINT16	</Type>
+      <!--- This property is accessible to all clients --->
       <Flags>	ALL_CLIENTS	</Flags>
     </equipmentID>
     <attackerID>
+      <!--- The object identifier of the player or entity using the ThunderStrike equipment --->
       <Type>	OBJECT_ID	</Type>
+      <!--- This property is accessible to all clients --->
       <Flags>	ALL_CLIENTS	</Flags>
     </attackerID>
     <delayEndTime>
+      <!--- The time at which the delay for the ThunderStrike effect ends --->
       <Type>	FLOAT	</Type>
+      <!--- This property is accessible to all clients --->
       <Flags>	ALL_CLIENTS	</Flags>
     </delayEndTime>
   </Properties>

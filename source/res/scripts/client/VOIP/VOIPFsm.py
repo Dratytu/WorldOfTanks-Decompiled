@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPFsm.py
+
 import logging
 import Event
-_logger = logging.getLogger(__name__)
-_logger.setLevel(logging.DEBUG)
 
+# Define a class for VOIP finite state machine states
 class VOIP_FSM_STATE(object):
     NONE = 0
     INITIALIZING = 1
@@ -16,31 +16,38 @@ class VOIP_FSM_STATE(object):
     JOINED_CHANNEL = 7
     LEAVING_CHANNEL = 8
 
-
 _STATE = VOIP_FSM_STATE
-_STATE_NAMES = dict([ (v, k) for k, v in VOIP_FSM_STATE.__dict__.iteritems() if not k.startswith('_') ])
+_STATE_NAMES = dict([(v, k) for k, v in VOIP_FSM_STATE.__dict__.iteritems() if not k.startswith('_')])
 
+# Define the VOIP finite state machine class
 class VOIPFsm(object):
 
     def __init__(self):
+        # Initialize the state variable to NONE
         self.__state = _STATE.NONE
+        # Create an event for state change
         self.onStateChanged = Event.Event()
 
     def getState(self):
+        # Return the current state
         return self.__state
 
     def __setState(self, newState):
         if newState == self.__state:
             return
+        # Log the state change
         _logger.debug('%s -> %s', _STATE_NAMES[self.__state], _STATE_NAMES[newState])
         oldState = self.__state
         self.__state = newState
+        # Trigger the state change event
         self.onStateChanged(oldState, newState)
 
     def inNoneState(self):
+        # Check if the state is NONE
         return self.__state == _STATE.NONE
 
     def reset(self):
+        # Reset the state to NONE
         self.__state = _STATE.NONE
 
     def update(self, voip):

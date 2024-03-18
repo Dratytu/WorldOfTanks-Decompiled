@@ -1,7 +1,15 @@
+<!- Defines a new component called ArenaAchievementsComponent.def. This component is associated with the Arena entity. ->
 <ArenaAchievementsComponent.def>
+
+  <!- This tag is used to define any cell methods associated with this component. In this case, it is empty. ->
   <CellMethods></CellMethods>
+
+  <!- This tag specifies the entity that this component is a part of. In this case, it is the Arena entity. ->
   <ofEntity>
     <Arena></Arena>
   </ofEntity>
+
+  <!- This tag defines the default key name for this component. In this case, it is "achievementsComponent". ->
   <DefaultKeyName>	achievementsComponent	</DefaultKeyName>
 </ArenaAchievementsComponent.def>
+

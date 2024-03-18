@@ -1,1 +1,16 @@
-!*.exe
+!*.data
+variable1 db 10, 0  ; variable1 is a byte with an initial value of 10
+variable2 dw 20, 0  ; variable2 is a word with an initial value of 20
+variable3 dd 30, 0  ; variable3 is a double word with an initial value of 30
+
+
+!*.code
+main proc
+    mov ax, @data   ; Load the address of the data segment into the AX register
+    mov ds, ax      ; Copy the contents of AX into the DS register
+
+    ; More code goes here
+
+    mov ax, 4C00h   ; Prepare to terminate the program
+    int 21h         ; Call the DOS interrupt to terminate the program
+main endp

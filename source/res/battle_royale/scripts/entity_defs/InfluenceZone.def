@@ -1,25 +1,23 @@
-<InfluenceZone.def>
-  <Properties>
-    <equipmentID>
-      <Type>	UINT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </equipmentID>
-    <team>
-      <Type>	UINT8	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </team>
-    <zonesPosition>
-      <Type>	ARRAY	  <of>	VECTOR3	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </zonesPosition>
-    <dotCreatorId>
-      <Type>	UINT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </dotCreatorId>
-    <dropOffset>
-      <Type>	FLOAT	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </dropOffset>
-  </Properties>
-</InfluenceZone.def>
+// The InfluenceZone.def file defines the properties of an influence zone in the game.
+// An influence zone is a 3D area in the game world that affects gameplay in some way,
+// such as by applying a buff or debuff to characters who enter the zone.
+
+// equipmentID: This field specifies the unique ID of the equipment associated with this influence zone.
+// All clients will receive updates for this field.
+UINT32 equipmentID;
+
+// team: This field specifies the team associated with this influence zone.
+// All clients will receive updates for this field.
+UINT8 team;
+
+// zonesPosition: This field is an array of 3D vector positions that define the shape and location of the influence zone.
+// All clients will receive updates for this field.
+ARRAY <VECTOR3> zonesPosition;
+
+// dotCreatorId: This field specifies the unique ID of the character or object that created the dot (i.e., the visual effect) for this influence zone.
+// All clients will receive updates for this field.
+UINT32 dotCreatorId;
+
+// dropOffset: This field specifies the vertical offset at which to drop the dot for this influence zone.
+// All clients will receive updates for this field.
+FLOAT dropOffset;

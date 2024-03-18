@@ -1,11 +1,11 @@
 <InBattleAchievementsComponent.def>
   <CellMethods>
-    <setupArena>
-      <Arg>	PYTHON	</Arg>
+    <setupArena>   <!-- This is the setupArena cell method for the InBattleAchievementsComponent component. -->
+      <Arg>	PYTHON	</Arg>  <!-- The argument for this cell method is a Python script. -->
     </setupArena>
   </CellMethods>
-  <BaseMethods></BaseMethods>
+  <BaseMethods></BaseMethods>  <!-- There are no base methods defined for this component. -->
   <ofEntity>
-    <Arena></Arena>
+    <Arena></Arena>  <!-- This component is associated with the Arena entity. -->
   </ofEntity>
 </InBattleAchievementsComponent.def>

@@ -10,6 +10,9 @@ import math_utils
 
 # Enum for different switch types
 class SwitchTypes(Enum):
+    """
+    Enum for different switch types.
+    """
     FROM_MAX_DIST = 0
     FROM_MIN_DIST = 1
     FROM_TRANSITION_DIST_AS_MAX = 2
@@ -17,6 +20,9 @@ class SwitchTypes(Enum):
 
 # Enum for switch to places
 class SwitchToPlaces(Enum):
+    """
+    Enum for switch to places.
+    """
     TO_RELATIVE_POS = 0
     TO_TRANSITION_DIST = 1
     TO_NEAR_POS = 2
@@ -26,11 +32,25 @@ TRANSITION_DIST_HYSTERESIS = 0.01
 
 # Camera switcher class
 class CameraSwitcher(object):
+    """
+    Camera switcher class.
+    """
     __slots__ = ('__switchType', '__switchToName', '__switchToPos', '__lastDist', '__intervalToSwitch', '__lastScrollTime', '__hasTimeout', '__timeoutCallback', '__timeoutTime', '__transitionValue', '__switchToPlaceType')
 
     def __init__(self, switchType, switchToName, switchToPos, intervalToSwitch=_INTERVAL_TO_SWITCH, timeoutTime=_TIMEOUT_TIME):
         """
         Initialize the camera switcher object with switch type, switch to name, switch to position, interval to switch, and timeout time.
+
+        :param switchType: Switch type.
+        :type switchType: SwitchTypes
+        :param switchToName: Switch to name.
+        :type switchToName: str
+        :param switchToPos: Switch to position.
+        :type switchToPos: typing.Tuple[float, float, float]
+        :param intervalToSwitch: Interval to switch (optional).
+        :type intervalToSwitch: float
+        :param timeoutTime: Timeout time (optional).
+        :type timeoutTime: float
         """
         self.__switchType = switchType
         self.__switchToName = switchToName
@@ -56,12 +76,28 @@ class CameraSwitcher(object):
     def getSwitchParams(self):
         """
         Get the switch parameters.
+
+        :return: Switch parameters.
+        :rtype: typing.Tuple[str, typing.Tuple[float, float, float], SwitchToPlaces]
         """
         return (self.__switchToName, self.__switchToPos, self.__switchToPlaceType)
 
     def needToSwitch(self, zValue, dist, minValue, maxValue, transitionValue=None):
         """
         Check if the switcher needs to switch.
+
+        :param zValue: Z value.
+        :type zValue: float
+        :param dist: Distance.
+        :type dist: float
+        :param minValue: Minimum value.
+        :type minValue: float
+        :param maxValue: Maximum value.
+        :type maxValue: float
+        :param transitionValue: Transition value (optional).
+        :type transitionValue: float
+        :return: Switch result.
+        :rtype: bool
         """
         if transitionValue is not None:
             transMin, transMax = self.getDistLimitationForSwitch(minValue, maxValue, transitionValue)
@@ -82,6 +118,15 @@ class CameraSwitcher(object):
     def getDistLimitationForSwitch(self, minValue, maxValue, transitionValue):
         """
         Get the distance limitation for switch.
+
+        :param minValue: Minimum value.
+        :type minValue: float
+        :param maxValue: Maximum value.
+        :type maxValue: float
+        :param transitionValue: Transition value.
+        :type transitionValue: float
+        :return: Tuple of minimum and maximum distance limitations.
+        :rtype: typing.Tuple[float, float]
         """
         resultMin = minValue
         resultMax = maxValue
@@ -102,22 +147,4 @@ class CameraSwitcher(object):
 
     def __setTimeout(self):
         """
-        Set the timeout.
-        """
-        self.__hasTimeout = False
-        self.__timeoutCallback = None
-
-    def __switchFromDist(self, zValue, dist, value):
-        """
-        Switch from distance.
-        """
-        currentScrollInterval = None
-        if zValue != 0:
-            currentTime = time.time()
-            currentScrollInterval = currentTime - self.__lastScrollTime
-            self.__lastScrollTime = currentTime
-        if self.__lastDist == dist:
-            isEqual = math_utils.almostZero(value - dist)
-            if isEqual and self.__hasTimeout is None and self.__timeoutTime:
-                self.__hasTimeout = True
-              ````
+       

@@ -1,5 +1,9 @@
 <AccountAbcTesterComponent.def>
+  <!--- This component definition file is for the AccountAbcTesterComponent.
+        It references the Account entity as its main component.
+        The purpose of this component is to test and validate the Account entity. --->
   <ofEntity>
     <Account></Account>
   </ofEntity>
 </AccountAbcTesterComponent.def>
+

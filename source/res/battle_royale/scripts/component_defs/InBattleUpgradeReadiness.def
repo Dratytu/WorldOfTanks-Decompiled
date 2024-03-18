@@ -1,6 +1,18 @@
+' This is the definition for the InBattleUpgradeReadiness component.
+' The component is associated with a vehicle entity.
+' The DefaultKeyName is set to "inBattleUpgradeReadiness".
+
 <InBattleUpgradeReadiness.def>
-  <ofEntity>
-    <Vehicle></Vehicle>
-  </ofEntity>
-  <DefaultKeyName>	inBattleUpgradeReadiness	</DefaultKeyName>
-</InBattleUpgradeReadiness.def>
+  '<ofEntity>'
+    ' This tag specifies the entity that the component is associated with.'
+    '<Vehicle>'
+      ' This indicates that the component is associated with a vehicle entity.'
+    '</Vehicle>'
+  '</ofEntity>'
+  '<DefaultKeyName>'
+    ' This tag sets the default key name for the component.'
+    ' The key name is a unique identifier for the component.'
+    ' In this case, the key name is set to "inBattleUpgradeReadiness".'
+    '	</DefaultKeyName>'
+    '>inBattleUpgradeReadiness</DefaultKeyName>'
+'</InBattleUpgradeReadiness.def>'

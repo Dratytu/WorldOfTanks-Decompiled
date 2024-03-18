@@ -1,19 +1,19 @@
-<VehicleHealingComponent.def>
-  <Properties>
-    <finishTime>
-      <Type>	FLOAT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
+<VehicleHealingComponent.def> <!-- This is a definition file for the VehicleHealingComponent. -->
+  <Properties> <!-- Properties section allows defining various properties associated with the VehicleHealingComponent. -->
+    <finishTime> <!-- The 'finishTime' property. -->
+      <Type>	FLOAT32	</Type> <!-- Defines the type of the 'finishTime' property as FLOAT32. -->
+      <Flags>	ALL_CLIENTS	</Flags> <!-- Indicates that the 'finishTime' property is accessible to all clients. -->
     </finishTime>
-    <isSourceVehicle>
-      <Type>	BOOL	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    <isSourceVehicle> <!-- The 'isSourceVehicle' property. -->
+      <Type>	BOOL	</Type> <!-- Defines the type of the 'isSourceVehicle' property as BOOL. -->
+      <Flags>	ALL_CLIENTS	</Flags> <!-- Indicates that the 'isSourceVehicle' property is accessible to all clients. -->
+      <DetailLevel>	MY_VEHICLE	</DetailLevel> <!-- Defines the detail level of the 'isSourceVehicle' property as MY_VEHICLE. -->
     </isSourceVehicle>
-    <isInactivation>
-      <Type>	BOOL	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    <isInactivation> <!-- The 'isInactivation' property. -->
+      <Type>	BOOL	</Type> <!-- Defines the type of the 'isInactivation' property as BOOL. -->
+      <Flags>	ALL_CLIENTS	</Flags> <!-- Indicates that the 'isInactivation' property is accessible to all clients. -->
+      <DetailLevel>	MY_VEHICLE	</DetailLevel> <!-- Defines the detail level of the 'isInactivation' property as MY_VEHICLE. -->
     </isInactivation>
   </Properties>
-  <DefaultKeyName>	healingComponent	</DefaultKeyName>
+  <DefaultKeyName>	healingComponent	</DefaultKeyName> <!-- Defines the default key name for the VehicleHealingComponent as 'healingComponent'. -->
 </VehicleHealingComponent.def>

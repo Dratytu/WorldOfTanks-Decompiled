@@ -16,12 +16,12 @@ def who(player, string):
     :param player: The invoking player object
     :param string: Not used in this function
     """
-    playerList = 'Players near you:\n'
-    for i in BigWorld.entities.values():
-        if i.__class__.__name__ == 'Avatar':
-            playerList = playerList + i.playerName + '\n'
+    player_list = 'Players near you:\n'
+    for entity in BigWorld.entities.values():
+        if isinstance(entity, Avatar.Avatar):
+            player_list += entity.playerName + '\n'
 
-    FantasyDemo.addChatMsg(-1, playerList)
+    FantasyDemo.addChatMsg(-1, player_list)
 
 
 # help(player, string) - A console command that displays help information for other commands
@@ -34,10 +34,10 @@ def help(player, string):
     """
     if string:
         try:
-            func = globals()[string]
-            if callable(func) and func.__doc__:
-                for s in func.__doc__.split('\n'):
-                    FantasyDemo.addChatMsg(-1, s)
+            function = globals()[string]
+            if callable(function) and function.__doc__:
+                for line in function.__doc__.split('\n'):
+                    FantasyDemo.addChatMsg(-1, line)
 
             else:
                 raise 'Not callable'
@@ -45,15 +45,15 @@ def help(player, string):
             FantasyDemo.addChatMsg(-1, 'No help for ' + string)
 
     else:
-        isCallable = lambda x: callable(globals()[x])
-        ignoreList = ('getV4FromString', 'help')
-        notIgnored = lambda x: x not in ignoreList
-        keys = filter(isCallable, globals().keys())
-        keys = filter(notIgnored, keys)
+        is_callable = lambda x: callable(globals()[x])
+        ignore_list = ('getV4FromString', 'help')
+        not_ignored = lambda x: x not in ignore_list
+        keys = filter(is_callable, globals().keys())
+        keys = filter(not_ignored, keys)
         keys.sort()
-        FantasyDemo.addChatMsg(-1, '/help {command} for more info.')
+        FantasyDemo.addChatMsg(-1, '/help {command} for more info.'.format(command=keys[0]))
         stripper = lambda c: c not in '[]\'"'
-        string = filter(stripper, str(keys))
+        string = ' '.join(filter(stripper, str(keys)))
         FantasyDemo.addChatMsg(-1, string)
 
 
@@ -65,11 +65,11 @@ def target(player, string):
     :param player: The invoking player object
     :param string: The message to send to the targeted entity
     """
-    t = BigWorld.target()
-    if t:
+    target_entity = BigWorld.target()
+    if target_entity is not None:
         try:
-            t.cell.directedChat(player.id, string)
-            FantasyDemo.addChatMsg(player.id, '[To ' + t.playerName + '] ' + string)
+            target_entity.cell.directedChat(player.id, string)
+            FantasyDemo.addChatMsg(player.id, '[To {target}] {message}'.format(target=target_entity.playerName, message=string))
         except:
             pass
 
@@ -104,10 +104,10 @@ def follow(player, string):
     :param player: The invoking player object
     :param string: Not used in this function
     """
-    if BigWorld.target() != None:
-        player.physics.chase(BigWorld.target(), 2.0, 0.5)
+    target_entity = BigWorld.target()
+    if target_entity is not None:
+        player.physics.chase(target_entity, 2.0, 0.5)
         player.physics.velocity = (0, 0, 6.0)
-    return
 
 
 # summon(player, string) - A console command that summons an entity by name
@@ -150,9 +150,4 @@ def rain(player, string):
 
 
 # getV4FromString(string) - A helper function that converts a string into a Math.Vector4 object
-def getV4FromString(string):
-    """
-    A helper function that converts a string into a Math.Vector4 object.
-
-    :param string: The string representation of the vector
-
+def getV4

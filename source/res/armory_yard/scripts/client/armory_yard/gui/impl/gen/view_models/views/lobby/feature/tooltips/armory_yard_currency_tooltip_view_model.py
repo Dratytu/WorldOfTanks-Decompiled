@@ -1,47 +1,67 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
+# Python bytecode 3.8 (decompiled from Python 3.8)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/tooltips/armory_yard_currency_tooltip_view_model.py
 from frameworks.wulf import ViewModel
 
 class ArmoryYardCurrencyTooltipViewModel(ViewModel):
+    """View model for the Armory Yard currency tooltip."""
+
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
-        super(ArmoryYardCurrencyTooltipViewModel, self).__init__(properties=properties, commands=commands)
+    def __init__(self, properties: int = 5, commands: int = 0):
+        """
+        Initialize the view model.
 
-    def getReceivedTokens(self):
-        return self._getNumber(0)
+        :param properties: The number of properties in the view model.
+        :param commands: The number of commands in the view model.
+        """
+        super().__init__(properties=properties, commands=commands)
 
-    def setReceivedTokens(self, value):
-        self._setNumber(0, value)
+    def get_received_tokens(self) -> int:
+        """
+        Get the number of received tokens.
 
-    def getTotalTokens(self):
-        return self._getNumber(1)
+        :return: The number of received tokens.
+        """
+        return self._get_number(0)
 
-    def setTotalTokens(self, value):
-        self._setNumber(1, value)
+    def set_received_tokens(self, value: int) -> None:
+        """
+        Set the number of received tokens.
 
-    def getQuestsForToken(self):
-        return self._getNumber(2)
+        :param value: The number of received tokens.
+        """
+        self._set_number(0, value)
 
-    def setQuestsForToken(self, value):
-        self._setNumber(2, value)
+    def get_total_tokens(self) -> int:
+        """
+        Get the total number of tokens.
 
-    def getStartTimestamp(self):
-        return self._getNumber(3)
+        :return: The total number of tokens.
+        """
+        return self._get_number(1)
 
-    def setStartTimestamp(self, value):
-        self._setNumber(3, value)
+    def set_total_tokens(self, value: int) -> None:
+        """
+        Set the total number of tokens.
 
-    def getEndTimestamp(self):
-        return self._getNumber(4)
+        :param value: The total number of tokens.
+        """
+        self._set_number(1, value)
 
-    def setEndTimestamp(self, value):
-        self._setNumber(4, value)
+    def get_quests_for_token(self) -> int:
+        """
+        Get the number of quests for a token.
 
-    def _initialize(self):
-        super(ArmoryYardCurrencyTooltipViewModel, self)._initialize()
-        self._addNumberProperty('receivedTokens', 0)
-        self._addNumberProperty('totalTokens', 0)
-        self._addNumberProperty('questsForToken', 0)
-        self._addNumberProperty('startTimestamp', 0)
-        self._addNumberProperty('endTimestamp', 0)
+        :return: The number of quests for a token.
+        """
+        return self._get_number(2)
+
+    def set_quests_for_token(self, value: int) -> None:
+        """
+        Set the number of quests for a token.
+
+        :param value: The number of quests for a token.
+        """
+        self._set_number(2, value)
+
+    def get_start_

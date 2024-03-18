@@ -1,13 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/CONSUMABLES_PANEL_SETTINGS.py
 
+class CONSUMABLES_PANEL_SETTINGS:
+    """
+    A class representing various settings IDs for the consumables panel.
+    """
 
-class CONSUMABLES_PANEL_SETTINGS(object):
-    DEFAULT_SETTINGS_ID = 0
-    BIG_SETTINGS_ID = 1
-    BATTLE_ROYALE_SETTINGS_ID = 2
-    MAPS_TRAINING_SETTINGS_ID = 3
-    EPIC_BATTLE_SETTINGS_ID = 4
+    DEFAULT_SETTINGS_ID = 0  # ID for the default settings of the consumables panel
+    BIG_SETTINGS_ID = 1  # ID for the big settings of the consumables panel
+    BATTLE_ROYALE_SETTINGS_ID = 2  # ID for the Battle Royale settings of the consumables panel
+    MAPS_TRAINING_SETTINGS_ID = 3  # ID for the Maps Training settings of the consumables panel
+    EPIC_BATTLE_SETTINGS_ID = 4  # ID for the Epic Battle settings of the consumables panel
+
+    # Glow ID constants for various consumable icons
     GLOW_ID_GREEN = 0
     GLOW_ID_ORANGE = 1
     GLOW_ID_GREEN_SPECIAL = 2

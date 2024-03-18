@@ -1,75 +1,160 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
-import math
-import BigWorld
-import Math
-import Event
-import math_utils
 
+# The ImpulseReason class defines various reasons for applying impulses to the camera
 class ImpulseReason(object):
+    # Represents a shot by the local player
     MY_SHOT = 0
+    # Represents a hit on the local player
     ME_HIT = 1
+    # Represents a shot by another player
     OTHER_SHOT = 2
+    # Represents a splash event
     SPLASH = 3
+    # Represents a collision event
     COLLISION = 4
+    # Represents a vehicle explosion event
     VEHICLE_EXPLOSION = 5
+    # Represents a projectile hit event
     PROJECTILE_HIT = 6
+    # Represents a high-explosive (HE) explosion event
     HE_EXPLOSION = 7
 
 
+# The ICamera interface defines the basic methods that a camera implementation should have
 class ICamera(object):
 
     def create(self, **args):
+        """
+        Creates the camera instance.
+
+        :param args: Additional keyword arguments for creating the camera.
+        """
         pass
 
     def destroy(self):
+        """
+        Destroys the camera instance.
+        """
         pass
 
     def enable(self, **args):
+        """
+        Enables the camera.
+
+        :param args: Additional keyword arguments for enabling the camera.
+        """
         pass
 
     def disable(self):
+        """
+        Disables the camera.
+        """
         pass
 
     def getConfigValue(self, name):
+        """
+        Retrieves a configuration value from the camera.
+
+        :param name: The name of the configuration value.
+        :return: The configuration value.
+        """
         pass
 
     def getUserConfigValue(self, name):
+        """
+        Retrieves a user-defined configuration value from the camera.
+
+        :param name: The name of the user-defined configuration value.
+        :return: The user-defined configuration value.
+        """
         pass
 
     def setUserConfigValue(self, name, value):
+        """
+        Sets a user-defined configuration value in the camera.
+
+        :param name: The name of the user-defined configuration value.
+        :param value: The new value for the user-defined configuration value.
+        """
         pass
 
     def update(self, dx, dy, dz, updatedByKeyboard):
+        """
+        Updates the camera position and orientation.
+
+        :param dx: Change in the X axis.
+        :param dy: Change in the Y axis.
+        :param dz: Change in the Z axis.
+        :param updatedByKeyboard: Indicates whether the update was triggered by keyboard input.
+        """
         pass
 
     def autoUpdate(self):
+        """
+        Updates the camera automatically.
+        """
         pass
 
     def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
+        """
+        Applies an impulse to the camera.
+
+        :param position: The position of the impulse.
+        :param impulse: The magnitude of the impulse.
+        :param reason: The reason for the impulse (optional).
+        """
         pass
 
     def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
+        """
+        Applies a distant impulse to the camera.
+
+        :param position: The position of the distant impulse.
+        :param impulseValue: The magnitude of the distant impulse.
+        :param reason: The reason for the distant impulse (optional).
+        """
         pass
 
     def getReasonsAffectCameraDirectly(self):
+        """
+        Retrieves the reasons that directly affect the camera.
+
+        :return: A list of reasons.
+        """
         pass
 
 
+# The FreeCamera class is a concrete implementation of the ICamera interface
 class FreeCamera(object):
+    # The camera property returns the internal camera instance
     camera = property(lambda self: self.__cam)
 
     def __init__(self):
+        """
+        Initializes the FreeCamera instance.
+        """
         self.__cam = BigWorld.FreeCamera()
 
     def create(self):
+        """
+        Creates the camera instance.
+        """
         pass
 
     def destroy(self):
+        """
+        Destroys the camera instance.
+        """
         self.__cam = None
         return
 
     def enable(self, camMat=None):
+        """
+        Enables the camera.
+
+        :param camMat: The camera matrix (optional).
+        """
         if camMat is not None:
             self.__cam.set(camMat)
         BigWorld.camera(self.__cam)
@@ -77,257 +162,44 @@ class FreeCamera(object):
         return
 
     def disable(self):
+        """
+        Disables the camera.
+        """
         BigWorld.enableFreeCameraModeForShadowManager(False)
 
     def setWorldMatrix(self, matrix):
+        """
+        Sets the world matrix for the camera.
+
+        :param matrix: The new world matrix.
+        """
         matrix = Math.Matrix(matrix)
         matrix.invert()
         self.__cam.set(matrix)
 
     def getWorldMatrix(self):
+        """
+        Retrieves the world matrix for the camera.
+
+        :return: The world matrix.
+        """
         return Math.Matrix(self.__cam.invViewMatrix)
 
     def handleKey(self, event):
+        """
+        Handles a keyboard event for the camera.
+
+        :param event: The keyboard event.
+        :return: The result of handling the event.
+        """
         return self.__cam.handleKeyEvent(event)
 
     def handleMouse(self, dx, dy, dz):
-        return self.__cam.handleMouseEvent(BigWorld.MouseEvent(dx, dy, dz, (0, 0)))
+        """
+        Handles a mouse event for the camera.
 
-    def resetMovement(self):
-        self.__cam.resetKeys()
-
-    def set(self, matrix):
-        self.__cam.set(matrix)
-
-    def isEnabled(self):
-        return BigWorld.camera() is self.__cam
-
-
-def readBool(dataSec, name, defaultVal):
-    return defaultVal if dataSec is None else dataSec.readBool(name, defaultVal)
-
-
-def readInt(dataSec, name, minVal, maxVal, defaultVal):
-    if dataSec is None:
-        return defaultVal
-    else:
-        value = dataSec.readInt(name, defaultVal)
-        value = math_utils.clamp(minVal, maxVal, value)
-        return value
-
-
-def readFloat(dataSec, name, minVal, maxVal, defaultVal):
-    if dataSec is None:
-        return defaultVal
-    else:
-        value = dataSec.readFloat(name, defaultVal)
-        value = math_utils.clamp(minVal, maxVal, value)
-        return value
-
-
-def readVec2(dataSec, name, minVal, maxVal, defaultVal):
-    if dataSec is None:
-        return Math.Vector2(defaultVal)
-    else:
-        value = dataSec.readVector2(name, Math.Vector2(defaultVal))
-        for i in xrange(2):
-            value[i] = math_utils.clamp(minVal[i], maxVal[i], value[i])
-
-        return value
-
-
-def readVec3(dataSec, name, minVal, maxVal, defaultVal):
-    if dataSec is None:
-        return Math.Vector3(defaultVal)
-    else:
-        value = dataSec.readVector3(name, Math.Vector3(defaultVal))
-        for i in xrange(3):
-            value[i] = math_utils.clamp(minVal[i], maxVal[i], value[i])
-
-        return value
-
-
-def readString(dataSec, name, defaultVal):
-    return defaultVal if dataSec is None else dataSec.readString(name, defaultVal)
-
-
-def getScreenAspectRatio():
-    return BigWorld.getAspectRatio()
-
-
-def getProjectionMatrix():
-    proj = BigWorld.projection()
-    aspect = getScreenAspectRatio()
-    result = Math.Matrix()
-    result.perspectiveProjection(proj.fov, aspect, proj.nearPlane, proj.farPlane)
-    return result
-
-
-def getViewProjectionMatrix():
-    result = Math.Matrix(BigWorld.camera().matrix)
-    result.postMultiply(getProjectionMatrix())
-    return result
-
-
-def isPointOnScreen(point):
-    if point.lengthSquared == 0.0:
-        return False
-    posInClip = Math.Vector4(point.x, point.y, point.z, 1)
-    posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
-    return posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and (True if -1 <= posInClip.y / posInClip.w <= 1 else False)
-
-
-def projectPoint(point):
-    posInClip = Math.Vector4(point.x, point.y, point.z, 1)
-    posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
-    if posInClip.w != 0:
-        posInClip = posInClip.scale(1 / posInClip.w)
-    return posInClip
-
-
-def getWorldRayAndPoint(x, y):
-    fov = BigWorld.projection().fov
-    near = BigWorld.projection().nearPlane
-    aspect = getScreenAspectRatio()
-    yLength = near * math.tan(fov * 0.5)
-    xLength = yLength * aspect
-    point = Math.Vector3(xLength * x, yLength * y, near)
-    inv = Math.Matrix(BigWorld.camera().invViewMatrix)
-    ray = inv.applyVector(point)
-    wPoint = inv.applyPoint(point)
-    return (ray, wPoint)
-
-
-def getWorldRayAndPosition():
-    near = BigWorld.projection().nearPlane
-    point = Math.Vector3(0.0, 0.0, near)
-    inv = Math.Matrix(BigWorld.camera().invViewMatrix)
-    ray = inv.applyVector(point)
-    wPoint = inv.applyPoint(Math.Vector3(0.0, 0.0, 0.0))
-    return (ray, wPoint)
-
-
-def getAimMatrix(x, y, fov=None):
-    if fov is None:
-        fov = BigWorld.projection().fov
-    near = BigWorld.projection().nearPlane
-    aspect = getScreenAspectRatio()
-    yLength = near * math.tan(fov * 0.5)
-    xLength = yLength * aspect
-    result = math_utils.createRotationMatrix(Math.Vector3(math.atan2(xLength * x, near), math.atan2(yLength * y, near), 0))
-    return result
-
-
-def overrideCameraMatrix(position, direction):
-    overridenCameraMatrix = Math.Matrix()
-    overridenCameraMatrix.setTranslate(position)
-    rotationMatrix = Math.Matrix()
-    rotationMatrix.setRotateYPR(direction)
-    overridenCameraMatrix.preMultiply(rotationMatrix)
-    overridenCameraMatrix.invert()
-    freeCamera = FreeCamera()
-    freeCamera.enable(overridenCameraMatrix)
-
-
-def get2DAngleFromCamera(vector):
-    modifiedVector = Math.Vector3(vector.x, 0, vector.z)
-    direction = Math.Vector3(BigWorld.camera().direction)
-    direction.y = 0
-    if direction.length and modifiedVector.length:
-        direction.normalise()
-        modifiedVector.normalise()
-    else:
-        return math.pi
-    dot = max(min(direction.dot(modifiedVector), 1), -1)
-    return math.acos(dot)
-
-
-class FovExtended(object):
-    __instance = None
-    arWide = 16.0 / 9.0
-    arNormal = 95.0 / 60.0
-
-    @staticmethod
-    def calculateVerticalFov(horizontalFovValue):
-        return math.radians(horizontalFovValue / FovExtended.arWide) if BigWorld.getAspectRatio() > FovExtended.arWide else math.radians(horizontalFovValue / FovExtended.arNormal)
-
-    @staticmethod
-    def clampFov(fov):
-        return math_utils.clamp(0.017, 3.12, fov)
-
-    @staticmethod
-    def instance():
-        if FovExtended.__instance is None:
-            FovExtended.__instance = FovExtended()
-        return FovExtended.__instance
-
-    def __setEnabled(self, value):
-        self.__enabled = value
-        self.refreshFov()
-
-    enabled = property(lambda self: self.__enabled, __setEnabled)
-
-    def __setHorizontalFov(self, value):
-        self.__horizontalFov = value
-        self.__verticalFov = FovExtended.calculateVerticalFov(value)
-        self.setFovByMultiplier(self.__multiplier)
-        self.onSetFovSettingEvent()
-
-    horizontalFov = property(lambda self: self.__horizontalFov, __setHorizontalFov)
-
-    def __getActualDefaultVerticalFov(self):
-        return FovExtended.calculateVerticalFov(self.horizontalFov)
-
-    actualDefaultVerticalFov = property(__getActualDefaultVerticalFov)
-
-    def __init__(self):
-        self.__multiplier = 1.0
-        self.__enabled = True
-        BigWorld.addWatcher('Render/Fov(horizontal, deg)', lambda : self.__horizontalFov)
-        BigWorld.addWatcher('Render/Fov(vertical, deg)', lambda : math.degrees(self.__verticalFov))
-        self.onSetFovSettingEvent = Event.Event()
-        self.horizontalFov = 90
-        self.defaultVerticalFov = FovExtended.calculateVerticalFov(self.horizontalFov)
-        from gui import g_guiResetters
-        g_guiResetters.add(self.refreshFov)
-
-    def resetFov(self):
-        self.setFovByMultiplier(1.0)
-
-    def setFovByMultiplier(self, multiplier, rampTime=None):
-        self.__multiplier = multiplier
-        if not self.__enabled:
-            return
-        else:
-            verticalFov = self.actualDefaultVerticalFov
-            finalFov = FovExtended.clampFov(verticalFov * self.__multiplier)
-            if rampTime is None:
-                BigWorld.projection().fov = finalFov
-            else:
-                BigWorld.projection().rampFov(finalFov, rampTime)
-            return
-
-    def setFovByAbsoluteValue(self, horizontalFov, rampTime=None):
-        multiplier = horizontalFov / self.horizontalFov
-        self.setFovByMultiplier(multiplier, rampTime)
-
-    def refreshFov(self):
-        self.__verticalFov = self.actualDefaultVerticalFov
-        self.setFovByMultiplier(self.__multiplier)
-
-
-def _clampPoint2DInBox2D(bottomLeft, upperRight, point):
-    retPoint = Math.Vector2(0, 0)
-    retPoint[0] = max(bottomLeft[0], point[0])
-    retPoint[0] = min(retPoint[0], upperRight[0])
-    retPoint[1] = max(bottomLeft[1], point[1])
-    retPoint[1] = min(retPoint[1], upperRight[1])
-    return retPoint
-
-
-def _vec3fFromYawPitch(yaw, pitch):
-    cosPitch = math.cos(+pitch)
-    sinPitch = math.sin(-pitch)
-    cosYaw = math.cos(yaw)
-    sinYaw = math.sin(yaw)
-    return Math.Vector3(cosPitch * sinYaw, sinPitch, cosPitch * cosYaw)
+        :param dx: Change in the X axis.
+        :param dy: Change in the Y axis.
+        :param dz: Change in the Z axis.
+        """
+        return self.__cam.handleMouseEvent(BigWorld.MouseEvent(dx, dy, dz, (0, 

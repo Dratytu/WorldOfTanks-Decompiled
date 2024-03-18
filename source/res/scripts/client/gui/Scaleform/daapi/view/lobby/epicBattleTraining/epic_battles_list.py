@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattleTraining/epic_battles_list.py
+
+
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
@@ -16,7 +18,9 @@ from gui.prb_control.entities.epic_battle_training.ctx import JoinEpicBattleTrai
 from gui.impl import backport
 from gui.impl.gen import R
 
+
 class EpicBattlesList(TrainingsListBase):
+
 
     def _populate(self):
         super(EpicBattlesList, self)._populate()
@@ -25,7 +29,7 @@ class EpicBattlesList(TrainingsListBase):
             if not funcState.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING):
                 g_eventDispatcher.removeEpicTrainingFromCarousel()
                 return
-        self.addListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
+
 
     def _dispose(self):
         self.removeListener(events.TrainingSettingsEvent.UPDATE_EPIC_TRAINING_SETTINGS, self._createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -35,16 +39,11 @@ class EpicBattlesList(TrainingsListBase):
         super(EpicBattlesList, self)._dispose()
         return
 
+
     def _getViewData(self):
         return {'title': backport.text(R.strings.menu.epicTraining.title()),
          'descr': backport.text(R.strings.menu.training.description()),
          'battleTypeID': BATTLE_TYPES.EPIC_TRAINING}
 
-    @adisp_process
-    def joinTrainingRequest(self, prbID):
-        yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, waitingID='prebattle/join'))
 
-    def createTrainingRequest(self):
-        settings = EpicTrainingSettingsCtx()
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': True,
-         'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)
+    @adisp

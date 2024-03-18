@@ -1,7 +1,8 @@
-<VehicleComp7Component.def>
-  <Properties></Properties>
+<VehicleComp7Component.def> <!-- Defines a new component type with the name "VehicleComp7Component" -->
+  <Properties></Properties> <!-- Empty properties section -->
   <ofEntity>
-    <Vehicle></Vehicle>
+    <Vehicle></Vehicle> <!-- Indicates that this component can be attached to a "Vehicle" entity type -->
   </ofEntity>
-  <DefaultKeyName>	vehicleComp7	</DefaultKeyName>
-</VehicleComp7Component.def>
+  <DefaultKeyName>	vehicleComp7	</DefaultKeyName> <!-- Sets the default key name for this component -->
+</VehicleComp7Component.def> <!-- Closing tag for the component definition -->
+

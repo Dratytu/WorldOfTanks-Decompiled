@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_battles_season_complete_view.py
+
 import logging
 import SoundGroups
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonCompleteViewMeta import RankedBattlesSeasonCompleteViewMeta
@@ -15,25 +16,30 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.shared import IItemsCache
+
 _logger = logging.getLogger(__name__)
 
 class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
+    # Dependency injection for IRankedBattlesController and IItemsCache
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(RankedBattlesSeasonCompleteView, self).__init__(ctx)
         ctx = ctx or {}
-        self._quest = ctx.get('quest')
-        self._awards = ctx.get('awards')
+        self._quest = ctx.get('quest')  # The quest data
+        self._awards = ctx.get('awards')  # The awards data
 
     def closeView(self):
+        # Close the view and destroy it
         self.destroy()
 
     def onSoundTrigger(self, soundName):
+        # Play a 2D sound with the given name
         SoundGroups.g_instance.playSound2D(soundName)
 
     def showRating(self):
+        # Show the ranked battle rating page
         self.__rankedController.showRankedBattlePage(ctx={'selectedItemID': RANKEDBATTLES_CONSTS.RANKED_BATTLES_RATING_ID})
         self.destroy()
 
@@ -93,4 +99,5 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta):
         return
 
     def __updatePosition(self):
+        # Update the position text
         self.as_setPlaceS(self.__getPosition())

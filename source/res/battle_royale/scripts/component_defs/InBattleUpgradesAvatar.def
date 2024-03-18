@@ -1,14 +1,14 @@
 <InBattleUpgradesAvatar.def>
   <ClientMethods>
-    <vehicleUpgradeResponse>
-      <Arg>	ARRAY	  <of>	INT32	</of>
+    <vehicleUpgradeResponse> <!-- This is a client-side method that handles the response for vehicle upgrades for the avatar. -->
+      <Arg>	ARRAY	  <of>	INT32	</of> <!-- The first argument is an array of integer values representing some aspect of the vehicle upgrade response. -->
       </Arg>
-      <Arg>	ARRAY	  <of>	STRING	</of>
+      <Arg>	ARRAY	  <of>	STRING	</of> <!-- The second argument is an array of string values representing some other aspect of the vehicle upgrade response. -->
       </Arg>
     </vehicleUpgradeResponse>
   </ClientMethods>
   <ofEntity>
-    <Avatar></Avatar>
+    <Avatar></Avatar> <!-- This code is related to the avatar entity in the game. -->
   </ofEntity>
-  <DefaultKeyName>	inBattleUpgradesAvatar	</DefaultKeyName>
+  <DefaultKeyName>	inBattleUpgradesAvatar	</DefaultKeyName> <!-- The default key name for this definition is "inBattleUpgradesAvatar". -->
 </InBattleUpgradesAvatar.def>

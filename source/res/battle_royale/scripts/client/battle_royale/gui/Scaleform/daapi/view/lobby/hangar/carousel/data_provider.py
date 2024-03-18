@@ -24,6 +24,9 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
 
     # Override getVehiclesIntCDs method
     def getVehiclesIntCDs(self):
+        """
+        Return a list of vehicle integer CDs from the current list of vehicles.
+        """
         vehicledIntCDs = []
         for vehicle in self._vehicles:
             vehicledIntCDs.append(vehicle.intCD)
@@ -31,15 +34,24 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
 
     # Override _getAdditionalItemsIndexes method
     def _getAdditionalItemsIndexes(self):
+        """
+        Return an empty list, as there are no additional items in this carousel.
+        """
         return []
 
     # Override _setBaseCriteria method
     def _setBaseCriteria(self):
+        """
+        Set the base criteria for fetching vehicles from the inventory.
+        """
         self._baseCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
 
     # Class method for comparing vehicles
     @classmethod
     def _vehicleComparisonKey(cls, vehicle):
+        """
+        Generate a comparison key for sorting vehicles in the carousel.
+        """
         return (vehicle.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE,
          vehicle.isRented,
          not vehicle.isInInventory,
@@ -54,10 +66,16 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
 
     # Method to check if telecom rentals are enabled
     def _isTelecomRentalsEnabled(self):
+        """
+        Check if telecom rentals are enabled for the battle royale mode.
+        """
         return False
 
     # Override _buildVehicle method
     def _buildVehicle(self, vehicle):
+        """
+        Build a dictionary containing vehicle properties for the carousel.
+        """
         result = super(RoyaleCarouselDataProvider, self)._buildVehicle(vehicle)
 
         # Get vehicle state and rent state
@@ -92,10 +110,4 @@ class RoyaleCarouselDataProvider(HangarCarouselDataProvider):
              Vehicle.VEHICLE_STATE.DAMAGED,
              Vehicle.VEHICLE_STATE.DESTROYED,
              Vehicle.VEHICLE_STATE.EXPLODED,
-             Vehicle.VEHICLE_STATE.BATTLE):
-                result.update({'infoText': '',
-                 'smallInfoText': '',
-                 'infoImgSrc': ''})
-        elif state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
-            # Set locked tooltip and click enabled properties if the vehicle is unsuitable for queue
-            result['lockedTooltip'] = makeTooltip(backport.text(R.strings.battle_royale.battleRoyaleCarousel.lockedToolTip.header()), backport.text(R.strings
+             Vehicle.VE

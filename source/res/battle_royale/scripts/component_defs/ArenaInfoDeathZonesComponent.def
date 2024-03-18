@@ -1,10 +1,15 @@
 <ArenaInfoDeathZonesComponent.def>
+  <!-- Defines the Properties section of the ArenaInfoDeathZonesComponent component -->
   <Properties>
+    <!-- Declares an array of unsigned 8-bit integers to store activeZones -->
     <activeZones>
-      <Type>	ARRAY	  <of>	UINT8	</of>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
+      <Type>ARRAY</Type>
+      <of>UINT8</of>
     </activeZones>
+    <!-- Specifies that the activeZones array is accessible by all clients -->
+    <Flags>ALL_CLIENTS</Flags>
   </Properties>
-  <DefaultKeyName>	deathZones	</DefaultKeyName>
+  <!-- Sets the default key name for the ArenaInfoDeathZonesComponent component to "deathZones" -->
+  <DefaultKeyName>deathZones</DefaultKeyName>
 </ArenaInfoDeathZonesComponent.def>
+

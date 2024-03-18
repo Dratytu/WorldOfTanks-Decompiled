@@ -2,35 +2,49 @@
 # Embedded file name: scripts/client/account_helpers/ClientGoodies.py
 
 # Importing necessary modules
-from functools import partial
 import AccountCommands
+from functools import partial
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 # Defining the ClientGoodies class
 class ClientGoodies(object):
-
     # Initializing the class with syncData parameter
     def __init__(self, syncData):
         # Initializing instance variables
-        self.__account = None
-        self.__syncData = syncData
-        self.__cache = {}
-        self.__ignore = True
+        self.__account = None  # variable to store the account object
+        self.__syncData = syncData  # variable to store the syncData object
+        self.__cache = {}  # dictionary to store the cache
+        self.__ignore = True  # flag to check if the account is ignorable
 
     # onAccountBecomePlayer method
     def onAccountBecomePlayer(self):
+        """
+        Method to set the ignore flag to False when the account becomes a player.
+        """
         self.__ignore = False
 
     # onAccountBecomeNonPlayer method
     def onAccountBecomeNonPlayer(self):
+        """
+        Method to set the ignore flag to True when the account becomes a non-player.
+        """
         self.__ignore = True
 
     # setAccount method
     def setAccount(self, account):
+        """
+        Method to set the account object.
+        """
         self.__account = account
 
     # synchronize method
     def synchronize(self, isFullSync, diff):
+        """
+        Method to synchronize the cache with the given diff.
+
+        :param isFullSync: boolean to check if it's a full sync
+        :param diff: dictionary containing the diff
+        """
         # Handling full sync and updating the cache
         if isFullSync:
             self.__cache.clear()
@@ -52,6 +66,11 @@ class ClientGoodies(object):
 
     # getCache method
     def getCache(self, callback=None):
+        """
+        Method to get the cache and pass it to the callback function.
+
+        :param callback: function to handle the response
+        """
         # Checking if the account is ignorable
         if self.__ignore:
             if callback is not None:
@@ -64,6 +83,12 @@ class ClientGoodies(object):
 
     # getItems method
     def getItems(self, itemsType, callback):
+        """
+        Method to get the items of the specified type and pass it to the callback function.
+
+        :param itemsType: string specifying the type of items
+        :param callback: function to handle the response
+        """
         # Checking if the account is ignorable
         if self.__ignore:
             if callback is not None:
@@ -76,6 +101,12 @@ class ClientGoodies(object):
 
     # __onGetCacheResponse method
     def __onGetCacheResponse(self, callback, resultID):
+        """
+        Private method to handle the response of getCache.
+
+        :param callback: function to handle the response
+        :param resultID: integer specifying the result ID
+        """
         # Handling negative resultID and passing it to the callback
         if resultID < 0:
             if callback is not None:
@@ -89,6 +120,13 @@ class ClientGoodies(object):
 
     # __onGetItemsResponse method
     def __onGetItemsResponse(self, itemsType, callback, resultID):
+        """
+        Private method to handle the response of getItems.
+
+        :param itemsType: string specifying the type of items
+        :param callback: function to handle the response
+        :param resultID: integer specifying the result ID
+        """
         # Handling negative resultID and passing it to the callback
         if resultID < 0:
             if callback is not None:

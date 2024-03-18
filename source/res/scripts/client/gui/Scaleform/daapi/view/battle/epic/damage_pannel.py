@@ -33,4 +33,3 @@ class EpicDamagePanel(DamagePanel, EpicDamagePanelMeta):
                 # Disconnect the onCrewRolesFactorUpdated signal from the __setGeneralBonus method
                 componentSystem.playerDataComponent.onCrewRolesFactorUpdated -= self.__setGeneralBonus
 
-   

@@ -1,32 +1,50 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/remapping/remapping_composers.py
-from typing import TYPE_CHECKING, Optional, Any, Dict, List, FrozenSet, Type
-from battle_modifiers_ext.constants_ext import ModifiersWithRemapping
-if TYPE_CHECKING:
-    from battle_modifiers_common import ModifiersContext
-    from battle_modifiers_ext.remapping.remapping_conditions import IRemappingCondition
-_START_PATTERN = '{'
-_END_PATTERN = '}'
 
+# IComposer: An interface for remapping composers
 class IComposer(object):
     __slots__ = ()
 
     def getValue(self, ctx, oldValue):
+        """
+        Returns the remapped value for the given context and old value.
+        :param ctx: The context object
+        :param oldValue: The old value to be remapped
+        :return: The remapped value as a string
+        """
         raise NotImplementedError
 
     def getValues(self, oldValue):
+        """
+        Returns a dictionary of remapped values for the given old value.
+        :param oldValue: The old value to be remapped
+        :return: A dictionary of remapped values
+        """
         raise NotImplementedError
 
 
+# _BaseComposer: An abstract base class for remapping composers
 class _BaseComposer(IComposer):
     __slots__ = ('_conditions', '_targetTemplate', '_specialRules')
 
     def __init__(self, conditions, targetTemplate, specialRules):
+        """
+        Initializes the _BaseComposer class with the given conditions, target template, and special rules.
+        :param conditions: A list of remapping conditions
+        :param targetTemplate: The target template for remapping
+        :param specialRules: A dictionary of special rules for remapping
+        """
         self._conditions = conditions
         self._targetTemplate = targetTemplate
         self._specialRules = specialRules
 
     def getValue(self, ctx, oldValue):
+        """
+        Returns the remapped value for the given context and old value.
+        :param ctx: The context object
+        :param oldValue: The old value to be remapped
+        :return: The remapped value as a string
+        """
         resStr = self.__applySpecialRules(ctx, oldValue)
         if resStr is not None:
             return resStr
@@ -41,13 +59,30 @@ class _BaseComposer(IComposer):
             return resStr
 
     def getValues(self, oldValue):
+        """
+        Returns a dictionary of remapped values for the given old value.
+        :param oldValue: The old value to be remapped
+        :return: A dictionary of remapped values
+        """
         return None
 
     @classmethod
     def _getItemName(cls, ctx, oldValue):
+        """
+        Returns the item name for the given context and old value.
+        :param ctx: The context object
+        :param oldValue: The old value to be remapped
+        :return: The item name as a string
+        """
         return oldValue
 
     def __applySpecialRules(self, ctx, oldValue):
+        """
+        Applies special rules for remapping.
+        :param ctx: The context object
+        :param oldValue: The old value to be remapped
+        :return: The remapped value as a string or None if no special rules apply
+        """
         if not self._specialRules:
             return None
         else:
@@ -59,48 +94,16 @@ class _BaseComposer(IComposer):
             return None
 
 
+# _DefaultGunEffectsComposer: A specific remapping composer for gun effects
 class _DefaultGunEffectsComposer(_BaseComposer):
 
     @classmethod
     def _getItemName(cls, _, oldValue):
+        """
+        Returns the item name for the given old value in the context of gun effects.
+        :param _: The context object (not used)
+        :param oldValue: The old value to be remapped
+        :return: The item name as a string
+        """
         from items import vehicles
-        for k, v in vehicles.g_cache.gunEffects.iteritems():
-            if v == oldValue:
-                return k
 
-        return None
-
-
-class _DefaultShotEffectsComposer(_BaseComposer):
-
-    @classmethod
-    def _getItemName(cls, _, oldValue):
-        from items import vehicles
-        return vehicles.g_cache.shotEffectsNames[oldValue]
-
-
-class _DefaultSoundNotificationsComposer(_BaseComposer):
-    _REMOVE_NOTIFICATION = 'none'
-
-    def getValue(self, ctx, oldValue):
-        resStr = super(_DefaultSoundNotificationsComposer, self).getValue(ctx, oldValue)
-        return oldValue if not resStr else self.__applyRemoveRule(resStr)
-
-    def getValues(self, oldValue):
-        result = oldValue.copy()
-        for sources, target in self._specialRules.iteritems():
-            result.update({s:self.__applyRemoveRule(target) for s in sources})
-
-        return result
-
-    def __applyRemoveRule(self, value):
-        return None if value == self._REMOVE_NOTIFICATION else value
-
-
-_DEFAULT_COMPOSERS = {ModifiersWithRemapping.GUN_EFFECTS: _DefaultGunEffectsComposer,
- ModifiersWithRemapping.SHOT_EFFECTS: _DefaultShotEffectsComposer,
- ModifiersWithRemapping.SOUND_NOTIFICATIONS: _DefaultSoundNotificationsComposer}
-_COMPOSERS_FACTORY = {}
-
-def getComposerClass(remappingName, modifierName):
-    return _COMPOSERS_FACTORY.get(remappingName, _DEFAULT_COMPOSERS).get(modifierName, _BaseComposer)

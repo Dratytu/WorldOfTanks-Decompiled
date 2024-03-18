@@ -1,7 +1,12 @@
-<SpawnKeyPointController.def>
-  <CellMethods></CellMethods>
-  <ofEntity>
-    <Arena></Arena>
-  </ofEntity>
-  <DefaultKeyName>	spawnKeyPointController	</DefaultKeyName>
-</SpawnKeyPointController.def>
+<' SpawnKeyPointController.def: Definition file for the Spawn KeyPoint Controller
+<' 
+<' CellMethods: Specifies the cell methods used in this definition file. In this case, it is empty.
+<' 
+<' ofEntity: Defines the entity that this definition file is associated with. In this case, it is the Arena entity.
+<' 
+<' DefaultKeyName: Specifies the default key name for this entity, which is "spawnKeyPointController".
+<' 
+<' This file serves to define the behavior and properties of the Spawn KeyPoint Controller, which is likely
+<' responsible for managing the spawning of entities or events within the Arena. The specifics of its
+<' functionality will depend on the larger codebase in which it is implemented.
+/>

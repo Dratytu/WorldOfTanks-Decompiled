@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/serial_number_component.py
+
 from functools import partial
 import CGF
 from GenericComponents import DecalComponent, EntityGOSync
@@ -7,6 +8,7 @@ from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, reg
 from cgf_script.managers_registrator import onAddedQuery, autoregister
 from vehicle_systems.model_assembler import loadAppearancePrefab
 
+# Register the SerialNumberSwitcher component
 @registerComponent
 class SerialNumberSwitcher(object):
     domain = CGF.DomainOption.DomainClient
@@ -21,6 +23,7 @@ class SerialNumberSwitcher(object):
         return self.lamp4digits if length > 3 else self.lamp3digits
 
 
+# Register the SerialNumberComponent component
 @registerComponent
 class SerialNumberComponent(object):
     domain = CGF.DomainOption.DomainClient
@@ -30,10 +33,12 @@ class SerialNumberComponent(object):
     decalCount = ComponentProperty(type=CGFMetaTypes.INT, editorName='Decal count', value=1)
 
 
+# Register the SerialNumberComponentManager class
 @autoregister(presentInAllWorlds=True)
 class SerialNumberComponentManager(CGF.ComponentManager):
     DEFAULT_NUMBER = '00000'
 
+    # onAddedSwitcher method is called when a SerialNumberSwitcher component is added to a GameObject
     @onAddedQuery(SerialNumberSwitcher, CGF.GameObject)
     def onAddedSwitcher(self, switcher, gameObject):
         vehicle = self.__getVehicle(gameObject)
@@ -43,6 +48,7 @@ class SerialNumberComponentManager(CGF.ComponentManager):
             loadAppearancePrefab(prefabPath, vehicle.appearance, partial(self.__onLoaded, counterVaue))
         return
 
+    # onAdded method is called when a SerialNumberComponent component is added to a GameObject
     @onAddedQuery(SerialNumberComponent, CGF.GameObject)
     def onAdded(self, serialNumber, gameObject):
         vehicle = self.__getVehicle(gameObject)

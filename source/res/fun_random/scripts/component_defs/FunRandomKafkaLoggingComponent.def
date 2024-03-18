@@ -1,5 +1,16 @@
-<FunRandomKafkaLoggingComponent.def>
-  <ofEntity>
-    <Arena></Arena>
-  </ofEntity>
+/**
+ * The FunRandomKafkaLoggingComponent.def file defines the configuration for a Kafka logging component.
+ * This particular configuration sets up an "ofEntity" object with an "Arena" entity.
+ */
+
+// The "ofEntity" element is used to define a specific entity within the Kafka logging component
+<ofEntity>
+
+  // The "Arena" entity is defined within the "ofEntity" element
+  <Arena></Arena>
+
+// The "ofEntity" element is closed here
+</ofEntity>
+
+// The FunRandomKafkaLoggingComponent.def file is closed here
 </FunRandomKafkaLoggingComponent.def>

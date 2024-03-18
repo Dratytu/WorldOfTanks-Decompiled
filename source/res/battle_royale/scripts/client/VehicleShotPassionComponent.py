@@ -7,25 +7,30 @@ from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
 
 class VehicleShotPassionComponent(VehicleAbilityBaseComponent):
     EQUIPMENT_NAME = BattleRoyaleEquipments.SHOT_PASSION
-    __TIMER_VIEW_ID = VEHICLE_VIEW_STATE.SHOT_PASSION
-    __MARKER_ID = BATTLE_MARKER_STATES.SHOT_PASSION_STATE
+    TIMER_VIEW_ID = VEHICLE_VIEW_STATE.SHOT_PASSION
+    MARKER_ID = BATTLE_MARKER_STATES.SHOT_PASSION_STATE
 
     def __init__(self):
-        super(VehicleShotPassionComponent, self).__init__(self.__TIMER_VIEW_ID, self.__MARKER_ID)
+        super(VehicleShotPassionComponent, self).__init__(self.TIMER_VIEW_ID, self.MARKER_ID)
+        self._data = None
 
     def set_stage(self, prev):
-        self._updateTimer(None)
+        self._update_timer(None)
         return
 
-    def getInfo(self):
-        data = self._getTimerData()
+    def get_info(self):
+        data = self._get_timer_data()
         data['stage'] = self.stage
         return data
 
-    def _updateTimer(self, data):
+    def _update_timer(self, data):
         if data is None:
-            data = self._getTimerData()
+            data = self._get_timer_data()
         data['stage'] = self.stage
-        super(VehicleShotPassionComponent, self)._updateTimer(data)
-        self._guiSessionProvider.shared.vehicleState.onEquipmentComponentUpdated(self.EQUIPMENT_NAME, self.entity.id, data)
-        return
+        super(VehicleShotPassionComponent, self)._update_timer(data)
+        self._gui_session_provider.shared.vehicle_state.on_equipment_component_updated(self.EQUIPMENT_NAME, self.entity.id, data)
+
+    @property
+    def _gui_session_provider(self):
+        return super(VehicleShotPassionComponent, self)._gui_session_provider
+

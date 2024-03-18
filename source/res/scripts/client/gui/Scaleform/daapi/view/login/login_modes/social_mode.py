@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/login_modes/social_mode.py
+
 from base_mode import BaseMode, INVALID_FIELDS
 from connection_mgr import LOGIN_STATUS
 from constants import IS_CHINA
@@ -9,14 +10,18 @@ from gui.login.social_networks import SOCIAL_NETWORKS
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.connection_mgr import IConnectionManager
-SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {SOCIAL_NETWORKS.FACEBOOK: 'https://fb.com',
- SOCIAL_NETWORKS.GOOGLE: 'https://plus.google.com',
- SOCIAL_NETWORKS.WGNI: 'https://wargaming.net',
- SOCIAL_NETWORKS.VKONTAKTE: 'https://vk.com',
- SOCIAL_NETWORKS.YAHOO: 'https://yahoo.com',
- SOCIAL_NETWORKS.NAVER: 'http://naver.com',
- SOCIAL_NETWORKS.TWITTER: 'https://twitter.com',
- SOCIAL_NETWORKS.ODNOKLASSNIKI: 'https://ok.ru'}
+
+# Mapping of social network names to their respective domain URLs
+SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {
+    SOCIAL_NETWORKS.FACEBOOK: 'https://fb.com',
+    SOCIAL_NETWORKS.GOOGLE: 'https://plus.google.com',
+    SOCIAL_NETWORKS.WGNI: 'https://wargaming.net',
+    SOCIAL_NETWORKS.VKONTAKTE: 'https://vk.com',
+    SOCIAL_NETWORKS.YAHOO: 'https://yahoo.com',
+    SOCIAL_NETWORKS.NAVER: 'http://naver.com',
+    SOCIAL_NETWORKS.TWITTER: 'https://twitter.com',
+    SOCIAL_NETWORKS.ODNOKLASSNIKI: 'https://ok.ru'
+}
 
 class SocialMode(BaseMode):
     _connectionMgr = dependency.descriptor(IConnectionManager)
@@ -105,17 +110,4 @@ class SocialMode(BaseMode):
         localizationString = '#menu:login/social/warning/SOCIAL_NETWORK_LOGOUT'
         formatter = {'userName': self._loginManager.getPreference('name'),
          'socialNetworkLink': makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': socialNetworkName,
-                               'socialNetworkOfficialName': _ms('#tooltips:login/social/' + socialNetworkName)})}
-        if socialNetworkName != SOCIAL_NETWORKS.WGNI:
-            localizationString += '_BOTH'
-            formatter['wargamingNetLink'] = makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': SOCIAL_NETWORKS.WGNI,
-             'socialNetworkOfficialName': _ms('#tooltips:login/social/' + SOCIAL_NETWORKS.WGNI)})
-        return makeHtmlString('html_templates:socialNetworkLogin', 'logoutWarning', {'warningMessage': _ms(localizationString) % formatter})
-
-    @staticmethod
-    def __getTooltipHeader(socialNetworkName):
-        return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/header') if socialNetworkName == SOCIAL_NETWORKS.WGNI else _ms('#tooltips:login/bySocial/header')
-
-    @staticmethod
-    def __getTooltipBody(socialNetworkName):
-        return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/body') if socialNetworkName == SOCIAL_NETWORKS.WGNI else _ms('#tooltips:login/bySocial/body') % {'social': _ms('#tooltips:login/social/' + socialNetworkName)}
+                               'socialNetworkOfficialName':

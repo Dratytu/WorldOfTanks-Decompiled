@@ -1,7 +1,15 @@
 <KafkaLoggingComponent.def>
-  <BaseMethods></BaseMethods>
-  <CellMethods></CellMethods>
+  <!--- This is the definition of the KafkaLoggingComponent. --->
+  <BaseMethods>
+    <!--- This is the section for defining base methods. --->
+  </BaseMethods>
+  <CellMethods>
+    <!--- This is the section for defining cell methods. --->
+  </CellMethods>
   <ofEntity>
-    <Arena></Arena>
+    <!--- This is the section for defining the entity that this component logs. --->
+    <Arena>
+      <!--- This is the entity that this component logs. --->
+    </Arena>
   </ofEntity>
 </KafkaLoggingComponent.def>

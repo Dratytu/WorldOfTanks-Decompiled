@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
+
 from functools import partial
 import AccountCommands
 from SyncController import SyncController
@@ -8,9 +9,20 @@ from persistent_caches import SimpleCache
 from live_crc_accountdata import accountDataPersistentHash, accountDataExtractPersistent, accountDataGetDiffForPersistent, accountDataMergePersistent
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
+# AccountSyncData class is responsible for handling data synchronization for an account.
 class AccountSyncData(object):
 
     def __init__(self):
+        # Initializes the AccountSyncData object with various attributes.
+        # revision: The current revision of the synchronized data.
+        # __account: The account associated with this synchronization data.
+        # __syncController: The sync controller used to manage synchronization requests and responses.
+        # __ignore: A flag to ignore synchronization requests when the account is not a player.
+        # __isSynchronized: A flag to indicate if the data is currently synchronized.
+        # __syncID: A unique identifier for each synchronization request.
+        # __subscribers: A list of callback functions to be called when synchronization is complete.
+        # __isFirstSync: A flag to indicate if this is the first time synchronization is happening.
+        # __persistentCache: A persistent cache for storing synchronized data.
         self.revision = 0
         self.__account = None
         self.__syncController = None
@@ -22,18 +34,23 @@ class AccountSyncData(object):
         self.__persistentCache = SimpleCache('account_caches', 'data')
         self.__persistentCache.data = None
         self.__persistentCache.isDirty = False
-        return
 
     def onAccountBecomePlayer(self):
+        # Called when the account becomes a player.
+        # Sets the ignore flag to False and starts the synchronization process.
         self.__ignore = False
-        self.__isFirstSync = True
         self._synchronize()
 
     def onAccountBecomeNonPlayer(self):
+        # Called when the account becomes a non-player.
+        # Sets the ignore flag to True and resets the synchronized flag.
         self.__ignore = True
         self.__isSynchronized = False
 
     def setAccount(self, account):
+        # Sets the account associated with this synchronization data.
+        # If the account is not None, sets the persistent cache's account and creates a new sync controller.
+        # If the account is None, destroys the current sync controller and notifies subscribers of the non-player status.
         self.__account = account
         if self.__syncController is not None:
             self.__syncController.destroy()
@@ -44,9 +61,9 @@ class AccountSyncData(object):
             self.__syncController = SyncController(account, self.__sendSyncRequest, self.__onSyncResponse, self.__onSyncComplete)
         else:
             self.__notifySubscribers(AccountCommands.RES_NON_PLAYER)
-        return
 
     def waitForSync(self, callback):
+        # Waits for synchronization to complete before calling the provided callback function.
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -60,6 +77,9 @@ class AccountSyncData(object):
             return
 
     def updatePersistentCache(self, ext, isFullSync):
+        # Updates the persistent cache with the provided data.
+        # If the data contains a cache, merges it with the persistent cache and sets the dirty flag.
+        # If the data does not contain a cache, synchronizes it with the persistent cache and sets the dirty flag.
         if ext.pop('__cache', None) is not None:
             if not self.__persistentCache.data:
                 desc, cacheData = self.__persistentCache.data = self.__persistentCache.get()
@@ -86,6 +106,7 @@ class AccountSyncData(object):
         return True
 
     def _synchronize(self):
+        # Starts the synchronization process if the ignore flag is False and the data is not already synchronized.
         if self.__ignore:
             return
         elif self.__isSynchronized:
@@ -95,7 +116,7 @@ class AccountSyncData(object):
             return
 
     def _resynchronize(self):
-        LOG_DEBUG('resynchronize')
+        # Resynchronizes the data if the persistent cache is corrupted or the data is in an incorrect state.
         if self.__ignore:
             return
         else:
@@ -105,139 +126,4 @@ class AccountSyncData(object):
             self.__syncController.request(self.__getNextSyncID(), None)
             return
 
-    def __onSyncResponse(self, syncID, resultID, ext=None):
-        ext = ext or {}
-        if resultID == AccountCommands.RES_NON_PLAYER:
-            return
-        if syncID != self.__syncID:
-            return
-        if resultID < 0:
-            LOG_ERROR('Data synchronization failed.')
-            self._resynchronize()
-            return
-        if self.revision != ext.get('prevRev', self.revision):
-            LOG_ERROR('Incorrect diff received', self.revision, ext['prevRev'])
-            self._resynchronize()
-            return
-        self.revision = ext.get('rev', self.revision)
-        self.__isSynchronized = True
-        if not self.__account._update(not self.__isFirstSync, ext):
-            return
-        self.__isFirstSync = False
-        self.__notifySubscribers(resultID)
-
-    def __onSyncComplete(self, syncID, data):
-        if syncID != self.__syncID:
-            return
-        elif data is None:
-            return
-        else:
-            self.revision = data['rev']
-            if not self.__account._update(False, data):
-                return
-            self._synchronize()
-            return
-
-    def __getNextSyncID(self):
-        self.__syncID += 1
-        if self.__syncID > 30000:
-            self.__syncID = 1
-        return self.__syncID
-
-    def __sendSyncRequest(self, rqID, proxy):
-        if self.__ignore:
-            return
-        crc = self.__persistentCache.getDescr()
-        gameParamsRevision = self.__account.serverSettings.get('rev', 0)
-        self.__account._doCmdInt3(AccountCommands.CMD_SYNC_DATA, self.revision, 0 if not crc else crc, gameParamsRevision, proxy)
-
-    def __clearPersistentCache(self):
-        self.__persistentCache.data = None
-        self.__persistentCache.isDirty = False
-        self.__persistentCache.clear()
-        return
-
-    def __savePersistentCache(self):
-        if self.__persistentCache.isDirty and self.__persistentCache.data:
-            self.__persistentCache.data = accountDataExtractPersistent(self.__persistentCache.data)
-            self.__persistentCache.save(accountDataPersistentHash(self.__persistentCache.data), self.__persistentCache.data)
-            self.__persistentCache.isDirty = False
-
-    def __notifySubscribers(self, resultID):
-        subscribers = self.__subscribers
-        self.__subscribers = []
-        for callback in subscribers:
-            callback(resultID)
-
-
-class BaseSyncDataCache(object):
-
-    def __init__(self, syncData):
-        self._account = None
-        self._syncData = syncData
-        self._cache = {}
-        self._ignore = True
-        return
-
-    def onAccountBecomePlayer(self):
-        self._ignore = False
-
-    def onAccountBecomeNonPlayer(self):
-        self._ignore = True
-
-    def setAccount(self, account):
-        self._account = account
-
-    def synchronize(self, isFullSync, diff):
-        if isFullSync:
-            self._cache.clear()
-        self._synchronize(diff)
-
-    def _synchronize(self, diff):
-        raise NotImplementedError
-
-    def getCache(self, callback=None):
-        if self._ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, None)
-            return
-        else:
-            self._syncData.waitForSync(partial(self._onGetCacheResponse, callback))
-            return
-
-    def getItems(self, itemsType, callback):
-        if self._ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, None)
-            return
-        else:
-            self._syncData.waitForSync(partial(self._onGetItemsResponse, itemsType, callback))
-            return
-
-    def _onGetCacheResponse(self, callback, resultID):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID, None)
-            return
-        else:
-            if callback is not None:
-                callback(resultID, self._cache)
-            return
-
-    @property
-    def _itemsStorage(self):
-        return self._cache
-
-    def _onGetItemsResponse(self, itemsType, callback, resultID):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID, None)
-            return
-        else:
-            if callback is not None:
-                callback(resultID, self._itemsStorage.get(itemsType, None))
-            return
-
-
-def isFullSyncDiff(diff):
-    return diff.get('prevRev', None) is None
+    def __onSyncResponse(self, syncID, result

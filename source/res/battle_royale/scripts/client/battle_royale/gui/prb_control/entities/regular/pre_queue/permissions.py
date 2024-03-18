@@ -2,10 +2,11 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/pre_queue/permissions.py
 
 # Import necessary modules and classes
-from gui.prb_control.entities.base.pre_queue.permissions import PreQueuePermissions
-from helpers import time_utils, dependency
-from gui.periodic_battles.models import PrimeTimeStatus
-from skeletons.gui.game_control import IBattleRoyaleController
+import time_utils  # for getting the current local server timestamp
+from helpers import dependency  # for dependency injection
+from gui.prb_control.entities.base.pre_queue.permissions import PreQueuePermissions  # for inheritance
+from gui.periodic_battles.models import PrimeTimeStatus  # for checking prime time status
+from skeletons.gui.game_control import IBattleRoyaleController  # for IBattleRoyaleController dependency
 
 # Define the BattleRoyalePermissions class, which inherits from PreQueuePermissions
 class BattleRoyalePermissions(PreQueuePermissions):
@@ -22,6 +23,7 @@ class BattleRoyalePermissions(PreQueuePermissions):
 
         # Check if prime time is not available
         if status != PrimeTimeStatus.AVAILABLE:
+            # Return False if prime time is not available
             return False
 
         # If there is a current season and the superclass's canCreateSquad method returns True

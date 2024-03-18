@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PolygonalAreaTriggerUDO.py
 
-import BigWorld
+import BigWorld # Import the BigWorld module for UserDataObject
 
 # Define a class named PolygonalAreaTriggerUDO that inherits from BigWorld.UserDataObject
 class PolygonalAreaTriggerUDO(BigWorld.UserDataObject):

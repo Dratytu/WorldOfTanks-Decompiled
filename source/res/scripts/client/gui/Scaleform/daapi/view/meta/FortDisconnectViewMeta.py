@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/FortDisconnectViewMeta.py
-from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
+
+import sys # Imported, but not used in the provided code
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent # Inherits from BaseDAAPIComponent
 
 class FortDisconnectViewMeta(BaseDAAPIComponent):
 
-    def as_setWarningTextsS(self, warningTxt, warningDescTxt):
-        return self.flashObject.as_setWarningTexts(warningTxt, warningDescTxt) if self._isDAAPIInited() else None
+    #

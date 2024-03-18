@@ -1,36 +1,42 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
+# Python bytecode 3.7 (decompiled from Python 3.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/armory_yard_intro_view_model.py
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 
 class ArmoryYardIntroViewModel(VehicleInfoModel):
-    __slots__ = ('onClose', 'onContinue', 'onGoBack')
+    __slots__ = ('on_close', 'on_continue', 'on_go_back')
 
     def __init__(self, properties=11, commands=3):
-        super(ArmoryYardIntroViewModel, self).__init__(properties=properties, commands=commands)
+        super().__init__(properties=properties, commands=commands)
 
-    def getStartDate(self):
-        return self._getNumber(8)
+    @property
+    def start_date(self):
+        return self._get_number(8)
 
-    def setStartDate(self, value):
-        self._setNumber(8, value)
+    @start_date.setter
+    def start_date(self, value):
+        self._set_number(8, value)
 
-    def getEndDate(self):
-        return self._getNumber(9)
+    @property
+    def end_date(self):
+        return self._get_number(9)
 
-    def setEndDate(self, value):
-        self._setNumber(9, value)
+    @end_date.setter
+    def end_date(self, value):
+        self._set_number(9, value)
 
-    def getHasIntroVideoLink(self):
-        return self._getBool(10)
+    @property
+    def has_intro_video_link(self):
+        return self._get_bool(10)
 
-    def setHasIntroVideoLink(self, value):
-        self._setBool(10, value)
+    @has_intro_video_link.setter
+    def has_intro_video_link(self, value):
+        self._set_bool(10, value)
 
     def _initialize(self):
-        super(ArmoryYardIntroViewModel, self)._initialize()
-        self._addNumberProperty('startDate', 0)
-        self._addNumberProperty('endDate', 0)
-        self._addBoolProperty('hasIntroVideoLink', False)
-        self.onClose = self._addCommand('onClose')
-        self.onContinue = self._addCommand('onContinue')
-        self.onGoBack = self._addCommand('onGoBack')
+        super()._initialize()
+        self._add_number_property('start_date', 0)
+        self._add_number_property('end_date', 0)
+        self._add_bool_property('has_intro_video_link', False)
+        self.on_close = self._add_command('on_close')
+        self.on_continue = self._add_command('on_continue')
+        self.on_go_back = self._add_command('on_go_back')

@@ -1,5 +1,11 @@
 <VehiclePrestigePoint.def>
+  <!--- 
+  This file defines the VehiclePrestigePoint, which is associated with a vehicle entity.
+  -->
   <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <!--- 
+  The DetailLevel specifies the level of detail for this definition. In this case, it is set to MY_VEHICLE.
+  -->
   <Properties>
     <prestigePoints>
       <Type>	FLOAT32	</Type>
@@ -7,8 +13,21 @@
       <Default>	0	</Default>
     </prestigePoints>
   </Properties>
+  <!--- 
+  The Properties section defines various attributes of the VehiclePrestigePoint.
+  The prestigePoints property is a floating point number type (FLOAT32) that is accessible to all clients.
+  The default value for prestigePoints is set to 0.
+  -->
   <ofEntity>
     <Vehicle></Vehicle>
   </ofEntity>
+  <!--- 
+  The ofEntity section specifies the entity that this definition is associated with.
+  In this case, the VehiclePrestigePoint is associated with a vehicle entity.
+  -->
   <DefaultKeyName>	VehiclePrestigePoint	</DefaultKeyName>
+  <!--- 
+  The DefaultKeyName specifies the default name for this definition.
+  In this case, it is set to "VehiclePrestigePoint".
+  -->
 </VehiclePrestigePoint.def>

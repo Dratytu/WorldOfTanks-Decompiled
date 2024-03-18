@@ -8,22 +8,41 @@ from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController
 
 class EntryPointBeforeProgressionTooltipView(ViewImpl):
+    """
+    View for displaying tooltip information about an entry point before progression.
+    """
     __slots__ = ()
-    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
     def __init__(self):
+        """
+        Initialize the view with settings and a view model.
+        """
         settings = ViewSettings(R.views.armory_yard.lobby.feature.tooltips.EntryPointBeforeProgressionTooltipView())
         settings.model = EntryPointBeforeProgressionTooltipViewModel()
         super(EntryPointBeforeProgressionTooltipView, self).__init__(settings)
 
     @property
-    def viewModel(self):
-        return super(EntryPointBeforeProgressionTooltipView, self).getViewModel()
+    def view_model(self):
+        """
+        Property for getting the view model.
+        """
+        return super(EntryPointBeforeProgressionTooltipView, self).get_view_model()
 
-    def _onLoading(self, *args, **kwargs):
-        super(EntryPointBeforeProgressionTooltipView, self)._onLoading()
-        if not self.__armoryYardCtrl.isEnabled():
+    def _on_loading(self, *args, **kwargs):
+        """
+        Called when the view is loaded.
+        """
+        super(EntryPointBeforeProgressionTooltipView, self)._on_loading(*args, **kwargs)
+        if not self.__armory_yard_ctrl.is_enabled():
             return
-        with self.viewModel.transaction() as tx:
-            startProgressionTime, _ = self.__armoryYardCtrl.getProgressionTimes()
-            tx.setStartTimestamp(startProgressionTime)
+        with self.view_model.transaction() as tx:
+            start_progression_time, _ = self.__armory_yard_ctrl.get_progression_times()
+            tx.set_start_timestamp(start_progression_time)
+
+    @property
+    def __armory_yard_ctrl(self):
+        """
+        Property for getting the armory yard controller.
+        """
+        return dependency.descriptor(IArmoryYardController)  # type: IArmoryYardController
+

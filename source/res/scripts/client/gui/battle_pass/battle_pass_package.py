@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_pass/battle_pass_package.py
+
+# Import necessary modules
 from collections import OrderedDict
 import typing
 from battle_pass_common import BattlePassConsts
@@ -11,21 +13,23 @@ from helpers.dependency import replace_none_kwargs
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-if typing.TYPE_CHECKING:
-    from gui.battle_pass.battle_pass_constants import ChapterState
-    from gui.server_events.bonuses import SimpleBonus
 
+# Define the BattlePassPackage class
 class BattlePassPackage(object):
+    # Define class variables
     __slots__ = ('__seasonID', '__chapterID')
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePass = dependency.descriptor(IBattlePassController)
     __TOP_PRIORITY_REWARDS_COUNT = 7
 
+    # Initialize the class
     def __init__(self, chapterID):
+        # Set the season ID and chapter ID
         self.__seasonID = self.__battlePass.getSeasonID()
         self.__chapterID = chapterID
 
+    # Define methods for getting the price, levels count, current level, top priority rewards, and other information related to the battle pass chapter
     def getPrice(self):
         return self.__getPriceBP(self.__battlePass.getBattlePassCost(self.__chapterID))
 
@@ -46,6 +50,7 @@ class BattlePassPackage(object):
         bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
         return BattlePassAwardsManager.sortBonuses(bonuses)[:self.__TOP_PRIORITY_REWARDS_COUNT]
 
+    # Define other methods for getting information related to the battle pass chapter
     def getNowAwards(self):
         fromLevel = 1
         curLevel = self.getCurrentLevel()
@@ -103,61 +108,7 @@ class BattlePassPackage(object):
     def __getPriceBP(self, battlePassCost):
         return next(next(battlePassCost.itervalues()).itervalues()) if self.hasBattlePass() else 0
 
-
+# Define the PackageAnyLevels class
 class PackageAnyLevels(BattlePassPackage):
     __slots__ = ('__dynamicLevelsCount',)
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __battlePass = dependency.descriptor(IBattlePassController)
 
-    def __init__(self, chapterID):
-        self.__dynamicLevelsCount = 1
-        super(PackageAnyLevels, self).__init__(chapterID)
-
-    def setLevels(self, value):
-        self.__dynamicLevelsCount = value
-
-    def getLevelsCount(self):
-        maxLevelCount = max(self._getMaxLevel() - self.getCurrentLevel(), 0)
-        return min(maxLevelCount, self.__dynamicLevelsCount)
-
-    def isLocked(self):
-        chapterID = self.getChapterID()
-        return not (self.__battlePass.isBought(chapterID=chapterID) and self.__battlePass.isChapterActive(chapterID))
-
-    def isDynamic(self):
-        return True
-
-    def isBought(self):
-        return self._getMaxLevel() <= self.getCurrentLevel()
-
-    def isVisible(self):
-        return True
-
-    def hasBattlePass(self):
-        return False
-
-    def getPrice(self):
-        levelCost = self.__itemsCache.items.shop.getBattlePassLevelCost()
-        return self.__getLevelsPrice(levelCost)
-
-    def getCompoundPrice(self):
-        return {}
-
-    def getNowAwards(self):
-        curLevel = self.getCurrentLevel()
-        toLevel = curLevel + self.getLevelsCount()
-        bonuses = []
-        if self.getLevelsCount():
-            bonuses.extend(self.__battlePass.getPackedAwardsInterval(self.getChapterID(), curLevel + 1, toLevel, awardType=BattlePassConsts.REWARD_BOTH))
-        bonuses = BattlePassAwardsManager.uniteTokenBonuses(bonuses)
-        return BattlePassAwardsManager.sortBonuses(bonuses)
-
-    def __getLevelsPrice(self, levelCost):
-        currency = levelCost.getCurrency()
-        levelsCount = self.getLevelsCount()
-        return levelCost.get(currency, 0) * levelsCount
-
-
-@replace_none_kwargs(battlePass=IBattlePassController)
-def generatePackages(battlePass=None):
-    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getChapterIDs()), cmp=lambda first, second: chaptersIDsComparator(first[0], second[0])))

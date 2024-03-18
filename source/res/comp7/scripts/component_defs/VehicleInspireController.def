@@ -1,16 +1,22 @@
 <VehicleInspireController.def>
   <Properties>
     <isActive>
+      <!-- A boolean flag that indicates whether this controller is active or not.
+           This flag is visible to all clients. -->
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isActive>
     <displayedState>
+      <!-- A state variable that includes a time interval. This variable is visible to all clients.
+           It likely represents the current state of the vehicle that this controller is responsible for. -->
       <Type>	STATE_WITH_TIME_INTERVAL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </displayedState>
   </Properties>
   <ofEntity>
+    <!-- This controller is associated with a vehicle entity. -->
     <Vehicle></Vehicle>
   </ofEntity>
   <DefaultKeyName>	VehicleInspireController	</DefaultKeyName>
 </VehicleInspireController.def>
+

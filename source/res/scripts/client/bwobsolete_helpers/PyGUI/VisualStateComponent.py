@@ -4,7 +4,7 @@
 
 import sys
 from bwdebug import ERROR_MSG
-import ResMgr
+import ResMgr  # ResMgr is used for opening external resource files
 
 # A class representing a visual state in a game component
 class VisualState(object):
@@ -12,14 +12,14 @@ class VisualState(object):
     def onSave(self, dataSection):
         """
         Save the visual state to a data section.
-        :param dataSection: The data section to save to.
+        :param dataSection: The data section to save to. This is a pydoc.Section object.
         """
         pass
 
     def onLoad(self, dataSection):
         """
         Load the visual state from a data section.
-        :param dataSection: The data section to load from.
+        :param dataSection: The data section to load from. This is a pydoc.Section object.
         """
         pass
 
@@ -33,7 +33,7 @@ class VisualState(object):
     def _readMappingSection(self, dataSection):
         """
         Read a mapping section from a data section.
-        :param dataSection: The data section to read from.
+        :param dataSection: The data section to read from. This is a pydoc.Section object.
         :return: A tuple of the mapping type and the mapping.
         """
         mappingName = dataSection.asString.strip()
@@ -52,7 +52,7 @@ class VisualState(object):
     def _writeMappingSection(self, dataSection, mappingType, mapping):
         """
         Write a mapping section to a data section.
-        :param dataSection: The data section to write to.
+        :param dataSection: The data section to write to. This is a pydoc.Section object.
         :param mappingType: The type of mapping.
         :param mapping: The mapping to write.
         """
@@ -77,7 +77,7 @@ class VisualStateComponent(object):
     def onSave(self, dataSection):
         """
         Save the visual state component to a data section.
-        :param dataSection: The data section to save to.
+        :param dataSection: The data section to save to. This is a pydoc.Section object.
         """
         dataSection.writeString('visualStates', self.visualStateClassName)
         visualStatesSection = dataSection._visualStates
@@ -88,7 +88,7 @@ class VisualStateComponent(object):
     def onLoad(self, dataSection):
         """
         Load the visual state component from a data section.
-        :param dataSection: The data section to load from.
+        :param dataSection: The data section to load from. This is a pydoc.Section object.
         """
         if dataSection.has_key('visualStates'):
             visualStatesSection = dataSection._visualStates

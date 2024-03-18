@@ -1,6 +1,3 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/lobby/__init__.py
-
 # This is an empty __init__.py file for the lobby package within the
 # battle_modifiers/gui/impl directory. Its purpose is to ensure that
 # the lobby package is recognized as a package by Python, allowing

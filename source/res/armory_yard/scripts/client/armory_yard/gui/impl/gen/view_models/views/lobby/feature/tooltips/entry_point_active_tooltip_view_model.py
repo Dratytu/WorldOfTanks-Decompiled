@@ -59,4 +59,5 @@ class EntryPointActiveTooltipViewModel(ViewModel):
     def _initialize(self):
         super(EntryPointActiveTooltipViewModel, self)._initialize()
         self._addNumberProperty('questsInProgress', 0)  # Initialize the number of quests in progress
-        self._addNumberProperty('endTimestamp
+        self._addNumberProperty('endTimestamp', 0)  # Initialize the end timestamp of the active entry
+        self._addArrayProperty('chapters', Array())  # Initialize the array of chapter models

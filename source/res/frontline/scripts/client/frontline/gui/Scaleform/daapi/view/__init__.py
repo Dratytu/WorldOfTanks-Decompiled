@@ -1,7 +1,6 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/__init__.py
+# frontline/scripts/client/frontline/gui/Scaleform/daapi/view/__init__.py
 
-# This script defines the entry point for the Frontline GUI views in the
+# This script sets up the entry point for the Frontline GUI views in the
 # Scaleform DAAPI module. It does not contain any concrete view classes,
 # but rather sets up the necessary imports and module structure.
 
@@ -16,3 +15,4 @@
 # The "pass" statement at the end of the script is a placeholder and
 # has no effect. It is used when a statement is required syntactically,
 # but no action is needed.
+pass

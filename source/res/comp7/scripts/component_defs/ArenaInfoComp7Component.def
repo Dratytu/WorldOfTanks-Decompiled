@@ -1,14 +1,21 @@
 <ArenaInfoComp7Component.def>
   <Properties>
     <ranks>
-      <Type>	PYTHON	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <AllowUnsafeData>	true	</AllowUnsafeData>
-      <Default>	{}	</Default>
+      <!-- Type of the component, in this case, it is a Python component -->
+      <Type>PYTHON</Type>
+      <!-- Flags that specify which clients can use this component, here it is set to be used by all clients -->
+      <Flags>ALL_CLIENTS</Flags>
+      <!-- Specifies whether the component can handle unsafe data, here it is set to true -->
+      <AllowUnsafeData>true</AllowUnsafeData>
+      <!-- Default value for the component, in this case, an empty dictionary -->
+      <Default>{}</Default>
     </ranks>
   </Properties>
+  <!-- Specifies the entity that this component is a part of, in this case, an ArenaInfo entity -->
   <ofEntity>
     <ArenaInfo></ArenaInfo>
   </ofEntity>
-  <DefaultKeyName>	comp7	</DefaultKeyName>
+  <!-- The default name for this component, here it is 'comp7' -->
+  <DefaultKeyName>comp7</DefaultKeyName>
 </ArenaInfoComp7Component.def>
+

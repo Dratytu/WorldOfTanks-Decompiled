@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/state_machine/states.py
+
 from collections import namedtuple
 from . import visitor
 from .exceptions import StateError
 from .node import Node
 from .transitions import BaseTransition
 
+# Enum for different state flags
 class StateFlags(object):
     UNDEFINED = 0
     INITIAL = 1
@@ -18,45 +20,39 @@ class StateFlags(object):
     SINGULAR = 32
     PARALLEL = 64
 
-
+# Function to filter nodes based on their type
 def _filterState(child):
     return isinstance(child, State)
 
-
+# Function to filter initial states
 def _filterInitialState(child):
     return _filterState(child) and child.isInitial()
 
-
+# Function to filter history states
 def _filterHistoryState(child):
     return _filterState(child) and child.isHistory()
 
-
+# Function to filter base transitions
 def _filterBaseTransition(child):
     return isinstance(child, BaseTransition)
 
-
+# Class representing a state in the state machine
 class State(Node):
-    __slots__ = ('__stateID', '__flags', '__isEntered')
-
+    # Initializer for the State class
     def __init__(self, stateID='', flags=StateFlags.UNDEFINED):
         super(State, self).__init__()
         self.__stateID = stateID
         self.__flags = flags
         self.__isEntered = False
 
-    def __repr__(self):
-        return '{}({})'.format(self.__class__.__name__, self.__stateID)
-
-    def clear(self):
-        self.__isEntered = False
-        super(State, self).clear()
-
+    # Properties for the state
     def getStateID(self):
         return self.__stateID
 
     def getFlags(self):
         return self.__flags
 
+    # Methods for the state
     def isInitial(self):
         return self.__flags & StateFlags.INITIAL > 0
 
@@ -140,82 +136,4 @@ class State(Node):
         pass
 
     def enter(self):
-        if self.__isEntered:
-            raise StateError('{} is already activated'.format(self))
-        self.__isEntered = True
-        self._onEntered()
-
-    def exit(self):
-        if not self.__isEntered:
-            raise StateError('{} is not activated'.format(self))
-        self.__isEntered = False
-        self._onExited()
-
-    def addChild(self, child):
-        raise StateError('Routine is not allowed in {}', self.__class__.__name__)
-
-    def removeChild(self, child):
-        raise StateError('Routine is not allowed in {}', self.__class__.__name__)
-
-    def _onEntered(self):
-        pass
-
-    def _onExited(self):
-        pass
-
-
-_SortDirection = namedtuple('_SortDirection', ('ancestor', 'descendant'))
-_FROM_ANCESTOR_TO_DESCENDANT = _SortDirection(1, -1)
-_FROM_DESCENDANT_TO_ANCESTOR = _SortDirection(-1, 1)
-
-class _StateTogglingSortKey(object):
-    __slots__ = ('state', 'direction')
-
-    def __init__(self, state, direction):
-        super(_StateTogglingSortKey, self).__init__()
-        self.state = state
-        self.direction = direction
-
-    def __lt__(self, other):
-        return self._cmp(other) < 0
-
-    def __gt__(self, other):
-        return self._cmp(other) > 0
-
-    def __eq__(self, other):
-        return self._cmp(other) == 0
-
-    def __le__(self, other):
-        return self._cmp(other) <= 0
-
-    def __ge__(self, other):
-        return self._cmp(other) >= 0
-
-    def __ne__(self, other):
-        return self._cmp(other) != 0
-
-    def __hash__(self):
-        raise TypeError('hash not implemented')
-
-    def _cmp(self, other):
-        if self.state.getParent() == other.state.getParent():
-            parent = self.state.getParent()
-            return cmp(visitor.getDescendantIndex(self.state, parent, filter_=_filterState), visitor.getDescendantIndex(other.state, parent, filter_=_filterState))
-        if visitor.isDescendantOf(self.state, other.state):
-            return self.direction.ancestor
-        if visitor.isDescendantOf(other.state, self.state):
-            return self.direction.descendant
-        lca = visitor.getLCA([self.state, other.state], upper=self.state.getMachine())
-        return cmp(visitor.getDescendantIndex(self.state, lca, filter_=_filterState), visitor.getDescendantIndex(other.state, lca, filter_=_filterState))
-
-
-class StateEnteringSortKey(_StateTogglingSortKey):
-
-    def __init__(self, state):
-        super(StateEnteringSortKey, self).__init__(state, _FROM_ANCESTOR_TO_DESCENDANT)
-
-
-class StateExitingSortKey(_StateTogglingSortKey):
-
-    def __init__(self, state):
-        super(StateExitingSortKey, self).__init__(state, _FROM_DESCENDANT_TO_ANCESTOR)
+        if self.__

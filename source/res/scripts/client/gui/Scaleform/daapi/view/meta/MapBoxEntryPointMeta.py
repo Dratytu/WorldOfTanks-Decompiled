@@ -12,7 +12,6 @@
 # defined in a derived class to implement the desired functionality for the MapBox component.
 
 class MapBoxEntryPointMeta(InjectComponentAdaptor):
-    # The class inherits from 'InjectComponentAdaptor' and does not provide any additional
-    # methods or properties, making it a minimal meta class for the MapBox component.
     pass
 
+# End of script

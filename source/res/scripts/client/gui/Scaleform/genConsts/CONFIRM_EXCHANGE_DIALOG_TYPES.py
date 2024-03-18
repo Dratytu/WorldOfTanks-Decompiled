@@ -1,14 +1,17 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: scripts/client/gui/Scaleform/genConsts/CONFIRM_EXCHANGE_DIALOG_TYPES.py
-
+# This module defines the different types of dialogs that can be displayed in the
+# ConfirmExchangeDialog, which is used to confirm the exchange of various items
+# in the game.
 
 class CONFIRM_EXCHANGE_DIALOG_TYPES(object):
+    # The different types of icons that can be displayed in the ConfirmExchangeDialog.
+    # VEHICLE_ICON: A vehicle icon.
+    # MODULE_ICON: A module icon.
+    # PLATFORM_PACK_ICON: A platform pack icon.
     VEHICLE_ICON = 1
     MODULE_ICON = 2
     PLATFORM_PACK_ICON = 3
-    NORMAL_STATE = 1
-    NOT_ENOUGH_GOLD_STATE = 2
-    EXCHANGE_NOT_NEEED_STATE = 3
-    TYPE_CREDITS_EXCHANGE = 'credits'
-    TYPE_XP_EXCHANGE = 'xp'
-    TYPE_DETAILED_XP_EXCHANGE = 'detailedXP'
+
+    # The different states that the ConfirmExchangeDialog can be in.
+    # NORMAL_STATE: The default state.
+    # NOT_ENOUGH_GOLD_STATE: The state where the player does not have enough gold
+    #

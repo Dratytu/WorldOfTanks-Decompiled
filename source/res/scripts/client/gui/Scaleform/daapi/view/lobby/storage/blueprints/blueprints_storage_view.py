@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/blueprints/blueprints_storage_view.py
+
 import nations
 from blueprints.BlueprintTypes import BlueprintTypes
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageCarouselDataProvider, blueprintExitEvent
-from gui.Scaleform.daapi.view.lobby.storage.blueprints import BlueprintsStorageCarouselFilter
+from gui.Scaleform.daapi.view.lobby.storage.blueprints import (
+    BlueprintsStorageCarouselDataProvider,
+    blueprintExitEvent,
+    BlueprintsStorageCarouselFilter
+)
 from gui.Scaleform.daapi.view.lobby.storage.storage_carousel_environment import StorageCarouselEnvironment
 from gui.Scaleform.daapi.view.meta.StorageCategoryBlueprintsViewMeta import StorageCategoryBlueprintsViewMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -23,22 +27,37 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 
 class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCarouselEnvironment):
+    """
+    The view for displaying and managing blueprints in the storage.
+    """
     __lobbyCtx = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
+        """
+        Initialize the view and set up necessary event listeners.
+        """
         super(StorageCategoryBlueprintsView, self).__init__()
         self.__needToResetScrollTo = True
 
     def navigateToBlueprintScreen(self, itemId):
+        """
+        Navigate to the blueprint details screen for the given item ID.
+        """
         self.filter.update({'scroll_to': itemId})
         self.__needToResetScrollTo = False
         shared_events.showBlueprintView(itemId, blueprintExitEvent())
 
     def selectConvertible(self, value):
+        """
+        Update the filter to show only convertible blueprints.
+        """
         self.filter.update({'can_convert': value})
         self.applyFilter()
 
     def _populate(self):
+        """
+        Set up the data provider, view, and event listeners for the blueprint storage view.
+        """
         super(StorageCategoryBlueprintsView, self).setDataProvider(self._dataProvider)
         super(StorageCategoryBlueprintsView, self)._populate()
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
@@ -54,6 +73,9 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         self.updateCounter()
 
     def _dispose(self):
+        """
+        Clean up event listeners and other resources when the view is closed.
+        """
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         g_clientUpdateManager.removeObjectCallbacks(self)
         if self.__needToResetScrollTo:
@@ -62,9 +84,19 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
         super(StorageCategoryBlueprintsView, self).clear()
 
     def _createDataProvider(self):
-        return BlueprintsStorageCarouselDataProvider(BlueprintsStorageCarouselFilter(), self._itemsCache, WeakMethodProxy(self.__updateFilterWarning))
+        """
+        Create and return the data provider for the blueprint storage view.
+        """
+        return BlueprintsStorageCarouselDataProvider(
+            BlueprintsStorageCarouselFilter(),
+            self._itemsCache,
+            WeakMethodProxy(self.__updateFilterWarning)
+        )
 
     def _onCacheResync(self, reason, diff):
+        """
+        Handle a resync of the game cache.
+        """
         if reason == CACHE_SYNC_REASON.CLIENT_UPDATE:
             self._dataProvider.buildList()
             self.updateCounter()
@@ -73,60 +105,29 @@ class StorageCategoryBlueprintsView(StorageCategoryBlueprintsViewMeta, StorageCa
 
     @staticmethod
     def __makeFragmentVO(count, iconName, tooltipData=None):
+        """
+        Create a view object for displaying fragment information.
+        """
         style = text_styles.stats if count > 0 else text_styles.main
         label = style(backport.getIntegralFormat(count))
-        return {'hasFragments': count > 0,
-         'label': label,
-         'iconSmall': RES_ICONS.getBlueprintFragment('small', iconName),
-         'iconBig': RES_ICONS.getBlueprintFragment('big', iconName),
-         'tooltipData': tooltipData}
+        return {
+            'hasFragments': count > 0,
+            'label': label,
+            'iconSmall': RES_ICONS.getBlueprintFragment('small', iconName),
+            'iconBig': RES_ICONS.getBlueprintFragment('big', iconName),
+            'tooltipData': tooltipData
+        }
 
     def __onViewLoaded(self, view, *args, **kwargs):
+        """
+        Handle the loading of related views.
+        """
         if view.settings is not None and view.settings.alias == VIEW_ALIAS.STORAGE_BLUEPRINTS_FILTER_POPOVER:
             view.setTankCarousel(self)
         return
 
     def __onUpdateBlueprints(self, _):
+        """
+        Handle updates to the blueprint data.
+        """
         self.__updateVehicles()
-        self.updateCounter()
-        self.__updateUniversalFragments()
-
-    def __updateVehicles(self, vehicles=None, filterCriteria=None):
-        self._dataProvider.updateVehicles(vehicles, filterCriteria)
-        hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
-        self.as_showDummyScreenS(hasNoVehicles)
-
-    def __updateUniversalFragments(self):
-        self.__updateIntelligence()
-        self.__updateNationFragments()
-
-    def __updateNationFragments(self):
-        result = []
-        fragments = self._itemsCache.items.blueprints.getAllNationalFragmentsData()
-        for nationName in GUI_NATIONS:
-            nationId = nations.INDICES.get(nationName, nations.NONE_INDEX)
-            nationTooltipData = getNationalFragmentCD(nationId)
-            result.append(self.__makeFragmentVO(fragments.get(nationId, 0), nationName, nationTooltipData))
-
-        self.as_updateNationalFragmentsS(result)
-
-    def __updateIntelligence(self):
-        self.as_updateIntelligenceDataS(self.__makeFragmentVO(self._itemsCache.items.blueprints.getIntelligenceCount(), 'intelligence', BlueprintTypes.INTELLIGENCE_DATA))
-
-    def __updateFilterWarning(self):
-        hasNoVehicles = self._dataProvider.getTotalVehiclesCount() == 0
-        hasNoFilterResults = self._dataProvider.getCurrentVehiclesCount() == 0
-        filterWarningVO = None
-        if hasNoFilterResults and not hasNoVehicles:
-            filterWarningVO = self._makeFilterWarningVO(STORAGE.FILTER_WARNINGMESSAGE, STORAGE.FILTER_NORESULTSBTN_LABEL, TOOLTIPS.STORAGE_FILTER_NORESULTSBTN)
-        self.as_showFilterWarningS(filterWarningVO)
-        return
-
-    def __restoreCarouselState(self):
-        self.as_updateCanConvertS(self.filter.get('can_convert'))
-        self.updateSearchInput(self.filter.get('searchNameVehicle'))
-        self.applyFilter()
-        scrollTo = self.filter.get('scroll_to')
-        if scrollTo is not None:
-            self.as_scrollToItemS(scrollTo)
-        return

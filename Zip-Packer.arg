@@ -1,5 +1,16 @@
 #-------------------- Zip-Packer parameters --------------------
-#{VERSION} - zip-packer replaces the arg with the version-tag from meta.xml
+# The Zip-Packer script is used to create a compressed zip file of the WorldOfTanks game source code.
+# The version number for the zip file is taken from the meta.xml file.
 
+# The path to the 7-Zip executable is stored in the 'exe' variable.
+# This is the program that will be used to create the zip file.
 exe  = "C:\Program Files\7-Zip\7z.exe"
+
+# The argument string for creating the zip file is stored in the 'arg' variable.
+# This string includes the following options:
+#   - 'a' : Add files to archive
+#   - '-tzip' : Create a zip archive
+#   - '-mx9' : Use the maximum compression level
+#   - 'zip\WorldOfTanks-Decompiled_1.24.0.0_1766.zip' : The name and location of the output zip file
+#   - 'source\"' : The directory containing the files to be compressed
 arg  = "a -tzip -mx9 zip\WorldOfTanks-Decompiled_1.24.0.0_1766.zip source\"

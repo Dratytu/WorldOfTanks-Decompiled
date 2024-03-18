@@ -1,7 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FilterUtilities.py
-import BigWorld
 
+# The 'enableVisualiseAvatarFilter' function takes an entity as an argument and enables
+# visualization of the avatar filter for that entity. This is done by checking if the
+# 'debugMatrixes' attribute exists and is callable for the entity's filter. If it does,
+# the function first disables the visualization for the entity (if it was previously
+# enabled), then creates a list of cube models for each matrix provider in the
+# 'debugMatrixes' function. These cube models are then added to the entity and stored
+# in the '_filterCubeModels' attribute.
 def enableVisualiseAvatarFilter(entity):
     if hasattr(entity.filter, 'debugMatrixes') and callable(entity.filter.debugMatrixes):
         disableVisualiseAvatarFilter(entity)
@@ -13,7 +19,11 @@ def enableVisualiseAvatarFilter(entity):
             entity.addModel(cubeModel)
             entity._filterCubeModels.append(cubeModel)
 
-
+# The 'disableVisualiseAvatarFilter' function takes an entity as an argument and disables
+# visualization of the avatar filter for that entity. This is done by checking if the
+# '_filterCubeModels' attribute exists for the entity. If it does, the function iterates
+# over each cube model in the list, removes it from the entity, and then deletes the
+# attribute.
 def disableVisualiseAvatarFilter(entity):
     if hasattr(entity, '_filterCubeModels'):
         for cube in entity._filterCubeModels:
@@ -21,12 +31,5 @@ def disableVisualiseAvatarFilter(entity):
 
         del entity._filterCubeModels
 
-
-def enableVisualiseAllAvatarFilters():
-    for entity in BigWorld.entities.values():
-        enableVisualiseAvatarFilter(entity)
-
-
-def disableVisualiseAllAvatarFilters():
-    for entity in BigWorld.entities.values():
-        disableVisualiseAvatarFilter(entity)
+# The 'enableVisualiseAllAvatarFilters' function enables visualization of the avatar
+# filter for all entities

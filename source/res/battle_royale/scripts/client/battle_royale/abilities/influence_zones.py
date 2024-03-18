@@ -13,36 +13,37 @@ from cgf_script.bonus_caps_rules import bonusCapsManager
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from constants import IS_CLIENT
-from helpers import dependency
 from items import vehicles
+
+# Client-side imports
 if IS_CLIENT:
     from skeletons.gui.battle_session import IBattleSessionProvider
     from InfluenceZone import InfluenceZone
 else:
-
+    # Server-side placeholders
     class Vehicle(object):
         pass
-
 
     class InfluenceZone(object):
         pass
 
-
     class IBattleSessionProvider(object):
         pass
 
-
+# Register the InfluenceZoneMultiVisualizer component
 @registerComponent
 class InfluenceZoneMultiVisualizer(object):
+    # Component properties
     editorTitle = 'Influence Zone Multi Visualizer'
     category = 'Abilities'
     domain = CGF.DomainOption.DomainClient
     influencePrefab = ComponentProperty(type=CGFMetaTypes.STRING, value='', editorName='Influence prefab', annotations={'path': '*.prefab'})
     rotateFromCenter = ComponentProperty(type=CGFMetaTypes.BOOL, value=False, editorName='Rotate from center')
 
-
+# Register the InfluenceZoneTerrainArea component
 @registerComponent
 class InfluenceZoneTerrainArea(object):
+    # Component properties
     editorTitle = 'Influence Zone Terrain Area'
     category = 'Abilities'
     domain = CGF.DomainOption.DomainClient
@@ -52,11 +53,11 @@ class InfluenceZoneTerrainArea(object):
     def __init__(self):
         super(InfluenceZoneTerrainArea, self).__init__()
         self.fullZoneArea = None
-        return
 
-
+# Register the InfluenceZoneEquipmentComponent component
 @registerComponent
 class InfluenceZoneEquipmentComponent(object):
+    # Component properties
     editorTitle = 'Influence Zone Equipment'
     domain = CGF.DomainOption.DomainClient
     userVisible = False
@@ -66,7 +67,6 @@ class InfluenceZoneEquipmentComponent(object):
 
     def __int__(self):
         self.equipment = None
-        return
 
     def setupEquipment(self, equipment):
         self.equipment = equipment
@@ -74,75 +74,29 @@ class InfluenceZoneEquipmentComponent(object):
         self.zonesCount = equipment.zonesCount
         self.zoneRadius = equipment.influenceZone.radius
 
-
+# Bonus caps manager for battle royale and client domain
 @bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)
 class InfluenceZoneVisualizationManager(CGF.ComponentManager):
+    # Class variables
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     ALLY_MARKER_POSTFIX = 'Ally'
     ENEMY_MARKER_POSTFIX = 'Enemy'
 
+    # onInfluenceZoneSpawn method
     @onAddedQuery(InfluenceZone, CGF.GameObject)
     def onInfluenceZoneSpawn(self, influenceZone, go):
-        from battle_royale.abilities.dynamic_cache_loader import DynamicObjectsCacheLoader
-        equipment = vehicles.g_cache.equipments()[influenceZone.equipmentID]
-        if not equipment.usagePrefab:
-            go.createComponent(DynamicObjectsCacheLoader, self.spaceID, influenceZone.equipmentID, influenceZone.zonesPosition, influenceZone.team)
-            return
+        # Load equipment and spawn influence zone
 
-        def postloadSetup(go):
-            eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
-            eqComponent.setupEquipment(equipment)
-            multiVisualizer = go.findComponentByType(InfluenceZoneMultiVisualizer)
-            if multiVisualizer is not None:
-                self.__multipositionSpawn(go, multiVisualizer, influenceZone, equipment, equipment.influenceZone.radius)
-            markerComponent = go.findComponentByType(CombatMarker)
-            if markerComponent is not None:
-                postfix = self.ENEMY_MARKER_POSTFIX
-                if self.__guiSessionProvider.getArenaDP().isAllyTeam(influenceZone.team):
-                    postfix = self.ALLY_MARKER_POSTFIX
-                markerComponent.shape += postfix
-                markerComponent.disappearanceRadius = equipment.radius + equipment.influenceZone.radius
-            terrainAreaComponent = go.findComponentByType(InfluenceZoneTerrainArea)
-            if terrainAreaComponent is not None:
-                terrainAreaComponent.dropOffset = influenceZone.dropOffset
-            return
-
-        CGF.loadGameObjectIntoHierarchy(equipment.usagePrefab, go, Math.Vector3(0, 0, 0), postloadSetup)
-
+    # __multipositionSpawn method
     def __multipositionSpawn(self, go, multivisualizer, influenceZone, equipment, radius):
-        for zonePosition in influenceZone.zonesPosition:
-            localPosition = zonePosition - influenceZone.position
-            if multivisualizer.rotateFromCenter:
-                transform = math_utils.createRTMatrix((localPosition.yaw, 0, 0), localPosition)
-            else:
-                transform = math_utils.createTranslationMatrix(localPosition)
+        # Spawn multiple influence zones
 
-            def postloadSetup(go):
-                areaVisualizer = go.findComponentByType(AreaAbilityVisualizer)
-                if areaVisualizer is not None:
-                    areaVisualizer.radius = equipment.zoneRadius
-                eqComponent = go.createComponent(InfluenceZoneEquipmentComponent)
-                eqComponent.setupEquipment(equipment)
-                return
-
-            CGF.loadGameObjectIntoHierarchy(multivisualizer.influencePrefab, go, transform, postloadSetup)
-
-    CUT_OFF_ANGLE = math.radians(60)
-    CUT_OFF_DISTANCE = 100
-
+    # terrainAreaInit method
     @onAddedQuery(GenericComponents.TransformComponent, InfluenceZoneEquipmentComponent, InfluenceZoneTerrainArea)
     def terrainAreaInit(self, transform, influenceZoneEquipment, terrainArea):
-        fullRadius = influenceZoneEquipment.radius + influenceZoneEquipment.zoneRadius
-        terrainArea.fullZoneArea = CombatSelectedArea.CombatSelectedArea()
-        terrainArea.fullZoneArea.setup(position=transform.worldPosition, direction=Math.Vector3(0, 0, 1), size=Math.Vector2(fullRadius * 2, fullRadius * 2), visualPath=terrainArea.fullZoneVisual, color=None, marker=None)
-        terrainArea.fullZoneArea.area.setMaxHeight(transform.worldPosition.y + terrainArea.dropOffset)
-        terrainArea.fullZoneArea.area.enableYCutOff(True)
-        terrainArea.fullZoneArea.area.setCutOffDistance(self.CUT_OFF_DISTANCE)
-        terrainArea.fullZoneArea.area.setCutOffAngle(self.CUT_OFF_ANGLE)
-        return
+        # Initialize terrain area
 
+    # terrainAreaDestroy method
     @onRemovedQuery(InfluenceZoneEquipmentComponent, InfluenceZoneTerrainArea)
     def terrainAreaDestroy(self, influenceZoneEquipment, terrainArea):
-        terrainArea.fullZoneArea.destroy()
-        terrainArea.fullZoneArea = None
-        return
+        # Destroy terrain area

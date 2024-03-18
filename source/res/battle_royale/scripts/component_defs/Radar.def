@@ -1,23 +1,24 @@
-<Radar.def>
-  <Properties>
-    <radarReadinessTime>
-      <Type>	FLOAT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+<Radar.def> <!-- This is the root element of the radar definition file -->
+  <Properties> <!-- This element contains properties of the radar system -->
+    <radarReadinessTime> <!-- This element defines the time it takes for the radar to become ready -->
+      <Type>	FLOAT32	</Type> <!-- The data type of the radar readiness time is a 32-bit floating-point number -->
+      <Flags>	ALL_CLIENTS	</Flags> <!-- The radar readiness time is available to all clients -->
+      <DetailLevel>	MY_VEHICLE	</DetailLevel> <!-- The radar readiness time is relevant to the user's vehicle -->
     </radarReadinessTime>
-    <radarReady>
-      <Type>	BOOL	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    <radarReady> <!-- This element defines whether the radar is ready or not -->
+      <Type>	BOOL	</Type> <!-- The data type of the radar ready status is a Boolean value -->
+      <Flags>	ALL_CLIENTS	</Flags> <!-- The radar ready status is available to all clients -->
+      <DetailLevel>	MY_VEHICLE	</DetailLevel> <!-- The radar ready status is relevant to the user's vehicle -->
     </radarReady>
   </Properties>
-  <CellMethods>
-    <activateRadar>
-      <Exposed></Exposed>
+  <CellMethods> <!-- This element contains methods for handling the radar system -->
+    <activateRadar> <!-- This element defines the method for activating the radar -->
+      <Exposed></Exposed> <!-- The activateRadar method is not exposed to other entities -->
     </activateRadar>
   </CellMethods>
-  <ofEntity>
-    <Vehicle></Vehicle>
+  <ofEntity> <!-- This element defines the entity that the radar is associated with -->
+    <Vehicle></Vehicle> <!-- The radar is associated with a vehicle entity -->
   </ofEntity>
-  <DefaultKeyName>	radar	</DefaultKeyName>
-</Radar.def>
+  <DefaultKeyName>	radar	</DefaultKeyName> <!-- The default key name for the radar system is "radar" -->
+</Radar.def> <!-- End of the radar definition file -->
+

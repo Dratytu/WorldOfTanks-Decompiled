@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Sector.py
+
 from functools import partial
 import BigWorld
 import MapActivities
@@ -8,97 +9,117 @@ from debug_utils import LOG_DEBUG
 import Math
 import items
 from ReplayEvents import g_replayEvents
-SECTOR_LOCATION_TO_MAP_ACTIVITY = {(1, 1): 'zone_destr_WZ1_planes',
- (1, 2): 'zone_destr_WZ2_planes',
- (1, 3): 'zone_destr_WZ3_planes',
- (2, 1): 'zone_destr_CZ1_planes',
- (2, 2): 'zone_destr_CZ2_planes',
- (2, 3): 'zone_destr_CZ3_planes',
- (3, 1): 'zone_destr_EZ1_planes',
- (3, 2): 'zone_destr_EZ2_planes',
- (3, 3): 'zone_destr_EZ3_planes'}
-ID_IN_PLAYER_GROUP_TO_MAP_ACTIVITY_LEAD_TIME = {1: 2.0,
- 2: 2.0,
- 3: 23.0}
+
+# Mapping of sector location tuples to map activity names
+SECTOR_LOCATION_TO_MAP_ACTIVITY = {
+    (1, 1): 'zone_destr_WZ1_planes',
+    (1, 2): 'zone_destr_WZ2_planes',
+    (1, 3): 'zone_destr_WZ3_planes',
+    (2, 1): 'zone_destr_CZ1_planes',
+    (2, 2): 'zone_destr_CZ2_planes',
+    (2, 3): 'zone_destr_CZ3_planes',
+    (3, 1): 'zone_destr_EZ1_planes',
+    (3, 2): 'zone_destr_EZ2_planes',
+    (3, 3): 'zone_destr_EZ3_planes'
+}
+
+# Mapping of IDs in player group to map activity lead times
+ID_IN_PLAYER_GROUP_TO_MAP_ACTIVITY_LEAD_TIME = {
+    1: 2.0,
+    2: 2.0,
+    3: 23.0
+}
+
+# Border visualization dash dimensions
 BORDER_VISUALISATION_DASH_DIMENSIONS = (10, 1, 1)
+
+# Border visualization gap length
 BORDER_VISUALISATION_GAP_LENGTH = 5
 
 class Sector(BigWorld.Entity):
+    """
+    A class representing a sector in the game world.
+    """
 
     def __init__(self):
-        self.__startDestructionCallback = None
-        return
+        """
+        Initializes a new Sector instance.
+        """
+        self.__start_destruction_callback = None
 
     def onEnterWorld(self, prereqs):
-        g_replayEvents.onTimeWarpStart += self.__cancelCallback
-        sectorComponent = BigWorld.player().arena.componentSystem.sectorComponent
-        if sectorComponent is not None:
-            sectorComponent.addSector(self)
+        """
+        Called when the sector enters the game world.
+        """
+        g_replay_events.on_time_warp_start += self.__cancel_callback
+        sector_component = BigWorld.player().arena.component_system.sector_component
+        if sector_component is not None:
+            sector_component.add_sector(self)
         self.model = model = BigWorld.Model('')
-        model.addMotor(BigWorld.Servo(self.matrix))
+        model.add_motor(BigWorld.Servo(self.matrix))
         model.visible = True
-        return
 
     def onLeaveWorld(self):
-        g_replayEvents.onTimeWarpStart -= self.__cancelCallback
-        self.__cancelCallback()
-        sectorComponent = BigWorld.player().arena.componentSystem.sectorComponent
-        if sectorComponent is not None:
-            sectorComponent.removeSector(self)
-        return
+        """
+        Called when the sector leaves the game world.
+        """
+        g_replay_events.on_time_warp_start -= self.__cancel_callback
+        self.__cancel_callback()
+        sector_component = BigWorld.player().arena.component_system.sector_component
+        if sector_component is not None:
+            sector_component.remove_sector(self)
 
-    def set_lengthX(self, oldValue):
-        sectorComponent = BigWorld.player().arena.componentSystem.sectorComponent
-        if sectorComponent is not None:
-            sectorComponent.updateSector(self)
-        return
+    def set_length_x(self, old_value):
+        """
+        Called when the length of the sector in the X direction is set.
+        """
+        sector_component = BigWorld.player().arena.component_system.sector_component
+        if sector_component is not None:
+            sector_component.update_sector(self)
 
-    def set_lengthZ(self, oldValue):
-        sectorComponent = BigWorld.player().arena.componentSystem.sectorComponent
-        if sectorComponent is not None:
-            sectorComponent.updateSector(self)
-        return
+    def set_length_z(self, old_value):
+        """
+        Called when the length of the sector in the Z direction is set.
+        """
+        sector_component = BigWorld.player().arena.component_system.sector_component
+        if sector_component is not None:
+            sector_component.update_sector(self)
 
-    def set_state(self, oldValue):
-        sectorComponent = BigWorld.player().arena.componentSystem.sectorComponent
-        if sectorComponent is not None:
-            sectorComponent.updateSector(self, oldValue)
+    def set_state(self, old_value):
+        """
+        Called when the state of the sector is set.
+        """
+        sector_component = BigWorld.player().arena.component_system.sector_component
+        if sector_component is not None:
+            sector_component.update_sector(self, old_value)
         if self.state is SECTOR_STATE.TRANSITION:
-            leadTime = ID_IN_PLAYER_GROUP_TO_MAP_ACTIVITY_LEAD_TIME[self.IDInPlayerGroup]
-            delay = max(0, self.transitionTime - leadTime)
-            self.__startDestructionCallback = BigWorld.callback(delay, partial(self.startSectorBombingMapActivities, MapActivities.Timer.getTime() + delay))
-        return
+            lead_time = ID_IN_PLAYER_GROUP_TO_MAP_ACTIVITY_LEAD_TIME[self.IDInPlayerGroup]
+            delay = max(0, self.transition_time - lead_time)
+            self.__start_destruction_callback = BigWorld.callback(delay, partial(self.start_sector_bombing_map_activities, MapActivities.Timer.get_time() + delay))
 
-    def startSectorBombingMapActivities(self, actualTargetTime):
-        self.__cancelCallback()
-        actualTime = MapActivities.Timer.getTime()
-        timeOffset = actualTargetTime - actualTime
-        if actualTime < actualTargetTime:
-            self.__startDestructionCallback = BigWorld.callback(timeOffset, partial(self.startSectorBombingMapActivities, actualTargetTime))
+    def start_sector_bombing_map_activities(self, actual_target_time):
+        """
+        Called to start the sector bombing map activities.
+        """
+        self.__cancel_callback()
+        actual_time = MapActivities.Timer.get_time()
+        time_offset = actual_target_time - actual_time
+        if actual_time < actual_target_time:
+            self.__start_destruction_callback = BigWorld.callback(time_offset, partial(self.start_sector_bombing_map_activities, actual_target_time))
             return
-        mapActivityName = SECTOR_LOCATION_TO_MAP_ACTIVITY[self.playerGroup, self.IDInPlayerGroup]
-        LOG_DEBUG('mapActivityName ', mapActivityName)
-        MapActivities.startActivity(mapActivityName, timeOffset)
+        map_activity_name = SECTOR_LOCATION_TO_MAP_ACTIVITY[self.player_group, self.IDInPlayerGroup]
+        LOG_DEBUG('mapActivityName ', map_activity_name)
+        MapActivities.start_activity(map_activity_name, time_offset)
 
-    def showBomb(self, position):
-        largeEffectsIndex = items.vehicles.g_cache.shotEffectsIndexes.get('largeHighExplosive')
+    def show_bomb(self, position):
+        """
+        Called to show a bomb at the specified position.
+        """
+        large_effects_index = items.vehicles.g_cache.shot_effects_indexes.get('largeHighExplosive')
         dir_ = Math.Vector3(0.5, 1.0, -0.5)
-        self.setSectorBombing(position, dir_, largeEffectsIndex)
+        self.set_sector_bombing(position, dir_, large_effects_index)
 
-    def setSectorBombing(self, position, dir_, effectsIndex):
-        LOG_DEBUG('sector bombing started ', position, effectsIndex)
-        effectsList = items.vehicles.g_cache.shotEffects[effectsIndex].get('groundHit', None)
-        if not effectsList:
-            return
-        else:
-            BigWorld.player().terrainEffects.addNew(position, effectsList[1], effectsList[0], self.__explosionFinished, dir=dir_, start=position + dir_.scale(-1.0), end=position + dir_.scale(1.0))
-            return
+    def set_sector_bombing(self, position, dir_, effects_index):
+        """
+        Called to set the sector bombing.
 
-    def __explosionFinished(self):
-        LOG_DEBUG('explosion finished')
-
-    def __cancelCallback(self):
-        if self.__startDestructionCallback is not None:
-            BigWorld.cancelCallback(self.__startDestructionCallback)
-            self.__startDestructionCallback = None
-        return

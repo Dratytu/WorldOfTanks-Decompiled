@@ -1,29 +1,47 @@
 <Placement.def>
+  <!-- The appeal radius for this object -->
   <AppealRadius>	3000	</AppealRadius>
+
+  <!-- Properties for this object -->
   <Properties>
+    <!-- Type ID for the object -->
     <typeID>
       <Type>	INT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </typeID>
+
+    <!-- The time until the object is dropped -->
     <dropTime>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </dropTime>
+
+    <!-- The ID of the team that this object belongs to -->
     <teamID>
       <Type>	INT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Default>	0	</Default>
     </teamID>
+
+    <!-- The yaw axis for this object -->
     <yawAxis>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <Default>	0	</Default>
     </yawAxis>
   </Properties>
+
+  <!-- Client methods for this object -->
   <ClientMethods></ClientMethods>
+
+  <!-- Base methods for this object -->
   <BaseMethods></BaseMethods>
+
+  <!-- Temporary properties for this object -->
   <TempProperties>
     <_spawner></_spawner>
   </TempProperties>
+
+  <!-- Flag to indicate if this object should be backed up -->
   <shouldBackup>	false	</shouldBackup>
 </Placement.def>

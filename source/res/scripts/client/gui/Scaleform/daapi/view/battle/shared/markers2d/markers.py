@@ -1,24 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/markers.py
+
+# Import necessary modules
 from enum import Enum
 import Event
 import GUI
 import Math
 from gun_rotation_shared import getLocalAimPoint
 from vehicle_systems.tankStructure import TankNodeNames
+
+# Define a constant vector for hidden vehicle offset
 HIDDEN_VEHICLE_OFFSET = Math.Vector3(0, 5, 0)
 
+# Define an Enum for ReplyStateForMarker
 class ReplyStateForMarker(Enum):
     CREATE_STATE = 0
     REPLIED_ME_STATE = 1
     REPLIED_ALLY_STATE = 2
     NO_ACTION = 3
 
-
+# Base Marker class
 class Marker(object):
 
     def __init__(self, markerID, active=True):
         super(Marker, self).__init__()
+        # Initialize markerID, active, replyCount, isSticky, isRepliedByPlayer, isReplied, and state
         self._markerID = markerID
         self._active = active
         self._replyCount = 0
@@ -27,6 +33,7 @@ class Marker(object):
         self._isReplied = False
         self._state = ReplyStateForMarker.CREATE_STATE
 
+    # Methods to get and set properties
     def getMarkerID(self):
         return self._markerID
 
@@ -76,10 +83,12 @@ class Marker(object):
         pass
 
 
+# LocationMarker class inherits from Marker
 class LocationMarker(Marker):
 
     def __init__(self, markerID, position, active=True, markerSymbolName=None):
         super(LocationMarker, self).__init__(markerID, active)
+        # Initialize position and markerSymbolName
         self._position = position
         self._markerSymbolName = markerSymbolName
 
@@ -90,10 +99,12 @@ class LocationMarker(Marker):
         return self._markerSymbolName
 
 
+# BaseMarker class inherits from Marker
 class BaseMarker(Marker):
 
     def __init__(self, markerID, active=True, owner=''):
         super(BaseMarker, self).__init__(markerID, active)
+        # Initialize activeCommandID, owningTeam, boundCheckEnabled, and isHighlighted
         self._activeCommandID = -1
         self._owningTeam = owner
         self._boundCheckEnabled = True
@@ -118,10 +129,12 @@ class BaseMarker(Marker):
         return self._boundCheckEnabled
 
 
+# VehicleMarker class inherits from Marker
 class VehicleMarker(Marker):
 
     def __init__(self, markerID, vehicleID, vProxy=None, active=True, isPlayerTeam=False):
         super(VehicleMarker, self).__init__(markerID, active)
+        # Initialize vehicleID, vProxy, speaking, isActionMarkerActive, isPlayerTeam, and actionState
         self._vehicleID = vehicleID
         self._vProxy = vProxy
         self._speaking = False
@@ -131,26 +144,25 @@ class VehicleMarker(Marker):
         if self._vProxy is not None:
             self.attach(vProxy)
         self.onVehicleModelChanged = Event.Event()
-        return
 
+    # Methods to attach, detach, and destroy the vehicle marker
     def attach(self, vProxy):
         self.detach()
         self._vProxy = vProxy
         if self._vProxy.appearance is not None:
             self._vProxy.appearance.onModelChanged += self.__onModelChanged
-        return
 
     def detach(self):
         if self._vProxy is not None and hasattr(self._vProxy, 'appearance'):
             if self._vProxy.appearance is not None:
                 self._vProxy.appearance.onModelChanged -= self.__onModelChanged
                 self._vProxy = None
-        return
 
     def destroy(self):
         self.detach()
         self.onVehicleModelChanged.clear()
 
+    # Methods to get properties
     def getVehicleID(self):
         return self._vehicleID
 
@@ -161,56 +173,4 @@ class VehicleMarker(Marker):
         return self._vProxy.isAlive() if self._vProxy is not None else 0
 
     def getHealth(self):
-        return self._vProxy.health if self._vProxy is not None else 0
-
-    def getIsPlayerTeam(self):
-        return self._isPlayerTeam
-
-    def setActionState(self, actionState):
-        self._actionState = actionState
-
-    def getActionState(self):
-        return self._actionState
-
-    @classmethod
-    def fetchMatrixProvider(cls, vProxy):
-        if vProxy.isHidden:
-            matrix = Math.Matrix()
-            matrix.setTranslate(vProxy.position + HIDDEN_VEHICLE_OFFSET)
-            return matrix
-        rootMP = vProxy.model.node(TankNodeNames.HULL_SWINGING)
-        guiMP = vProxy.model.node(TankNodeNames.GUI)
-        rootM = rootMP.localMatrix
-        guiM = guiMP.localMatrix
-        offset = guiM.translation - rootM.translation
-        rootCalculator = vProxy.model.getWorldMatrixCalculator(TankNodeNames.HULL_SWINGING)
-        return GUI.WGVehicleMarkersMatrixProvider(rootCalculator, offset)
-
-    def getMatrixProvider(self):
-        return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None
-
-    def isSpeaking(self):
-        return self._speaking
-
-    def setSpeaking(self, speaking):
-        if self._speaking != speaking:
-            self._speaking = speaking
-            return True
-        return False
-
-    def __onModelChanged(self):
-        self.onVehicleModelChanged(self._markerID, self.getMatrixProvider())
-
-    def setIsActionMarkerActive(self, value):
-        self._isActionMarkerActive = value
-
-    def getIsActionMarkerActive(self):
-        return self._isActionMarkerActive
-
-
-class VehicleTargetMarker(VehicleMarker):
-
-    @classmethod
-    def fetchMatrixProvider(cls, vProxy):
-        pointOffset = getLocalAimPoint(vProxy.typeDescriptor)
-        return GUI.WGVehicleMagneticAimMarkerMatrixProvider(vProxy.matrix, pointOffset)
+        return self._vProxy.health if self._vProxy is

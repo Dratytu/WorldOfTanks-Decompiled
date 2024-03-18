@@ -1,24 +1,29 @@
-<AccountBattleRoyaleTournamentComponent.def>
-  <ofEntity>
-    <Account></Account>
-    <BootcampAccount></BootcampAccount>
+<AccountBattleRoyaleTournamentComponent.def>  # Definition file for AccountBattleRoyaleTournamentComponent
+  <ofEntity>  # Defines the entities associated with this component
+    <Account></Account>  # Account entity
+    <BootcampAccount></BootcampAccount>  # BootcampAccount entity
   </ofEntity>
-  <ClientMethods>
-    <setTournamentToken>
-      <Arg>	STRING	</Arg>
+  
+  <ClientMethods>  # Client-side methods for this component
+    <setTournamentToken>  # Method to set tournament token
+      <Arg>	STRING	</Arg>  # Argument: String value for tournament token
     </setTournamentToken>
-    <setParticipants>
-      <Arg>	LIST_OF_TOURNAMEMT_PARTICIPANTS	</Arg>
-      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
+    
+    <setParticipants>  # Method to set participants for the tournament
+      <Arg>	LIST_OF_TOURNAMEMT_PARTICIPANTS	</Arg>  # Argument: List of tournament participants
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>  # Variable length header size
     </setParticipants>
   </ClientMethods>
-  <BaseMethods>
-    <setParticipants>
-      <Arg>	PYTHON	</Arg>
+  
+  <BaseMethods>  # Base methods for this component
+    <setParticipants>  # Method to set participants
+      <Arg>	PYTHON	</Arg>  # Argument: Python code for participant handling
     </setParticipants>
-    <onTournamentJoin>
-      <Arg>	STRING	</Arg>
+    
+    <onTournamentJoin>  # Method to handle tournament join event
+      <Arg>	STRING	</Arg>  # Argument: String value for tournament ID or name
     </onTournamentJoin>
-    <onTournamentLeave></onTournamentLeave>
+    
+    <onTournamentLeave></onTournamentLeave>  # Method to handle tournament leave event with no arguments
   </BaseMethods>
 </AccountBattleRoyaleTournamentComponent.def>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/dualgun_control.py
+
 import logging
 import BigWorld
 import CommandMapping
@@ -7,28 +8,38 @@ from AvatarInputHandler.commands.input_handler_command import InputHandlerComman
 from constants import DUAL_GUN, DUALGUN_CHARGER_ACTION_TYPE, DUALGUN_CHARGER_STATUS
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from helpers.CallbackDelayer import CallbackDelayer
-_logger = logging.getLogger(__name__)
 
+# Define a class for shot states
 class ShotStates(object):
-    PREPARING = 0
-    DISABLED = 1
+    PREPARING = 0  # The gun is preparing to shoot
+    DISABLED = 1  # The gun is disabled
 
 
+# Define a class for shot controller
 class ShotController(CallbackDelayer):
-    __SINGLE_SHOT_THRESHOLD_DEFAULT = 0.5
-    __PRE_CHARGE_INDICATION_DEFAULT = 0.25
-    __CHARGE_CANCEL_TIME_DEFAULT = 0.18
+    # Define a property for shot locking
     isLocked = property(lambda self: self.__shotUnavailable)
 
     def __init__(self, threshold=__SINGLE_SHOT_THRESHOLD_DEFAULT, preChargeIndication=__PRE_CHARGE_INDICATION_DEFAULT, chargeCancelTime=__CHARGE_CANCEL_TIME_DEFAULT):
+        # Initialize the superclass
         super(ShotController, self).__init__()
+        # Initialize the state
         self.__state = ShotStates.DISABLED
+        # Initialize the single shot threshold
         self.__singleShotThreshold = threshold
+        # Initialize the pre-charge indication delay
         self.__preChargeIndicationDelay = preChargeIndication
+        # Initialize the charge cancel time
         self.__chargeCancelTime = chargeCancelTime
+        # Initialize the shot unavailability flag
         self.__shotUnavailable = False
 
     def updateState(self, state, value):
+        """
+        Update the state of the shot controller
+        :param state: The state of the charger
+        :param value: The value associated with the state
+        """
         if state == DUALGUN_CHARGER_STATUS.CANCELED:
             cancelTime = value[0] if value else 0.0
             if cancelTime > 0.0:
@@ -42,6 +53,10 @@ class ShotController(CallbackDelayer):
             self.__setShootAvailable()
 
     def shootKeyEvent(self, actionType):
+        """
+        Handle the key event for shooting
+        :param actionType: The type of action
+        """
         if actionType == DUALGUN_CHARGER_ACTION_TYPE.CANCEL:
             wasInCharging = self.__state == ShotStates.DISABLED
         else:
@@ -70,52 +85,48 @@ class ShotController(CallbackDelayer):
             gui_event_dispatcher.chargeReleased(keyDown=False)
 
     def __applyShoot(self):
+        """
+        Apply the shoot
+        """
         if not self.__shotUnavailable:
             BigWorld.player().shoot()
         self.stopCallback(gui_event_dispatcher.dualGunPreCharge)
 
     def __setShootAvailable(self):
+        """
+        Set the shoot as available
+        """
         self.__shotUnavailable = False
 
     def __disable(self, direct=False):
+        """
+        Disable the shot
+        :param direct: Whether to disable directly
+        """
         self.stopCallback(self.__disable)
         self.__state = ShotStates.DISABLED
         if not direct:
             gui_event_dispatcher.chargeReleased(keyDown=True)
 
 
+# Define a class for dual gun controller
 class DualGunController(InputHandlerCommand):
+    # Define a property for shot locking
     isShotLocked = property(lambda self: self.__shotControl.isLocked)
 
     def __init__(self, typeDescr):
+        # Initialize the active gun
         self.__activeGun = DUAL_GUN.ACTIVE_GUN.LEFT
+        # Initialize the shot control
         dualGunParams = typeDescr.gun.dualGun
         if dualGunParams is not None:
             self.__shotControl = ShotController(dualGunParams.chargeThreshold, dualGunParams.preChargeIndication, dualGunParams.chargeCancelTime)
         else:
             self.__shotControl = ShotController()
-        return
 
     def updateChargeState(self, state, value):
-        self.__shotControl.updateState(state, value)
+        """
+        Update the charge state
+        :param state: The state of the charger
+        :param value: The value associated with the state
 
-    def handleKeyEvent(self, isDown, key, mods, event=None):
-        vehicle = BigWorld.player().getVehicleAttached()
-        if vehicle is None or not vehicle.isPlayerVehicle or not vehicle.isAlive():
-            return False
-        elif vehicle.typeDescriptor is None or not vehicle.typeDescriptor.hasCharge:
-            return False
-        cmdMap = CommandMapping.g_instance
-        if cmdMap.isFiredList((CommandMapping.CMD_CM_CHARGE_SHOT, CommandMapping.CMD_CM_SHOOT), key, True):
-            status = DUALGUN_CHARGER_ACTION_TYPE.START_WITH_DELAY if isDown else DUALGUN_CHARGER_ACTION_TYPE.CANCEL
-            self.__shotControl.shootKeyEvent(status)
-            return True
-        elif cmdMap.isFired(CommandMapping.CMD_CM_CHARGE_SHOT, key):
-            status = DUALGUN_CHARGER_ACTION_TYPE.START_IMMEDIATELY if isDown else DUALGUN_CHARGER_ACTION_TYPE.CANCEL
-            self.__shotControl.shootKeyEvent(status)
-            return True
-        else:
-            return False
-
-    def cancelShootKeyEvent(self):
-        self.__shotControl.shootKeyEvent(DUALGUN_CHARGER_ACTION_TYPE.CANCEL)

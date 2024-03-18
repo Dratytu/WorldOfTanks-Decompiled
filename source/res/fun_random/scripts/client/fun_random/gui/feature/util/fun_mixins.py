@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/util/fun_mixins.py
+
+# Import necessary modules and libraries
 import logging
 import typing
 from adisp import adisp_async, adisp_process
@@ -14,173 +16,134 @@ from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.game_control import IFunRandomController
+
+# If typing module is available, use its features for type checking
 if typing.TYPE_CHECKING:
     from fun_random.gui.feature.models.common import FunSubModesStatus
     from fun_random.gui.feature.models.progressions import FunProgression
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
     from skeletons.gui.battle_session import IClientArenaVisitor
+
+# Initialize the logger for this module
 _logger = logging.getLogger(__name__)
 
+# Define FunAssetPacksMixin class
 class FunAssetPacksMixin(object):
+    """
+    A mixin class that provides methods for accessing fun random mode assets.
+    """
+    
+    # Dependency injection for IFunRandomController
     _funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     @classmethod
     def getModeAssetsPointer(cls):
+        """
+        Return the assets pointer for the fun random mode.
+        """
         return cls._funRandomCtrl.getAssetsPointer()
 
     @classmethod
     def getModeIconsResRoot(cls):
+        """
+        Return the icons resource root for the fun random mode.
+        """
         return cls._funRandomCtrl.getIconsResRoot()
 
     @classmethod
     def getModeLocalsResRoot(cls):
+        """
+        Return the locals resource root for the fun random mode.
+        """
         return cls._funRandomCtrl.getLocalsResRoot()
 
     @classmethod
     def getModeNameKwargs(cls):
+        """
+        Return a dictionary with the mode name keyword argument for the fun random mode.
+        """
         return {'modeName': cls.getModeUserName()}
 
     @classmethod
     def getModeUserName(cls):
+        """
+        Return the user-friendly name of the fun random mode.
+        """
         return backport.text(cls.getModeLocalsResRoot().userName())
 
     @classmethod
     def getModeDetailedUserName(cls, **kwargs):
+        """
+        Return the detailed user-friendly name of the fun random mode with optional keyword arguments.
+        """
         return backport.text(cls.getModeLocalsResRoot().detailedUserName(), modeName=cls.getModeUserName(), **kwargs)
 
     @classmethod
     def getPrebattleConditionIcon(cls):
+        """
+        Return the prebattle condition icon for the fun random mode.
+        """
         return backport.image(cls.getModeIconsResRoot().battle_type.c_32x32.fun_random())
 
-
+# Define FunProgressionWatcher class
 class FunProgressionWatcher(object):
+    """
+    A class that provides methods for watching fun random progression events.
+    """
+    
+    # Dependency injection for IFunRandomController
     _funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     @classmethod
     @hasActiveProgression()
     def showActiveProgressionPage(cls):
+        """
+        Show the active progression page for the fun random mode.
+        """
         showFunRandomProgressionWindow()
 
     @classmethod
     def getActiveProgression(cls):
+        """
+        Return the active progression for the fun random mode.
+        """
         return cls._funRandomCtrl.progressions.getActiveProgression()
 
     def startProgressionListening(self, updateMethod, tickMethod=None):
+        """
+        Start listening for progression updates and ticks with the given methods.
+        """
         self._funRandomCtrl.subscription.addListener(FunEventType.PROGRESSION_UPDATE, updateMethod)
         if tickMethod is not None:
             self._funRandomCtrl.subscription.addListener(FunEventType.PROGRESSION_TICK, tickMethod)
         return
 
     def stopProgressionListening(self, updateMethod, tickMethod=None):
+        """
+        Stop listening for progression updates and ticks with the given methods.
+        """
         self._funRandomCtrl.subscription.removeListener(FunEventType.PROGRESSION_UPDATE, updateMethod)
         if tickMethod is not None:
             self._funRandomCtrl.subscription.removeListener(FunEventType.PROGRESSION_TICK, tickMethod)
         return
 
-
+# Define FunSubModesWatcher class
 class FunSubModesWatcher(object):
+    """
+    A class that provides methods for watching fun random sub-mode events.
+    """
+    
+    # Dependency injection for IFunRandomController
     _funRandomCtrl = dependency.descriptor(IFunRandomController)
 
     @classmethod
     def getBattleSubMode(cls, arenaVisitor=None):
+        """
+        Return the battle sub-mode for the fun random mode.
+        """
         return cls._funRandomCtrl.subModesHolder.getBattleSubMode(arenaVisitor)
 
     @classmethod
     def getSubModes(cls, subModesIDs=None, isOrdered=False):
-        return cls._funRandomCtrl.subModesHolder.getSubModes(subModesIDs=subModesIDs, isOrdered=isOrdered)
-
-    @classmethod
-    def getSubModesStatus(cls, subModesIDs=None):
-        return cls._funRandomCtrl.subModesInfo.getSubModesStatus(subModesIDs)
-
-    def getDesiredSubMode(self):
-        return self._funRandomCtrl.subModesHolder.getDesiredSubMode()
-
-    def getSubMode(self, subModeID):
-        return self._funRandomCtrl.subModesHolder.getSubMode(subModeID)
-
-    def startSubSelectionListening(self, method):
-        self._funRandomCtrl.subscription.addListener(FunEventType.SUB_SELECTION, method)
-
-    def startSubSettingsListening(self, method, desiredOnly=False):
-        scope = FunEventScope.DESIRABLE if desiredOnly else FunEventScope.DEFAULT
-        self._funRandomCtrl.subscription.addListener(FunEventType.SUB_SETTINGS, method, scope)
-
-    def startSubStatusListening(self, updateMethod, desiredOnly=False, tickMethod=None):
-        scope = FunEventScope.DESIRABLE if desiredOnly else FunEventScope.DEFAULT
-        self._funRandomCtrl.subscription.addListener(FunEventType.SUB_STATUS_UPDATE, updateMethod, scope)
-        if tickMethod is not None:
-            self._funRandomCtrl.subscription.addListener(FunEventType.SUB_STATUS_TICK, tickMethod, scope)
-        return
-
-    def stopSubSelectionListening(self, method):
-        self._funRandomCtrl.subscription.removeListener(FunEventType.SUB_SELECTION, method)
-
-    def stopSubSettingsListening(self, method, desiredOnly=False):
-        scope = FunEventScope.DESIRABLE if desiredOnly else FunEventScope.DEFAULT
-        self._funRandomCtrl.subscription.removeListener(FunEventType.SUB_SETTINGS, method, scope)
-
-    def stopSubStatusListening(self, updateMethod, desiredOnly=False, tickMethod=False):
-        scope = FunEventScope.DESIRABLE if desiredOnly else FunEventScope.DEFAULT
-        self._funRandomCtrl.subscription.removeListener(FunEventType.SUB_STATUS_UPDATE, updateMethod, scope)
-        if tickMethod is not None:
-            self._funRandomCtrl.subscription.removeListener(FunEventType.SUB_STATUS_TICK, tickMethod, scope)
-        return
-
-    @adisp_async
-    @adisp_process
-    def selectFunRandomBattle(self, subModeID=UNKNOWN_EVENT_ID, callback=None):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        allSubModesIDs = self._funRandomCtrl.subModesHolder.getSubModesIDs()
-        if not allSubModesIDs:
-            _logger.error('Trying to get into fun random without any sub mode configured')
-            notifyCaller(callback, False)
-            return
-        if subModeID != UNKNOWN_EVENT_ID and subModeID not in allSubModesIDs:
-            _logger.error('Trying to get into not configured fun random sub mode %s', subModeID)
-            notifyCaller(callback, False)
-            return
-        if subModeID == UNKNOWN_EVENT_ID and len(allSubModesIDs) > 1:
-            showFunRandomModeSubSelectorWindow()
-            notifyCaller(callback, False)
-            return
-        subModeID = subModeID or first(allSubModesIDs)
-        if not self.getSubMode(subModeID).isAvailable():
-            self.showSubModeInfoPage(subModeID)
-            notifyCaller(callback, False)
-            return
-        result = yield self._funRandomCtrl.selectFunRandomBattle(subModeID)
-        notifyCaller(callback, result)
-
-    @hasAnySubMode()
-    def showCommonInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(self._funRandomCtrl.getSettings().infoPageUrl)
-
-    @hasSpecifiedSubMode()
-    def showSubModeInfoPage(self, subModeID):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(self.getSubMode(subModeID).getSettings().client.infoPageUrl)
-
-    @hasSingleSubMode(abortAction='showCommonInfoPage')
-    def showSubModesInfoPage(self):
-        selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.FUN_RANDOM)
-        showFunRandomInfoPage(first(self.getSubModes()).getSettings().client.infoPageUrl)
-
-
-class FunSubModeHolder(FunSubModesWatcher):
-
-    def __init__(self):
-        super(FunSubModeHolder, self).__init__()
-        self.__subMode = None
-        return
-
-    def getHoldingSubMode(self):
-        return self.__subMode
-
-    def catchSubMode(self, subModeID):
-        self.__subMode = self.getSubMode(subModeID)
-
-    def releaseSubMode(self):
-        self.__subMode = None
-        return
+        """
+        Return the sub-modes for

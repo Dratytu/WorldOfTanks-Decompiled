@@ -1,53 +1,76 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/abstract/GlobalVarsMgrMeta.py
-from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
+
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent  # Importing BaseDAAPIComponent to inherit its properties and methods
 
 class GlobalVarsMgrMeta(BaseDAAPIComponent):
+    """
+    A meta class for the GlobalVarsMgr component, which provides access to various global variables and flags used in the game.
+    """
 
     def isDevelopment(self):
-        self._printOverrideError('isDevelopment')
+        """
+        Returns a boolean indicating whether the game is currently in development mode.
+        """
+        self._printOverrideError('isDevelopment')  # Prints an error message if this method is overridden without proper implementation
 
     def isShowLangaugeBar(self):
-        self._printOverrideError('isShowLangaugeBar')
+        """
+        Returns a boolean indicating whether the language bar is currently visible.
+        """
+        self._printOverrideError('isShowLangaugeBar') 
 
     def isShowServerStats(self):
-        self._printOverrideError('isShowServerStats')
+        """
+        Returns a boolean indicating whether server stats are currently visible.
+        """
+        self._printOverrideError('isShowServerStats') 
 
     def isChina(self):
-        self._printOverrideError('isChina')
+        """
+        Returns a boolean indicating whether the game is running in the Chinese region.
+        """
+        self._printOverrideError('isChina') 
 
     def isKorea(self):
-        self._printOverrideError('isKorea')
+        """
+        Returns a boolean indicating whether the game is running in the Korean region.
+        """
+        self._printOverrideError('isKorea') 
 
     def isTutorialRunning(self, tutorialID):
-        self._printOverrideError('isTutorialRunning')
+        """
+        Returns a boolean indicating whether a specific tutorial is currently running.
+
+        :param tutorialID: The ID of the tutorial.
+        """
+        self._printOverrideError('isTutorialRunning') 
 
     def isRoamingEnabled(self):
-        self._printOverrideError('isRoamingEnabled')
+        """
+        Returns a boolean indicating whether roaming is currently enabled.
+        """
+        self._printOverrideError('isRoamingEnabled') 
 
     def isInRoaming(self):
-        self._printOverrideError('isInRoaming')
+        """
+        Returns a boolean indicating whether the player is currently in a roaming state.
+        """
+        self._printOverrideError('isInRoaming') 
 
     def isFreeXpToTankman(self):
-        self._printOverrideError('isFreeXpToTankman')
+        """
+        Returns a boolean indicating whether free XP can be converted to crew XP.
+        """
+        self._printOverrideError('isFreeXpToTankman') 
 
     def getLocaleOverride(self):
-        self._printOverrideError('getLocaleOverride')
+        """
+        Returns the currently overridden locale, if any.
+        """
+        self._printOverrideError('getLocaleOverride') 
 
     def isFortificationAvailable(self):
-        self._printOverrideError('isFortificationAvailable')
-
-    def isRentalsEnabled(self):
-        self._printOverrideError('isRentalsEnabled')
-
-    def isPersonalMissionsEnabled(self):
-        self._printOverrideError('isPersonalMissionsEnabled')
-
-    def isLoginLoadedAtFirstTime(self):
-        self._printOverrideError('isLoginLoadedAtFirstTime')
-
-    def isVehicleRestoreEnabled(self):
-        self._printOverrideError('isVehicleRestoreEnabled')
-
-    def isTradeInEnabled(self):
-        self._printOverrideError('isTradeInEnabled')
+        """
+        Returns a boolean indicating whether fortification is available.
+        """

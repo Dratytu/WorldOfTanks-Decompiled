@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SectorBase.py
+
 import BigWorld
 import ResMgr
 import SoundGroups
@@ -10,8 +11,8 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 import AnimationSequence
 
+# A class to cache sector base settings
 class _SectorBaseSettingsCache(object):
-
     def __init__(self, settings):
         self.initSettings(settings)
 
@@ -28,24 +29,29 @@ class _SectorBaseSettingsCache(object):
         self.flagScale = settings.readVector3('flagScale', Vector3())
         self.flagNodeAliasName = settings.readString('flagNodeAliasName', '')
 
-
+# Global variable to store sector base settings
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _g_sectorBaseSettings = None
 
+# The main SectorBase class
 class SectorBase(BigWorld.Entity):
     _OVER_TERRAIN_HEIGHT = 0.5
     _PLAYER_TEAM_PARAMS = {}
     __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
-        global _g_sectorBaseSettings
+        # Initialize the base class
         super(SectorBase, self).__init__(self)
+
+        # Initialize member variables
         self.__flagModel = FlagModel()
         self.__terrainSelectedArea = None
         self.capturePercentage = 0
         self.__isCapturedOnStart = False
         self.__baseCaptureSoundObject = None
         self._baseCaptureSirenSoundIsPlaying = False
+
+        # Initialize global sector base settings
         if _g_sectorBaseSettings is None:
             settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/sectorBase')
             _g_sectorBaseSettings = _SectorBaseSettingsCache(settingsData)
@@ -53,100 +59,61 @@ class SectorBase(BigWorld.Entity):
         return
 
     def prerequisites(self):
+        # Calculate capture percentage
         self.capturePercentage = float(self.pointsPercentage) / 100
+
+        # Set the initial captured state
         self.__isCapturedOnStart = self.isCaptured
+
+        # Initialize sector base components
         sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
         if sectorBaseComponent is not None:
             sectorBaseComponent.addSectorBase(self)
+
+        # Initialize assembler for sector base components
         assembler = BigWorld.CompoundAssembler(_g_sectorBaseSettings.flagStaffModelName, self.spaceID)
         assembler.addRootPart(_g_sectorBaseSettings.flagStaffModelName, 'root')
+
+        # Initialize scale matrix
         scaleMatrix = Matrix()
         scaleMatrix.setScale(_g_sectorBaseSettings.flagScale)
+
+        # Add parts to the assembler
         assembler.addPart(_g_sectorBaseSettings.flagModelName, _g_sectorBaseSettings.flagStaffFlagHP, _g_sectorBaseSettings.flagNodeAliasName, scaleMatrix)
+
+        # Prepare return values
         rv = [assembler, _g_sectorBaseSettings.radiusModel]
+
+        # Initialize animation sequence loader if necessary
         if _g_sectorBaseSettings.flagAnim is not None:
             loader = AnimationSequence.Loader(_g_sectorBaseSettings.flagAnim, self.spaceID)
             rv.append(loader)
+
+        # Initialize matrix for positioning
         mProv = Matrix()
         mProv.translation = self.position
+
+        # Initialize base capture sound object
         self.__baseCaptureSoundObject = SoundGroups.g_instance.WWgetSoundObject('base_' + str(self.baseID), mProv)
         self.__baseCaptureSoundObject.play(_g_sectorBaseSettings.baseAttachedSoundEventName)
+
         return rv
 
     def onEnterWorld(self, prereqs):
+        # Calculate capture percentage
         self.capturePercentage = float(self.pointsPercentage) / 100
+
+        # Set the initial captured state
         if self.__isCapturedOnStart != self.isCaptured:
             self.set_isCaptured(self.__isCapturedOnStart)
-        teamParams = self.__getTeamParams()
-        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.spaceID)
-        self.__flagModel.setupFlag(self.position, flagSettings, teamParams[0])
-        self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
-        self.__terrainSelectedArea.setup(_g_sectorBaseSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, teamParams[0])
-        self.__flagModel.model.root.attach(self.__terrainSelectedArea)
-        self.model = self.__flagModel.model
-        self.__flagModel.startFlagAnimation()
 
-    def onLeaveWorld(self):
+        # Initialize sector base components
         sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
         if sectorBaseComponent is not None:
-            sectorBaseComponent.removeSectorBase(self)
-        self.__prereqs = None
-        self.__baseCaptureSoundObject.stopAll()
-        self._baseCaptureSirenSoundIsPlaying = False
-        self.__baseCaptureSoundObject = None
-        self.__flagModel = None
-        self.model = None
-        return
+            sectorBaseComponent.addSectorBase(self)
 
-    def isPlayerTeam(self):
-        return self.team == BigWorld.player().team and not self.isCaptured or self.team != BigWorld.player().team and self.isCaptured
+        # Initialize assembler for sector base components
+        assembler = prereqs[_g_sectorBaseSettings.flagStaffModelName]
 
-    def active(self):
-        return self.isActive and not self.isCaptured
-
-    def set_invadersCount(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBasePointsUpdated(self)
-        return
-
-    def set_pointsPercentage(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        self.capturePercentage = float(self.pointsPercentage) / 100
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBasePointsUpdated(self)
-        return
-
-    def set_capturingStopped(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBasePointsUpdated(self)
-        return
-
-    def set_isActive(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBaseActiveStateChanged(self)
-        return
-
-    def set_isCaptured(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBaseCaptured(self)
-            if self.__flagModel:
-                teamParams = self.__getTeamParams()
-                self.__flagModel.changeFlagColor(teamParams[0])
-                if self.__terrainSelectedArea is not None:
-                    self.__terrainSelectedArea.setColor(teamParams[0])
-        return
-
-    def set_expectedCaptureTime(self, oldValue):
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        self.expectedCaptureTime = self.expectedCaptureTime
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.sectorBasePointsUpdated(self)
-        return
-
-    def __getTeamParams(self):
-        params = self._PLAYER_TEAM_PARAMS[self.isPlayerTeam()]
-        return (params[self.__settingsCore.getSetting(GRAPHICS.COLOR_BLIND)], params[2])
+        # Initialize flag settings
+        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.space

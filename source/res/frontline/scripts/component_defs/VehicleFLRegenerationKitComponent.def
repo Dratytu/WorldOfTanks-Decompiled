@@ -1,28 +1,52 @@
 '<VehicleFLRegenerationKitComponent.def>
+'---------------------------------------
 'This is a definition file for the VehicleFLRegenerationKitComponent.
-'It contains properties, cell methods, and entity information.
+'It contains properties (defined in the '<Properties>' section),
+'cell methods (defined in the '<CellMethods>' section), and
+'entity information (defined in the '<ofEntity>' section).
 
 '<Properties>
+'------------
 'This section defines the properties of the regeneration kit.
+'Currently, there is only one property defined, named 'regenerationKit'.
+
 '<regenerationKit>
+'-----------------
 'This is a specific property of the regeneration kit.
+
 '<Type>	REGENERATION_KIT_INFO	</Type>
 'The type of the regeneration kit is set to RENERATION_KIT_INFO.
+This indicates that the component contains information related to the
+regeneration kit of a vehicle.
+
 '<Flags>	ALL_CLIENTS	</Flags>
 'The flags for this property are set to ALL_CLIENTS.
+This means that the regeneration kit information is available to
+all clients, ensuring consistency and synchronization across the
+system.
+
 '</regenerationKit>
 '</Properties>
 
 '<CellMethods></CellMethods>
+'--------------------------
 'This section is currently empty and does not contain any cell methods.
+Cell methods are functions that operate on a cell or a set of cells.
+In this case, there are no specific cell methods defined for the
+VehicleFLRegenerationKitComponent.
 
 '<ofEntity>
+'----------
 'This section defines the entity that this component is a part of.
+
 '<Vehicle></Vehicle>
 'The component is a part of a vehicle entity.
+This indicates that the VehicleFLRegenerationKitComponent is used
+specifically for managing and storing information about the
+regeneration kit of a vehicle.
+
 '</ofEntity>
 
 '<DefaultKeyName>	VehicleFLRegenerationKitComponent	</DefaultKeyName>
-'The default key name for this component is VehicleFLRegenerationKitComponent.
-'</VehicleFLRegenerationKitComponent.def>
-
+'-----------------------------------------------------
+'The default key name for this component is VehicleFLRegenerationKitComponent

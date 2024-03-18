@@ -42,4 +42,4 @@ class CustomizationBonusModel(ItemBonusModel):
     def _initialize(self):
         # Calling the parent class initialization method
         super(CustomizationBonusModel, self)._initialize()
-        # Adding
+        # Adding custom properties and commands here if needed

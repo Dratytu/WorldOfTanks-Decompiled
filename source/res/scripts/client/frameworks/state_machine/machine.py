@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/state_machine/machine.py
+
 import logging
 import operator
 from . import states as _states
@@ -10,12 +11,19 @@ from .exceptions import StateMachineError
 from .observers import BaseStateObserver
 from .observers import StateObserversContainer
 from .transitions import BaseTransition
+
 _logger = logging.getLogger(__name__)
 
 class StateMachine(_states.State):
+    """
+    A state machine that manages states and transitions between them.
+    """
     __slots__ = ('__isRunning', '__entered', '__history', '__observers')
 
     def __init__(self, stateID=''):
+        """
+        Initialize the state machine with an initial state ID.
+        """
         super(StateMachine, self).__init__(stateID=stateID)
         self.__isRunning = False
         self.__entered = []
@@ -24,9 +32,15 @@ class StateMachine(_states.State):
 
     @staticmethod
     def isMachine():
+        """
+        Return True if the object is a state machine.
+        """
         return True
 
     def start(self, doValidate=True):
+        """
+        Start the state machine, optionally validating the state machine first.
+        """
         if doValidate:
             validator.validate(self)
         if self.__isRunning:
@@ -43,6 +57,9 @@ class StateMachine(_states.State):
             return
 
     def stop(self):
+        """
+        Stop the state machine.
+        """
         if not self.__isRunning:
             _logger.debug('%r: Machine is not started', self)
             return
@@ -54,6 +71,9 @@ class StateMachine(_states.State):
         _logger.debug('%r: Machine is stopped', self)
 
     def isStateEntered(self, stateID):
+        """
+        Check if a state has been entered.
+        """
         for state in self.__entered:
             if state.getStateID() == stateID:
                 return True
@@ -61,15 +81,27 @@ class StateMachine(_states.State):
         return False
 
     def isRunning(self):
+        """
+        Check if the state machine is running.
+        """
         return self.__isRunning
 
     def addState(self, state):
+        """
+        Add a state to the state machine.
+        """
         self.addChildState(state)
 
     def removeState(self, state):
+        """
+        Remove a state from the state machine.
+        """
         self.removeChildState(state)
 
     def post(self, event):
+        """
+        Post an event to the state machine.
+        """
         _logger.debug('%r: %r is posted', self, event)
         if not isinstance(event, StateEvent):
             raise StateMachineError('Instance of StateEvent class is required')
@@ -78,19 +110,31 @@ class StateMachine(_states.State):
         self.__tick(event=event)
 
     def connect(self, observer):
+        """
+        Connect an observer to the state machine.
+        """
         self.__observers.addObserver(observer)
         for state in self.__entered:
             observer.onStateChanged(state.getStateID(), True)
 
     def disconnect(self, observer):
+        """
+        Disconnect an observer from the state machine.
+        """
         self.__observers.removeObserver(observer)
 
     def __tick(self, event=None):
+        """
+        Process events and transitions.
+        """
         transitions = self.__select(event)
         if transitions:
             self.__process(transitions, event)
 
     def __process(self, transitions, event):
+        """
+        Process transitions and states.
+        """
         _logger.debug('%r: Start process, enabled transitions = %r', self, transitions)
         _logger.debug('%r: Snapshot before exiting states = %r', self, self.__entered)
         exited = self.__exit(transitions)
@@ -107,6 +151,9 @@ class StateMachine(_states.State):
         _logger.debug('%r: Stop process', self)
 
     def __select(self, event):
+        """
+        Select transitions based on the event.
+        """
         result = []
         filtered = [ state for state in self.__entered if state.isAtomic() ]
         for state in filtered:
@@ -119,6 +166,9 @@ class StateMachine(_states.State):
         return result
 
     def __execute(self, states, event):
+        """
+        Execute transitions based on the event.
+        """
         result = []
         for state in states:
             transitions = state.getTransitions()
@@ -128,126 +178,4 @@ class StateMachine(_states.State):
                     result.append(transition)
 
             if result:
-                result.sort(key=operator.methodcaller('getPriority'), reverse=True)
-                transition = result[0]
-                _logger.debug('%r: %r is selected', self, transition)
-                return transition
-
-        return None
-
-    def __exit(self, transitions):
-        result = []
-        for transition in transitions:
-            domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
-            for state in self.__entered:
-                if visitor.isDescendantOf(state, domain) and state not in result:
-                    result.append(state)
-
-        result.sort(key=_states.StateExitingSortKey)
-        for state in result:
-            for history in state.getHistoryStates():
-                historyFlag = history.getFlags() & _states.StateFlags.HISTORY_TYPE_MASK
-                if historyFlag == _states.StateFlags.DEEP_HISTORY:
-                    snapshot = [ entered for entered in self.__entered if entered.isAtomic() and visitor.isDescendantOf(entered, state) ]
-                else:
-                    snapshot = [ entered for entered in self.__entered if entered.getParent() == state ]
-                self.__history[history.getStateID()] = snapshot
-                _logger.debug('%r: snapshot is recorded to history for %r -> %r', self, state, snapshot)
-
-        for state in result:
-            _logger.debug('%r: %r is exiting', self, state)
-            state.exit()
-            self.__entered.remove(state)
-
-        return result
-
-    def __enter(self, transitions):
-        result = []
-        for transition in transitions:
-            self.__collect(transition, result)
-
-        result.sort(key=_states.StateEnteringSortKey)
-        for state in result:
-            self.__entered.append(state)
-            _logger.debug('%r: %r is entering', self, state)
-            state.enter()
-
-        return result
-
-    def __collect(self, transition, accumulation):
-        domain = visitor.getTransitionDomain(transition, self.__history, upper=self.getParent())
-        for state in transition.getTargets():
-            self.__dcollect(state, accumulation)
-
-        for state in visitor.getEffectiveTargetStates(transition, self.__history):
-            self.__acollect(state, domain, accumulation)
-
-    def __dcollect(self, state, accumulation):
-        if state.isHistory():
-            self.__restore(state, accumulation)
-        else:
-            accumulation.append(state)
-            if state.isCompound():
-                self.__dcollect(state.getInitial(), accumulation)
-                self.__acollect(state.getInitial(), state, accumulation)
-            elif state.isParallel():
-                self.__pcollect(state, accumulation)
-
-    def __acollect(self, state, root, accumulation):
-        ancestors = visitor.getAncestors(state, root)
-        for ancestor in ancestors:
-            if ancestor.getParent() is None:
-                continue
-            accumulation.append(ancestor)
-            if ancestor.isParallel():
-                self.__pcollect(state, accumulation)
-
-        return
-
-    def __pcollect(self, state, accumulation):
-        for child in state.getChildrenStates():
-            for item in accumulation:
-                if visitor.isDescendantOf(item, child):
-                    break
-            else:
-                self.__dcollect(child, accumulation)
-
-    def __restore(self, history, accumulation):
-        stateID = history.getStateID()
-        if stateID in self.__history:
-            states = self.__history[stateID]
-        else:
-            transitions = history.getTransitions()
-            if transitions:
-                states = (transitions[0].getTarget(),)
-            else:
-                states = ()
-        for state in states:
-            self.__dcollect(state, accumulation)
-            parent = state.getParent()
-            if parent is not None:
-                self.__acollect(state, parent, accumulation)
-
-        return
-
-    def __notify(self, states, flag, event):
-        for state in states:
-            stateID = state.getStateID()
-            if not stateID:
-                _logger.warn('%r: %r has no ID, can not notify observers', self, state)
-                continue
-            self.__observers.onStateChanged(stateID, flag, event=event)
-
-
-class _InitialTransition(BaseTransition):
-    __slots__ = ()
-
-    def __init__(self, target):
-        super(_InitialTransition, self).__init__()
-        self.setTarget(target)
-
-    def getSource(self):
-        return _states.State()
-
-    def execute(self, event):
-        return True
+                result.sort(key=operator.methodcaller('getPriority'), reverse

@@ -1,25 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/battle_loading.py
-from gui.Scaleform.daapi.view.meta.BattleRoyaleLoadingMeta import BattleRoyaleLoadingMeta
-from gui.impl.gen.resources import R
-from gui.impl import backport
 
+# Import necessary modules and classes
+from gui.Scaleform.daapi.view.meta.BattleRoyaleLoadingMeta import BattleRoyaleLoadingMeta
+from gui.impl.gen.resources import R  # Resource container for localization and other resources
+from gui.impl import backport  # Helper class for backporting string resources
+
+# Define the BattleLoading class, which inherits from BattleRoyaleLoadingMeta
 class BattleLoading(BattleRoyaleLoadingMeta):
 
+    # Override the _populate method to set up the view
     def _populate(self):
+        # Call the superclass method to set up basic view properties
         super(BattleLoading, self)._populate()
-        arenaDP = self.sessionProvider.getArenaDP()
-        self.as_setHeaderDataS({'battleType': arenaDP.getPersonalDescription().getFrameLabel(),
-         'title': backport.text(R.strings.battle_royale.fullStats.title()),
-         'subTitle': backport.text(R.strings.battle_royale.fullStats.subTitle()),
-         'description': backport.text(R.strings.battle_royale.fullStats.description())})
 
-    def _formatTipTitle(self, tipTitleText):
-        return tipTitleText
+        # Get the arena descriptor from the session provider
+        arena_dp = self.sessionProvider.getArenaDP()
 
-    def _formatTipBody(self, tipBody):
-        return tipBody
+        # Extract various pieces of data from the arena descriptor
+        battle_type = arena_dp.getPersonalDescription().getFrameLabel()
+        title = backport.text(R.strings.battle_royale.fullStats.title())
+        sub_title = backport.text(R.strings.battle_royale.fullStats.subTitle())
+        description = backport.text(R.strings.battle_royale.fullStats.description())
 
-    def _makeVisualTipVO(self, arenaDP, tip=None):
-        vo = {'tipIcon': self.gui.resourceManager.getImagePath(tip.icon) if tip is not None else None}
-        return vo
+        # Pass the extracted data to the setHeaderData SSC handler
+        self.as_setHeaderDataS({'battleType': battle_type,
+                                'title': title,
+                                'subTitle': sub_title,
+                                'description': description})
+
+    # Override the _formatTipTitle method to format the tooltip title
+    def _formatTipTitle(self, tip_title_text):
+        return tip_title_text
+
+    # Override the _formatTipBody method to format the tooltip body
+    def _formatTipBody(self, tip_

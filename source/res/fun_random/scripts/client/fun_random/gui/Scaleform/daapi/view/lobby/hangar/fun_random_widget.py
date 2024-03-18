@@ -3,13 +3,14 @@
 
 # Import the necessary classes and functions for this module.
 from fun_random.gui.impl.lobby.feature.fun_random_hangar_widget_view import FunRandomHangarWidgetView
-from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor  # Inherit from InjectComponentAdaptor class to enable automatic injection of components.
 
 
 class FunRandomHangarWidgetComponent(InjectComponentAdaptor):
-    # Inherit from InjectComponentAdaptor class to enable automatic injection of components.
+    # Create a custom component class for the fun_random feature in the hangar screen.
 
     def _makeInjectView(self):
-        # Create an instance of the FunRandomHangarWidgetView class and return it.
-        return FunRandomHangarWidgetView()
+        # Override the _makeInjectView method to return an instance of the custom FunRandomHangarWidgetView.
+        # This method is called by the parent class when the component is initialized.
+        return FunRandomHangarWidgetView()  # Create an instance of the FunRandomHangarWidgetView class and return it.
 

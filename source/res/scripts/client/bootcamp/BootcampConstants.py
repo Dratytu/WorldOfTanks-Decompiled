@@ -1,144 +1,111 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampConstants.py
+
+# The starting distance of the camera from the player's tank in the bootcamp.
 CAMERA_START_DISTANCE = 12
 
+# Class representing the different states of the UI in the bootcamp.
 class UI_STATE(object):
+    # The initial state of the UI.
     INIT = 1
+    # The state of the UI when the battle is starting.
     START = 2
+    # The state of the UI when the battle is being updated.
     UPDATE = 3
+    # The state of the UI when the battle is stopping.
     STOP = 4
 
 
-class BATTLE_STATS_TOOLTIPS:
+# Class representing the different tooltips for battle stats in the bootcamp.
+class BATTLE_STATS_TOOLTIPS(object):
+    # The tooltip for destroyed enemies.
     DESTROYED = 'destroyed'
+    # The tooltip for damage dealt.
     DAMAGE = 'damage'
+    # The tooltip for damage blocked.
     BLOCKED = 'blocked'
+    # The tooltip for enemies detected.
     DETECTED = 'detected'
+    # The tooltip for damage assisted.
     ASSISTED = 'assisted'
 
+# A dictionary mapping battle stat tooltips to their corresponding result fields.
+BATTLE_STATS_RESULT_FIELDS = {
+    BATTLE_STATS_TOOLTIPS.DESTROYED: 'kills',
+    BATTLE_STATS_TOOLTIPS.DAMAGE: 'damageDealt',
+    BATTLE_STATS_TOOLTIPS.BLOCKED: 'damageBlockedByArmor',
+    BATTLE_STATS_TOOLTIPS.DETECTED: 'spotted',
+    BATTLE_STATS_TOOLTIPS.ASSISTED: 'damageAssisted'
+}
+# A dictionary mapping battle stat tooltips to their corresponding icons.
+BATTLE_STATS_ICONS = {
+    BATTLE_STATS_TOOLTIPS.DESTROYED: 'statIconDestroyed',
+    BATTLE_STATS_TOOLTIPS.DAMAGE: 'statIconDamage',
+    BATTLE_STATS_TOOLTIPS.BLOCKED: 'statIconBlocked',
+    BATTLE_STATS_TOOLTIPS.DETECTED: 'statIconDetected',
+    BATTLE_STATS_TOOLTIPS.ASSISTED: 'statIconAssisted'
+}
+# A tuple of error messages related to consumables.
+CONSUMABLE_ERROR_MESSAGES = (
+    'repairkitAllDevicesAreNotDamaged',  # Error message for repair kit when all devices are not damaged.
+    'repairkitDeviceIsNotDamaged',  # Error message for repair kit when a device is not damaged.
+    'medkitAllTankmenAreSafe',  # Error message for medkit when all tankmen are safe.
+    'medkitTankmanIsSafe',  # Error message for medkit when a tankman is safe.
+    'extinguisherDoesNotActivated'  # Error message for extinguisher when it does not activate.
+)
 
-BATTLE_STATS_RESULT_FIELDS = {BATTLE_STATS_TOOLTIPS.DESTROYED: 'kills',
- BATTLE_STATS_TOOLTIPS.DAMAGE: 'damageDealt',
- BATTLE_STATS_TOOLTIPS.BLOCKED: 'damageBlockedByArmor',
- BATTLE_STATS_TOOLTIPS.DETECTED: 'spotted',
- BATTLE_STATS_TOOLTIPS.ASSISTED: 'damageAssisted'}
-BATTLE_STATS_ICONS = {BATTLE_STATS_TOOLTIPS.DESTROYED: 'statIconDestroyed',
- BATTLE_STATS_TOOLTIPS.DAMAGE: 'statIconDamage',
- BATTLE_STATS_TOOLTIPS.BLOCKED: 'statIconBlocked',
- BATTLE_STATS_TOOLTIPS.DETECTED: 'statIconDetected',
- BATTLE_STATS_TOOLTIPS.ASSISTED: 'statIconAssisted'}
-CONSUMABLE_ERROR_MESSAGES = ('repairkitAllDevicesAreNotDamaged', 'repairkitDeviceIsNotDamaged', 'medkitAllTankmenAreSafe', 'medkitTankmanIsSafe', 'extinguisherDoesNotActivated')
-
-class HINT_TYPE:
+# Class representing the different types of hints in the bootcamp.
+class HINT_TYPE(object):
+    # The hint type for moving the tank.
     HINT_MOVE = 0
+    # The hint type for moving the turret.
     HINT_MOVE_TURRET = 1
+    # The hint type for shooting.
     HINT_SHOOT = 2
+    # The hint type for advanced sniper mode.
     HINT_ADVANCED_SNIPER = 3
+    # The hint type for aiming.
     HINT_AIM = 4
+    # The hint type for sniper mode.
     HINT_SNIPER = 5
+    # The hint type for weak points.
     HINT_WEAK_POINTS = 6
+    # The hint type for avoiding certain actions.
     HINT_MESSAGE_AVOID = 7
+    # The hint type for when the player is spotted.
     HINT_MESSAGE_PLAYER_SPOTTED = 8
+    # The hint type for clearing a sector.
     HINT_SECTOR_CLEAR = 9
+    # The hint type for starting the narrative.
     HINT_START_NARRATIVE = 10
+    # The hint type for capturing the base.
     HINT_MESSAGE_CAPTURE_THE_BASE = 11
+    # The hint type for resetting progress.
     HINT_MESSAGE_RESET_PROGRESS = 12
+    # The hint type for repairing the track.
     HINT_REPAIR_TRACK = 13
+    # The hint type for healing the crew.
     HINT_HEAL_CREW = 14
+    # The hint type for using the extinguisher.
     HINT_USE_EXTINGUISHER = 15
+    # The hint type for shooting at allies.
     HINT_SHOOT_ALLY = 16
+    # The hint type for detecting enemies.
     HINT_PLAYER_DETECT_ENEMIES = 17
+    # The hint type for exiting the game area.
     HINT_EXIT_GAME_AREA = 18
+    # The hint type for when enemies can hide.
     HINT_MESSAGE_ENEMY_CAN_HIDE = 19
+    # The hint type for sneaking.
     HINT_MESSAGE_SNEAK = 20
+    # The hint type for sniper mode on distance.
     HINT_SNIPER_ON_DISTANCE = 21
+    # The hint type for rotating the lobby.
     HINT_ROTATE_LOBBY = 22
+    # The hint type for target lock.
     HINT_TARGET_LOCK = 23
+    # The hint type for waiting for reload.
     HINT_WAIT_RELOAD = 24
+    # The hint type for not moving.
     HINT_NO_MOVE = 25
-    HINT_NO_MOVE_TURRET = 26
-    HINT_SHOT_WHILE_MOVING = 27
-    HINT_MOVE_TO_MARKER = 28
-    HINT_SECONDARY_SNIPER = 29
-    HINT_USELESS_CONSUMABLE = 30
-    HINT_LOW_HP = 31
-    HINT_UNLOCK_TARGET = 32
-    HINT_B3_YOU_ARE_DETECTED = 33
-    HINT_B3_FALL_BACK = 34
-    HINT_B3_FOLIAGE = 35
-    HINT_B3_DO_CAPTURE = 36
-    HINT_B3_CAPTURE_IN_PROGRESS = 37
-    HINT_B3_ENEMIES_HIDDEN = 38
-    HINT_B3_CAPTURE_RESET = 39
-    HINT_B3_FOLIAGE2 = 40
-    HINT_B3_FLANK = 41
-    HINT_B3_CAPTURE_TOGETHER = 42
-    HINT_SNIPER_LEVEL0 = 43
-    HINT_CUSTOM = 44
-    HINTS_B3_CAPTURE = (HINT_B3_DO_CAPTURE,
-     HINT_B3_CAPTURE_IN_PROGRESS,
-     HINT_B3_CAPTURE_RESET,
-     HINT_B3_CAPTURE_TOGETHER)
-    HINTS_B3_DETECTED = (HINT_B3_YOU_ARE_DETECTED,)
-    BATTLE_HINTS = (HINT_MOVE,
-     HINT_MOVE_TURRET,
-     HINT_SHOOT,
-     HINT_SNIPER,
-     HINT_SNIPER_LEVEL0,
-     HINT_ADVANCED_SNIPER,
-     HINT_MESSAGE_AVOID,
-     HINT_MESSAGE_PLAYER_SPOTTED,
-     HINT_MESSAGE_SNEAK,
-     HINT_MESSAGE_ENEMY_CAN_HIDE,
-     HINT_MESSAGE_CAPTURE_THE_BASE,
-     HINT_MESSAGE_RESET_PROGRESS,
-     HINT_WEAK_POINTS,
-     HINT_REPAIR_TRACK,
-     HINT_USE_EXTINGUISHER,
-     HINT_HEAL_CREW,
-     HINT_AIM,
-     HINT_EXIT_GAME_AREA,
-     HINT_SECTOR_CLEAR,
-     HINT_PLAYER_DETECT_ENEMIES,
-     HINT_SNIPER_ON_DISTANCE,
-     HINT_TARGET_LOCK,
-     HINT_WAIT_RELOAD,
-     HINT_NO_MOVE,
-     HINT_NO_MOVE_TURRET,
-     HINT_SHOT_WHILE_MOVING,
-     HINT_MOVE_TO_MARKER,
-     HINT_SECONDARY_SNIPER,
-     HINT_USELESS_CONSUMABLE,
-     HINT_CUSTOM,
-     HINT_LOW_HP,
-     HINT_UNLOCK_TARGET,
-     HINT_B3_YOU_ARE_DETECTED,
-     HINT_B3_FALL_BACK,
-     HINT_B3_FOLIAGE,
-     HINT_B3_DO_CAPTURE,
-     HINT_B3_CAPTURE_IN_PROGRESS,
-     HINT_B3_ENEMIES_HIDDEN,
-     HINT_B3_CAPTURE_RESET,
-     HINT_B3_FOLIAGE2,
-     HINT_B3_FLANK,
-     HINT_B3_CAPTURE_TOGETHER)
-    SECONDARY_HINTS = (HINT_WAIT_RELOAD,
-     HINT_EXIT_GAME_AREA,
-     HINT_AIM,
-     HINT_SECONDARY_SNIPER,
-     HINT_NO_MOVE,
-     HINT_NO_MOVE_TURRET,
-     HINT_SHOT_WHILE_MOVING,
-     HINT_MOVE_TO_MARKER,
-     HINT_USELESS_CONSUMABLE,
-     HINT_LOW_HP,
-     HINT_UNLOCK_TARGET)
-
-
-HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0', 'hintCustom')
-
-class BOOTCAMP_BATTLE_RESULT_MESSAGE:
-    DRAW = 0
-    VICTORY = 1
-    DEFEAT = 2
-    FAILURE = 3
+    # The hint type for not moving

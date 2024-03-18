@@ -1,15 +1,19 @@
 <VehicleBerserkerComponent.def>
+  <!-- Defines the properties for a VehicleBerserkerComponent. -->
   <Properties>
+    <!-- The finish time for the berserker component. Type: FLOAT32. Flags: ALL_CLIENTS. DetailLevel: MY_VEHICLE. -->
     <finishTime>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </finishTime>
+    <!-- The tick interval for the berserker component. Type: FLOAT32. Flags: ALL_CLIENTS. DetailLevel: MY_VEHICLE. -->
     <tickInterval>
       <Type>	FLOAT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <DetailLevel>	MY_VEHICLE	</DetailLevel>
     </tickInterval>
   </Properties>
+  <!-- The default key name for the berserker component. -->
   <DefaultKeyName>	berserkerComponent	</DefaultKeyName>
 </VehicleBerserkerComponent.def>

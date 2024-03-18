@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/stats_exchange/vehicle.py
+
+# Import necessary modules and libraries
 from gui.shared.badges import buildBadge
 from gui.Scaleform.daapi.view.battle.shared.stats_exchange import broker
 from gui.Scaleform.settings import ICONS_SIZES
@@ -7,243 +9,107 @@ from gui.battle_control.arena_info import vos_collections
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
+# Define an abstract base class for sorted IDs composers
 class ISortedIDsComposer(object):
+    # Declare an abstract method for adding sort IDs
     __slots__ = ()
 
     def addSortIDs(self, isEnemy, arenaDP):
         raise NotImplementedError
 
 
+# Define a class for composing sorted IDs of vehicles
 class VehiclesSortedIDsComposer(broker.SingleSideComposer, ISortedIDsComposer):
+    # Declare a slot for storing the items
     __slots__ = ('_items',)
 
+    # Initialize the class with optional voField and sortKey parameters
     def __init__(self, voField='vehiclesIDs', sortKey=vos_collections.VehicleInfoSortKey):
+        # Call the constructor of the parent classes
         super(VehiclesSortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)
+        # Initialize the items slot
+        self._items = None
 
+    # Implement the addSortIDs method of the ISortedIDsComposer abstract base class
     def addSortIDs(self, isEnemy, arenaDP):
+        # Get the vehicle IDs from the arenaDP object
         self._items = vos_collections.VehiclesInfoCollection().ids(arenaDP)
 
+    # Implement a method for removing observer IDs
     def removeObserverIDs(self, arenaDP):
-        self._items = [ vID for vID in self._items if not arenaDP.getVehicleInfo(vID).vehicleType.isObserver ]
+        # Filter out observer vehicle IDs from the items list
+        self._items = [vID for vID in self._items if not arenaDP.getVehicleInfo(vID).vehicleType.isObserver]
 
 
+# Define a class for composing sorted IDs of allied vehicles
 class AllySortedIDsComposer(VehiclesSortedIDsComposer):
+    # Declare a slot for storing the items
     __slots__ = ()
 
+    # Initialize the class with optional voField and sortKey parameters
+    def __init__(self, voField='leftItemsIDs', sortKey=vos_collections.VehicleInfoSortKey):
+        # Call the constructor of the parent class
+        super(AllySortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)
+
+    # Implement the addSortIDs method of the ISortedIDsComposer abstract base class
     def addSortIDs(self, isEnemy, arenaDP):
+        # Get the allied vehicle IDs from the arenaDP object
         self._items = vos_collections.AllyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
+        # Remove observer vehicle IDs from the items list
         self.removeObserverIDs(arenaDP)
 
 
+# Define a class for composing sorted IDs of enemy vehicles
 class EnemySortedIDsComposer(VehiclesSortedIDsComposer):
+    # Declare a slot for storing the items
     __slots__ = ()
 
+    # Initialize the class with optional voField and sortKey parameters
+    def __init__(self, voField='rightItemsIDs', sortKey=vos_collections.VehicleInfoSortKey):
+        # Call the constructor of the parent class
+        super(EnemySortedIDsComposer, self).__init__(voField=voField, sortKey=sortKey)
+
+    # Implement the addSortIDs method of the ISortedIDsComposer abstract base class
     def addSortIDs(self, isEnemy, arenaDP):
+        # Get the enemy vehicle IDs from the arenaDP object
         self._items = vos_collections.EnemyItemsCollection(sortKey=self._sortKey).ids(arenaDP)
+        # Remove observer vehicle IDs from the items list
         self.removeObserverIDs(arenaDP)
 
 
+# Define a class for composing sorted IDs of two groups of items
 class BiSortedIDsComposer(broker.BiDirectionComposer, ISortedIDsComposer):
+    # Declare a slot for storing the left and right composers
     __slots__ = ()
 
+    # Initialize the class with left and right composers
+    def __init__(self, left, right):
+        # Call the constructor of the parent class
+        super(BiSortedIDsComposer, self).__init__(left=left, right=right)
+
+    # Implement the addSortIDs method of the ISortedIDsComposer abstract base class
     def addSortIDs(self, isEnemy, arenaDP):
+        # Call the addSortIDs method of the left or right composer depending on the isEnemy parameter
         if isEnemy:
             self._right.addSortIDs(isEnemy, arenaDP)
         else:
             self._left.addSortIDs(isEnemy, arenaDP)
 
 
+# Define a class for composing sorted IDs of teams
 class TeamsSortedIDsComposer(BiSortedIDsComposer):
-    __slots__ = ()
+    # Declare a slot for storing the sortKey parameter
+    __slots__ = ('_sortKey',)
 
+    # Initialize the class with optional sortKey parameter
     def __init__(self, sortKey=vos_collections.VehicleInfoSortKey):
-        super(TeamsSortedIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftItemsIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightItemsIDs', sortKey=sortKey))
+        # Define the left and right composers with optional voField and sortKey parameters
+        left = AllySortedIDsComposer(voField='leftItemsIDs', sortKey=sortKey)
+        right = EnemySortedIDsComposer(voField='rightItemsIDs', sortKey=sortKey)
+        # Call the constructor of the parent class
+        super(TeamsSortedIDsComposer, self).__init__(left=left, right=right)
+        # Initialize the sortKey slot
+        self._sortKey = sortKey
 
 
-class TeamsCorrelationIDsComposer(BiSortedIDsComposer):
-    __slots__ = ()
-
-    def __init__(self):
-        sortKey = vos_collections.FragCorrelationSortKey
-        super(TeamsCorrelationIDsComposer, self).__init__(left=AllySortedIDsComposer(voField='leftCorrelationIDs', sortKey=sortKey), right=EnemySortedIDsComposer(voField='rightCorrelationIDs', sortKey=sortKey))
-
-
-class TotalStatsComposer(broker.IExchangeComposer):
-    __slots__ = ('_stats',)
-
-    def __init__(self):
-        super(TotalStatsComposer, self).__init__()
-        self._stats = {}
-
-    def clear(self):
-        self._stats = None
-        return
-
-    def compose(self, data):
-        if self._stats:
-            data['totalStats'] = self._stats
-        return data
-
-    def addTotalStats(self, stats):
-        self._stats = stats
-
-
-class VehicleInfoComponent(broker.ExchangeComponent):
-    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('_data',)
-
-    def __init__(self):
-        super(VehicleInfoComponent, self).__init__()
-        self._data = {}
-
-    def clear(self):
-        self._data = {}
-        super(VehicleInfoComponent, self).clear()
-
-    def get(self, forced=False):
-        return self._data
-
-    def addVehicleInfo(self, vInfoVO, overrides):
-        vehicleID = vInfoVO.vehicleID
-        vTypeVO = vInfoVO.vehicleType
-        playerVO = vInfoVO.player
-        accountDBID = playerVO.accountDBID
-        sessionID = playerVO.avatarSessionID
-        battleCtx = self.__sessionProvider.getCtx()
-        isTeamKiller = playerVO.isTeamKiller or battleCtx.isTeamKiller(vehicleID, sessionID) or overrides.isTeamKiller(vInfoVO)
-        parts = self._ctx.getPlayerFullName(vInfoVO)
-        hasPrefixBadge = bool(vInfoVO.selectedBadge or vInfoVO.overriddenBadge)
-        data = {'accountDBID': accountDBID,
-         'sessionID': sessionID,
-         'playerName': parts.playerName,
-         'playerFakeName': parts.playerFakeName,
-         'playerFullName': parts.playerFullName,
-         'playerStatus': overrides.getPlayerStatus(vInfoVO, isTeamKiller),
-         'clanAbbrev': playerVO.clanAbbrev,
-         'region': parts.regionCode,
-         'userTags': self._ctx.getUserTags(sessionID, playerVO.igrType),
-         'squadIndex': vInfoVO.squadIndex,
-         'invitationStatus': overrides.getInvitationDeliveryStatus(vInfoVO),
-         'vehicleID': vehicleID,
-         'vehicleName': vTypeVO.shortName,
-         'vehicleType': vTypeVO.getClassName(),
-         'vehicleLevel': vTypeVO.level,
-         'vehicleIcon': vTypeVO.iconPath,
-         'vehicleIconName': vTypeVO.iconName,
-         'vehicleStatus': vInfoVO.vehicleStatus,
-         'isObserver': vInfoVO.isObserver(),
-         'vehicleAction': overrides.getAction(vInfoVO),
-         'isVehiclePremiumIgr': vTypeVO.isPremiumIGR,
-         'teamColor': overrides.getColorScheme(),
-         'hasSelectedBadge': hasPrefixBadge}
-        if vInfoVO.overriddenBadge:
-            data['badge'] = {'icon': 'override_badge_{}'.format(vInfoVO.overriddenBadge),
-             'content': None,
-             'sizeContent': ICONS_SIZES.X24,
-             'isDynamic': False,
-             'isAtlasSource': True}
-        elif vInfoVO.selectedBadge:
-            badgeID = vInfoVO.selectedBadge
-            badge = buildBadge(badgeID, vInfoVO.getBadgeExtraInfo())
-            if badge is not None:
-                data['badge'] = badge.getBadgeVO(ICONS_SIZES.X24, {'isAtlasSource': True}, shortIconName=True)
-        if vInfoVO.selectedSuffixBadge:
-            data['suffixBadgeType'] = 'badge_{}'.format(vInfoVO.selectedSuffixBadge)
-            data['suffixBadgeStripType'] = 'strip_{}'.format(vInfoVO.selectedSuffixBadge)
-        return self._data.update(data)
-
-
-class VehicleStatusComponent(broker.ExchangeComponent):
-    __slots__ = ('_vehicleID', '_status', '_idsComposers', '_statsComposers', '_dogTag')
-
-    def __init__(self, idsComposers=None, statsComposers=None):
-        super(VehicleStatusComponent, self).__init__()
-        self._vehicleID = 0
-        self._status = 0
-        self._idsComposers = idsComposers or ()
-        self._statsComposers = statsComposers or ()
-        self._dogTag = None
-        return
-
-    def clear(self):
-        self._vehicleID = 0
-        self._status = 0
-        for composer in self._idsComposers:
-            composer.clear()
-
-        for composer in self._statsComposers:
-            composer.clear()
-
-        super(VehicleStatusComponent, self).clear()
-
-    def get(self, forced=False):
-        data = {'isEnemy': self._isEnemy,
-         'vehicleID': self._vehicleID,
-         'status': self._status}
-        if self._dogTag:
-            data['dogTag'] = self._dogTag
-        for composer in self._idsComposers:
-            composer.compose(data)
-
-        for composer in self._statsComposers:
-            composer.compose(data)
-
-        return data
-
-    def addVehicleInfo(self, vInfoVO):
-        self._vehicleID = vInfoVO.vehicleID
-        self._status = vInfoVO.vehicleStatus
-        self._dogTag = vInfoVO.dogTag
-
-    def addTotalStats(self, stats):
-        for composer in self._statsComposers:
-            composer.addTotalStats(stats)
-
-    def addSortIDs(self, arenaDP):
-        for composer in self._idsComposers:
-            composer.addSortIDs(self._isEnemy, arenaDP)
-
-
-class VehicleStatsComponent(broker.VehicleComponent):
-    __slots__ = ()
-
-    def addStats(self, vStatsVO):
-        raise NotImplementedError
-
-
-class VehiclesExchangeBlock(broker.ExchangeBlock):
-    __slots__ = ('_idsComposers', '_statsComposers')
-
-    def __init__(self, itemComponent, positionComposer=None, idsComposers=None, statsComposers=None):
-        super(VehiclesExchangeBlock, self).__init__(itemComponent, composer=positionComposer)
-        self._idsComposers = idsComposers or ()
-        self._statsComposers = statsComposers or ()
-
-    def clear(self):
-        for composer in self._idsComposers:
-            composer.clear()
-
-        for composer in self._statsComposers:
-            composer.clear()
-
-        super(VehiclesExchangeBlock, self).clear()
-
-    def get(self, forced=False):
-        data = super(VehiclesExchangeBlock, self).get(forced=forced)
-        if data or forced:
-            for composer in self._idsComposers:
-                composer.compose(data)
-
-            for composer in self._statsComposers:
-                composer.compose(data)
-
-        return data
-
-    def addSortIDs(self, arenaDP, *flags):
-        for composer in self._idsComposers:
-            for flag in flags:
-                composer.addSortIDs(flag, arenaDP)
-
-    def addTotalStats(self, stats):
-        for composer in self._statsComposers:
-            composer.addTotalStats(stats)
+# Define a class for composing sorted IDs of

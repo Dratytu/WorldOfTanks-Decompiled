@@ -1,17 +1,17 @@
 <BattleRoyaleComponent.def>
   <CellMethods>
     <setupArena>
-      <Arg>	PYTHON	</Arg>
+      <Arg>PYTHON</Arg>  # Specifies the programming language used for the setupArena method
     </setupArena>
     <finalizeWinner></finalizeWinner>
     <destroyLeaver>
-      <Arg>	OBJECT_ID	</Arg>
+      <Arg>OBJECT_ID</Arg>  # Identifies the object ID passed as an argument to the destroyLeaver method
     </destroyLeaver>
   </CellMethods>
   <BaseMethods>
-    <destroyLeavers></destroyLeavers>
+    <destroyLeavers></destroyLeavers>  # Method for destroying multiple leavers
   </BaseMethods>
   <ofEntity>
-    <Arena></Arena>
+    <Arena></Arena>  # Entity type is Arena
   </ofEntity>
 </BattleRoyaleComponent.def>

@@ -1,5 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: battle_royale/scripts/client/InBattleUpgradesAvatar.py
+# Embedded file name: battle_royale/scripts/client/in_battle_upgrades_avatar.py
 
 import BigWorld  # Imported for creating a DynamicScriptComponent
 from debug_utils import LOG_DEBUG, LOG_WARNING  # Imported for logging debug and warning messages
@@ -32,32 +32,10 @@ class InBattleUpgradesAvatar(BigWorld.DynamicScriptComponent):
         """
         player = self.entity  # The player entity
 
-        def __vehicleUpgradeLogger(isSuccess, intCD, reason, moduleTxt):
+        def __vehicleUpgradeLogger(is_success, int_cd, reason, module_txt):
             """
             A helper function for logging upgrade successes and failures.
 
-            :param isSuccess: A boolean value indicating success or failure.
-            :param intCD: The integer compact descriptor code for the upgrade.
-            :param reason: The reason for the upgrade failure.
-            :param moduleTxt: The text for the module type.
-            """
-            if isSuccess:
-                LOG_DEBUG('{} intCD = {} successfully installed'.format(moduleTxt, intCD))
-            else:
-                LOG_WARNING('Could not install {} intCD = {}. Reason - {}!'.format(moduleTxt, intCD, reason))
-
-        for intCD, reason in zip(intCDs, reasons):
-            __vehicleUpgradeLogger(reason == '', intCD, reason, 'Main' if intCD is intCDs[0] else 'Additional')
-
-        mainIntCDs = intCDs[0]  # The main integer compact descriptor code
-        mainSuccess = not reasons[0]  # The success or failure of the main upgrade
-
-        if mainSuccess and ITEM_TYPES.vehicleGun in [vehicles.parseIntCompactDescr(intCD)[0] for intCD in intCDs]:
-            """
-            If the main upgrade was successful and it's a vehicle gun, upgrade the vehicle gun.
-            """
-            self.__upgradeVehicleGun()
-
-        if player.guiSessionProvider.dynamic.progression:
-            if BattleReplay.g_replayCtrl.isPlaying:
-                player.guiSession
+            :param is_success: A boolean value indicating success or failure.
+            :param int_cd: The integer compact descriptor code for the upgrade.
+           

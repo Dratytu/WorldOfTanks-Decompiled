@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: scripts/client/bootcamp/BootcampUIConfig.py
 
 # Import necessary modules
 from copy import copy
-import ResMgr
-from soft_exception import SoftException
+import ResMgr # Module for working with resource files
+from soft_exception import SoftException # Custom exception class
 
 # Define the default battle ribbons settings
 g_defaultBattleRibbonsSettings = {
@@ -22,7 +21,7 @@ XML_CONFIG_PATH = 'scripts/bootcamp_docs/battle_page_visibility.xml'
 
 # Define a function to read UI settings from the file
 def readUISettingsFile(path):
-    settingsConfig = ResMgr.openSection(path)
+    settingsConfig = ResMgr.openSection(path) # Open the configuration file
     if settingsConfig is None:
         # Raise a SoftException if the config file cannot be opened
         raise SoftException("Can't open config file (%s)" % path)
@@ -62,3 +61,5 @@ def getBattleRibbonsSettings(lessonId):
     return g_battleRibbonsSettings[lessonId]
 
 # Define a function to get the prebattle settings
+# (This function is declared but not implemented)
+

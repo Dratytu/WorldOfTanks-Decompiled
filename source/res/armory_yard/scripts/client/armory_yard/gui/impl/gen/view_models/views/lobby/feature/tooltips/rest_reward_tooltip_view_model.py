@@ -1,25 +1,14 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/tooltips/rest_reward_tooltip_view_model.py
-from frameworks.wulf import Array
-from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
+# Create a new RestRewardTooltipViewModel
+view_model = RestRewardTooltipViewModel()
 
-class RestRewardTooltipViewModel(ViewModel):
-    __slots__ = ()
+# Add some rewards to the view model
+rewards = [
+    ItemBonusModel(item_id=1, value=10),
+    ItemBonusModel(item_id=2, value=5),
+    ItemBonusModel(item_id=3, value=20),
+]
+view_model.setRewards(rewards)
 
-    def __init__(self, properties=1, commands=0):
-        super(RestRewardTooltipViewModel, self).__init__(properties=properties, commands=commands)
-
-    def getRewards(self):
-        return self._getArray(0)
-
-    def setRewards(self, value):
-        self._setArray(0, value)
-
-    @staticmethod
-    def getRewardsType():
-        return ItemBonusModel
-
-    def _initialize(self):
-        super(RestRewardTooltipViewModel, self)._initialize()
-        self._addArrayProperty('rewards', Array())
+# Display the tooltip with the view model as its data source
+tooltip = Tooltip(view_model=view_model)
+tooltip.show()

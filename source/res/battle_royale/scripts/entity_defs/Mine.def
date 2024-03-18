@@ -1,30 +1,38 @@
 <!-- The 'Mine.def' element defines the properties of a mine object in the game. -->
+<Mine.def>
 
-<!-- 'AppealRadius' specifies the radius within which the mine object can affect other game objects. -->
-<AppealRadius>	3000	</AppealRadius>
+  <!-- 'AppealRadius' specifies the radius within which the mine object can affect other game objects. -->
+  <AppealRadius>	3000	</AppealRadius>
 
-<!-- The 'Properties' element contains a list of properties that define the behavior and state of the mine object. -->
-<Properties>
+  <!-- The 'Properties' element contains a list of properties that define the behavior and state of the mine object. -->
+  <Properties>
 
-  <!-- 'equipmentID' is a unique identifier for the equipment associated with the mine. -->
-  <equipmentID>
-    <!-- 'Type' specifies the data type of the identifier, which is a 32-bit unsigned integer. -->
-    <Type>	UINT32	</Type>
-    <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
-    <Flags>	ALL_CLIENTS	</Flags>
-  </equipmentID>
+    <!-- 'equipmentID' is a unique identifier for the equipment associated with the mine. -->
+    <equipmentID>
+      <!-- 'Type' specifies the data type of the identifier, which is a 32-bit unsigned integer. -->
+      <Type>	UINT32	</Type>
+      <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
 
-  <!-- 'ownerVehicleID' is a unique identifier for the vehicle that owns the mine. -->
-  <ownerVehicleID>
-    <!-- 'Type' specifies the data type of the identifier, which is a 32-bit unsigned integer. -->
-    <Type>	UINT32	</Type>
-    <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
-    <Flags>	ALL_CLIENTS	</Flags>
-  </ownerVehicleID>
+    <!-- 'ownerVehicleID' is a unique identifier for the vehicle that owns the mine. -->
+    <ownerVehicleID>
+      <!-- 'Type' specifies the data type of the identifier, which is a 32-bit unsigned integer. -->
+      <Type>	UINT32	</Type>
+      <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
+      <Flags>	ALL_CLIENTS	</Flags>
+    </ownerVehicleID>
 
-  <!-- 'isDetonated' is a boolean flag that indicates whether the mine has been detonated. -->
-  <isDetonated>
-    <!-- 'Type' specifies the data type of this property, which is a boolean. -->
-    <Type>	BOOL	</Type>
-    <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
-    <Flags>	ALL_CLIENTS	
+    <!-- 'isDetonated' is a boolean flag that indicates whether the mine has been detonated. -->
+    <isDetonated>
+      <!-- 'Type' specifies the data type of this property, which is a boolean. -->
+      <Type>	BOOL	</Type>
+      <!-- 'Flags' specifies the access level for this property, which is set to 'ALL_CLIENTS', indicating that all clients can access this property. -->
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isDetonated>
+
+  <!-- </Properties> is the closing tag for the 'Properties' element. -->
+  </Properties>
+
+<!-- </Mine.def> is the closing tag for the 'Mine.def' element. -->
+</Mine.def>

@@ -5,9 +5,12 @@
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
+# Import VehicleAbilityBaseComponent class
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
+# Import vehicles and FireCircle from items and items.artefacts respectively
 from items import vehicles
 from items.artefacts import FireCircle
+# Import first from shared_utils
 from shared_utils import first
 
 # Define the VehicleFireCircleEffectComponent class, which inherits from VehicleAbilityBaseComponent
@@ -29,7 +32,9 @@ class VehicleFireCircleEffectComponent(VehicleAbilityBaseComponent):
     @staticmethod
     def getEquipment():
         # Static method to get the fire circle equipment
+        # Get the equipment ID for the Fire Circle item
         equipmentID = vehicles.g_cache.equipmentIDs().get(BattleRoyaleEquipments.FIRE_CIRCLE)
+        # Get the equipment object for the Fire Circle item
         equipment = vehicles.g_cache.equipments()[equipmentID]
         return equipment
 

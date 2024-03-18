@@ -1,7 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Settings.py
+
 import BigWorld
+
+# The global instance of the Settings class
 g_instance = None
+
+# Constants for various settings keys
 KEY_CONTROL_MODE = 'controlMode'
 KEY_LOGIN_INFO = 'loginInfo'
 KEY_SCREEN_SIZE = 'screenSize'
@@ -29,11 +34,13 @@ POPUPS_WINDOWS_DISABLED = 'popupsWindowsDisabled'
 KEY_MAPS_TRAINING_PREFERENCES = 'mapsTraining'
 
 class Settings(object):
+    """
+    A class representing the game settings.
+    Handles saving the settings to the preferences.
+    """
 
     def __init__(self, scriptConfig, engineConfig, userPrefs):
-        self.scriptConfig = scriptConfig
-        self.engineConfig = engineConfig
-        self.userPrefs = userPrefs
+        """
+        Initializes a new Settings instance.
 
-    def save(self):
-        BigWorld.savePreferences()
+        :param scriptConfig: The script configuration.

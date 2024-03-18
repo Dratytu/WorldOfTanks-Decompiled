@@ -14,25 +14,42 @@ class SPAFlags(object):
         super(SPAFlags, self).__init__()
 
         # Initialize class variables
-        self.__account = None
-        self.__syncData = syncData
-        self.__cache = {}
-        self.__ignore = True
+        self.__account = None  #: The account associated with the flags
+        self.__syncData = syncData  #: The sync data provided during initialization
+        self.__cache = {}  #: The cache for storing flag values
+        self.__ignore = True  #: A flag to ignore flag updates when the account is not a player
 
     # Callback method for when the account becomes a player
     def onAccountBecomePlayer(self):
+        """
+        Callback method for when the account becomes a player.
+        Sets the __ignore flag to False.
+        """
         self.__ignore = False
 
     # Callback method for when the account stops being a player
     def onAccountBecomeNonPlayer(self):
+        """
+        Callback method for when the account stops being a player.
+        Sets the __ignore flag to True.
+        """
         self.__ignore = True
 
     # Method to set the account
     def setAccount(self, account):
+        """
+        Method to set the account.
+        :param account: The account to be set
+        """
         self.__account = account
 
     # Method to synchronize the flags with the given diff
     def synchronize(self, diff):
+        """
+        Method to synchronize the flags with the given diff.
+        Updates the internal __cache attribute with the new flag values.
+        :param diff: The diff data containing the flag updates
+        """
         # Get the cache diff and the SPA cache from the diff
         cacheDiff = diff.get('cache', None)
         spaCache = cacheDiff.get('SPA', None) if cacheDiff else None
@@ -53,9 +70,4 @@ class SPAFlags(object):
                         itemDiff[key] = value
 
         # Synchronize the item diff with the cache
-        synchronizeDicts(itemDiff, self.__cache.setdefault('spaFlags', {}))
 
-    # Method to get a flag by name
-    def getFlag(self, flagName):
-        # Return the flag value from the cache if it exists
-        return self.__cache['spaFlags'].get(

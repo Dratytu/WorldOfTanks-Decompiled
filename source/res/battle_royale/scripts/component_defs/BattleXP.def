@@ -1,21 +1,19 @@
-<BattleXP.def>
-  <Properties>
-    <battleXP>
-      <Type>	INT32	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <Default>	-1	</Default>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
-    </battleXP>
-    <battleXpLvlData>
-      <Type>	TUPLE	  <of>	UINT16	</of>
-        <size>	3	</size>
-      </Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-      <DetailLevel>	MY_VEHICLE	</DetailLevel>
-    </battleXpLvlData>
-  </Properties>
-  <ofEntity>
-    <Vehicle></Vehicle>
-  </ofEntity>
-  <DefaultKeyName>	battleXP	</DefaultKeyName>
-</BattleXP.def>
+' This is a definition file for BattleXP-related data.
+' It contains properties for battleXP and battleXpLvlData.
+
+' The battleXP property:
+'   - Type: INT32
+'   - Flags: ALL_CLIENTS
+'   - Default: -1
+'   - DetailLevel: MY_VEHICLE
+' This property represents the battle experience points of a vehicle.
+
+' The battleXpLvlData property:
+'   - Type: TUPLE of UINT16 (size: 3)
+'   - Flags: ALL_CLIENTS
+'   - DetailLevel: MY_VEHICLE
+' This property represents a tuple of three UINT16 values that are used for battle experience level data.
+
+' The ofEntity section specifies that this definition is for a Vehicle entity.
+
+' The DefaultKeyName specifies the default name for this definition, which is "battleXP".

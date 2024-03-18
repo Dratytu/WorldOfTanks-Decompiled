@@ -10,11 +10,10 @@ from frameworks.wulf import ViewModel  # Base class for all view models
 # FINISHED: The frontline event has finished
 # FROZEN: The frontline event is in a paused or frozen state
 class FrontlineState(enum.Enum):
-    ANNOUNCE = 'announce'
-    ACTIVE = 'active'
-    FINISHED = 'finished'
-    FROZEN = 'frozen'
-
+    ANNOUNCE = 'announce'  # The frontline event is being announced
+    ACTIVE = 'active'  # The frontline event is currently active
+    FINISHED = 'finished'  # The frontline event has finished
+    FROZEN = 'frozen'  # The frontline event is in a paused or frozen state
 
 # Define the FrontlineConst view model class
 class FrontlineConst(ViewModel):

@@ -1,12 +1,14 @@
 <TeamInfoComp7Component.def>
   <Properties>
     <roleSkillLevels>
+      ! This property is used to store the skill levels of team members.
       <Type>	PYTHON	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <AllowUnsafeData>	true	</AllowUnsafeData>
       <Default>	{}	</Default>
     </roleSkillLevels>
     <teamVivoxChannel>
+      ! This property is used to store the Vivox channel for the team.
       <Type>	PYTHON	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <AllowUnsafeData>	true	</AllowUnsafeData>
@@ -15,6 +17,7 @@
   </Properties>
   <CellMethods>
     <setVivoxPresence>
+      ! This method is used to set the Vivox presence for the team.
       <Arg>	BOOL	</Arg>
       <Exposed></Exposed>
     </setVivoxPresence>
@@ -23,3 +26,4 @@
     <TeamInfo></TeamInfo>
   </ofEntity>
 </TeamInfoComp7Component.def>
+

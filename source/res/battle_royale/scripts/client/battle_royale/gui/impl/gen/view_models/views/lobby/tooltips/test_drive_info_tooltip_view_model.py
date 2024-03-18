@@ -4,26 +4,16 @@ from frameworks.wulf import ViewModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.rent_price_model import RentPriceModel
 
 class TestDriveInfoTooltipViewModel(ViewModel):
+    """View model for the tooltip that displays information about the test drive feature in the lobby."""
     __slots__ = ()
 
     def __init__(self, properties=2, commands=0):
+        """Initializes the view model with 2 properties and 0 commands."""
         super(TestDriveInfoTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def price(self):
+        """Returns the view model for the price of the test drive."""
         return self._getViewModel(0)
 
-    @staticmethod
-    def getPriceType():
-        return RentPriceModel
-
-    def getTestDriveDays(self):
-        return self._getNumber(1)
-
-    def setTestDriveDays(self, value):
-        self._setNumber(1, value)
-
-    def _initialize(self):
-        super(TestDriveInfoTooltipViewModel, self)._initialize()
-        self._addViewModelProperty('price', RentPriceModel())
-        self._addNumberProperty('testDriveDays', 0)
+    @static

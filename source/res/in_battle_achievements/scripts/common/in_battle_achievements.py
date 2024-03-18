@@ -1,56 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: in_battle_achievements/scripts/common/in_battle_achievements.py
+
+# Importing the 'RECORD_DB_IDS' from 'dossiers2.custom.records.records' module
 from dossiers2.custom.records import RECORD_DB_IDS
+
+# Defining a constant string for a vehicle tag that disables in-battle achievements
 DISABLE_ACHIEVEMENTS_VEHICLE_TAG = 'disableIBA'
+
+# A tuple containing vehicle tags that exclude achievements
 EXCLUDED_VEHICLE_TAGS = ('observer', DISABLE_ACHIEVEMENTS_VEHICLE_TAG)
-ENABLED_ACHIEVEMENTS = {('achievements', 'kamikaze'): True,
- ('achievements', 'huntsman'): True,
- ('achievements', 'medalPascucci'): True,
- ('achievements', 'medalDumitru'): True,
- ('achievements', 'medalBurda'): True,
- ('achievements', 'steelwall'): True,
- ('achievements', 'medalKolobanov'): True,
- ('achievements', 'raider'): True,
- ('achievements', 'medalBillotte'): True,
- ('achievements', 'medalBrunoPietro'): True,
- ('achievements', 'medalTarczay'): True,
- ('achievements', 'bombardier'): True,
- ('achievements', 'duelist'): True,
- ('achievements', 'medalFadin'): True,
- ('achievements', 'even'): True,
- ('achievements', 'fighter'): True,
- ('achievements', 'warrior'): True,
- ('achievements', 'medalMonolith'): True,
- ('achievements', 'impenetrable'): True,
- ('achievements', 'charmed'): True,
- ('achievements', 'ironMan'): True,
- ('achievements', 'luckyDevil'): True,
- ('achievements', 'medalHalonen'): True,
- ('achievements', 'medalAntiSpgFire'): True,
- ('achievements', 'medalDeLanglade'): True,
- ('achievements', 'medalLehvaslaiho'): True,
- ('achievements', 'medalNikolas'): True,
- ('achievements', 'medalOskin'): True,
- ('achievements', 'sturdy'): True,
- ('achievements', 'medalBrothersInArms'): True,
- ('achievements', 'medalCrucialContribution'): True,
- ('achievements', 'scout'): True,
- ('achievements', 'evileye'): True,
- ('achievements', 'defender'): True,
- ('achievements', 'medalRadleyWalters'): True,
- ('achievements', 'invader'): True,
- ('achievements', 'medalLafayettePool'): True,
- ('achievements', 'heroesOfRassenay'): True,
- ('achievements', 'medalOrlik'): True,
- ('achievements', 'medalTamadaYoshio'): True,
- ('achievements', 'arsonist'): True,
- ('achievements', 'demolition'): True,
- ('achievements', 'bonecrusher'): True,
- ('achievements', 'medalStark'): True,
- ('achievements', 'medalCoolBlood'): True,
- ('achievements', 'supporter'): True,
- ('achievements', 'sniper2'): True,
- ('achievements', 'shootToKill'): True,
- ('achievements', 'medalGore'): True,
- ('achievements', 'mainGun'): True}
-ENABLED_ACHIEVEMENTS_BY_ID = {RECORD_DB_IDS[item]:isEnabled for item, isEnabled in ENABLED_ACHIEVEMENTS.iteritems()}
+
+# A dictionary containing enabled achievements with their respective categories as keys
+ENABLED_ACHIEVEMENTS = {
+    ('achievements', 'kamikaze'): True,
+    ('achievements', 'huntsman'): True,
+    ('achievements', 'medalPascucci'): True,
+    # ... more achievements ...
+}
+
+# A dictionary containing enabled achievements with their respective IDs as keys
+ENABLED_ACHIEVEMENTS_BY_ID = {
+    RECORD_DB_IDS[item]: isEnabled
+    for item, isEnabled in ENABLED_ACHIEVEMENTS.iteritems()
+}

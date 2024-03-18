@@ -1,7 +1,13 @@
 <ArenaFLBattleModifiersComponent.def>
+  <!-- This is a definition file for the ArenaFLBattleModifiersComponent entity. -->
   <CellMethods></CellMethods>
+  <!-- The CellMethods tag is used to specify the methods that are applied to the cells of the entity.
+  In this case, no methods are specified. -->
   <ofEntity>
     <Arena></Arena>
   </ofEntity>
+  <!-- This tag specifies that the ArenaFLBattleModifiersComponent entity is associated with the Arena entity. -->
   <DefaultKeyName>	ArenaFLBattleModifiersComponent	</DefaultKeyName>
+  <!-- The DefaultKeyName tag specifies the default name for the ArenaFLBattleModifiersComponent entity. -->
 </ArenaFLBattleModifiersComponent.def>
+

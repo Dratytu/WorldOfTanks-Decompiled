@@ -1,13 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/ConsoleCommands.py
-import BigWorld
-import FantasyDemo
-import Avatar
-import Math
-import FDGUI
-import re
 
+import BigWorld  # Import the BigWorld module for entity management and game world interaction
+import FantasyDemo  # Import the FantasyDemo module for adding chat messages
+import Avatar  # Import the Avatar module for player-related functionality
+import Math  # Import the Math module for vector and matrix operations
+import FDGUI  # Import the FDGUI module for GUI-related functionality
+import re  # Import the re module for regular expression operations
+
+# who(player, string) - A console command that lists players near the invoker
 def who(player, string):
+    """
+    A console command that lists players near the invoker.
+
+    :param player: The invoking player object
+    :param string: Not used in this function
+    """
     playerList = 'Players near you:\n'
     for i in BigWorld.entities.values():
         if i.__class__.__name__ == 'Avatar':
@@ -16,7 +24,14 @@ def who(player, string):
     FantasyDemo.addChatMsg(-1, playerList)
 
 
+# help(player, string) - A console command that displays help information for other commands
 def help(player, string):
+    """
+    A console command that displays help information for other commands.
+
+    :param player: The invoking player object
+    :param string: The name of the command to display help for, or an empty string for a list of all commands
+    """
     if string:
         try:
             func = globals()[string]
@@ -42,7 +57,14 @@ def help(player, string):
         FantasyDemo.addChatMsg(-1, string)
 
 
+# target(player, string) - A console command that sends a private message to the targeted entity
 def target(player, string):
+    """
+    A console command that sends a private message to the targeted entity.
+
+    :param player: The invoking player object
+    :param string: The message to send to the targeted entity
+    """
     t = BigWorld.target()
     if t:
         try:
@@ -52,230 +74,85 @@ def target(player, string):
             pass
 
 
+# pushUp(player, string) - A console command that pushes the player up
 def pushUp(player, string):
+    """
+    A console command that pushes the player up.
+
+    :param player: The invoking player object
+    :param string: Not used in this function
+    """
     player.pushUpKey()
 
 
+# pullUp(player, string) - A console command that pulls the player up
 def pullUp(player, string):
+    """
+    A console command that pulls the player up.
+
+    :param player: The invoking player object
+    :param string: Not used in this function
+    """
     player.pullUpKey()
 
 
+# follow(player, string) - A console command that makes the player follow the targeted entity
 def follow(player, string):
+    """
+    A console command that makes the player follow the targeted entity.
+
+    :param player: The invoking player object
+    :param string: Not used in this function
+    """
     if BigWorld.target() != None:
         player.physics.chase(BigWorld.target(), 2.0, 0.5)
         player.physics.velocity = (0, 0, 6.0)
     return
 
 
+# summon(player, string) - A console command that summons an entity by name
 def summon(player, string):
+    """
+    A console command that summons an entity by name.
+
+    :param player: The invoking player object
+    :param string: The name of the entity to summon
+    """
     if isinstance(BigWorld.connectedEntity(), Avatar.Avatar):
         BigWorld.connectedEntity().cell.summonEntity(str(string))
     else:
         FantasyDemo.addChatMsg(-1, 'Summon can only be called when connected to the server')
 
 
+# weather(player, string) - A console command that sets the current weather
 def weather(player, string):
-    import Weather
+    """
+    A console command that sets the current weather.
+
+    :param player: The invoking player object
+    :param string: The name of the weather type
+    """
+    import Weather  # Import the Weather module for weather management
     Weather.weather().toggleRandomWeather(False)
     Weather.weather().summon(str(string))
 
 
+# rain(player, string) - A console command that sets the rain intensity
 def rain(player, string):
-    import Weather
+    """
+    A console command that sets the rain intensity.
+
+    :param player: The invoking player object
+    :param string: The rain intensity as a float
+    """
+    import Weather  # Import the Weather module for weather management
     Weather.weather().rain(float(string))
 
 
+# getV4FromString(string) - A helper function that converts a string into a Math.Vector4 object
 def getV4FromString(string):
-    tokens = string.split(' ')
-    v = [1,
-     1,
-     1,
-     1]
-    for i in tokens:
-        try:
-            v.append(float(i))
-        except:
-            pass
+    """
+    A helper function that converts a string into a Math.Vector4 object.
 
-    return Math.Vector4(v[-4:])
+    :param string: The string representation of the vector
 
-
-def fog(player, string):
-    import Weather
-    Weather.weather().fog(getV4FromString(string))
-
-
-def ambient(player, string):
-    import Weather
-    Weather.weather().ambient(getV4FromString(string))
-
-
-def sunlight(player, string):
-    import Weather
-    Weather.weather().sun(getV4FromString(string))
-
-
-def wave(player, string):
-    player.playGesture(1)
-
-
-def laugh(player, string):
-    player.playGesture(16)
-
-
-def cry(player, string):
-    player.playGesture(3)
-
-
-def point(player, string):
-    player.playGesture(24)
-
-
-def shrug(player, string):
-    player.playGesture(4)
-
-
-def yes(player, string):
-    player.playGesture(19)
-
-
-def no(player, string):
-    player.playGesture(20)
-
-
-def beckon(player, string):
-    player.playGesture(21)
-
-
-def fat(player, string):
-    player.playGesture(44)
-
-
-def skinny(player, string):
-    player.playGesture(45)
-
-
-def addTransportAccount(player, string):
-    string = string.encode('utf8').strip()
-    m = re.match('(.+?)\\s+(.+?)\\s+(.+)', string)
-    if not m:
-        FantasyDemo.addChatMsg(-1, 'Invalid transport registration details.', FDGUI.TEXT_COLOUR_SYSTEM)
-        return
-    transport = m.group(1)
-    username = m.group(2)
-    password = m.group(3)
-    registerMsg = 'Attempting to register %s account %s.' % (transport, username)
-    FantasyDemo.addChatMsg(-1, registerMsg, FDGUI.TEXT_COLOUR_SYSTEM)
-    player.base.xmppTransportAccountRegister(transport, username, password)
-
-
-def delTransportAccount(player, string):
-    transport = string.encode('utf8').strip()
-    wasFound = False
-    for transportDetails in player.xmppTransportDetails:
-        if not wasFound and transportDetails['transport'] == transport:
-            wasFound = True
-
-    if not wasFound:
-        FantasyDemo.addChatMsg(-1, 'Transport not known.', FDGUI.TEXT_COLOUR_SYSTEM)
-    else:
-        player.base.xmppTransportAccountDeregister(transport)
-
-
-def addFriend(player, string):
-    if string.find('@') >= 0:
-        transport = 'xmpp'
-        if string.startswith('@'):
-            FantasyDemo.addChatMsg(-1, 'Invalid IM friend name.', FDGUI.TEXT_COLOUR_SYSTEM)
-            return
-        imContents = string.rsplit(':', 1)
-        friendID = imContents[0]
-        if len(imContents) == 2:
-            transport = imContents[1].encode('utf8').lower()
-        if friendID.endswith('@'):
-            friendID += 'eval.bigworldtech.com'
-        friendsList = player.roster.findFriendsLike(friendID, transport)
-        if len(friendsList):
-            FantasyDemo.addChatMsg(-1, '%s is already a friend.' % friendID, FDGUI.TEXT_COLOUR_SYSTEM)
-            return
-        player.base.xmppAddFriend(friendID, transport)
-    else:
-        player.addFriend(string.encode('utf8'))
-
-
-def delFriend(player, string):
-    friendsList = player.roster.findFriendsLike(string)
-    if not len(friendsList):
-        player.delFriend(string.encode('utf8'))
-    elif len(friendsList) > 1:
-        FantasyDemo.addChatMsg(-1, "Found multiple friends that match '%s'.", FDGUI.TEXT_COLOUR_SYSTEM)
-        for friendItem in friendsList:
-            FantasyDemo.addChatMsg(-1, friendItem[0], FDGUI.TEXT_COLOUR_SYSTEM)
-
-    else:
-        friend = friendsList[0]
-        player.base.xmppDelFriend(friend[0], friend[1])
-
-
-def infoFriend(player, string):
-    player.infoFriend(string)
-
-
-def listFriends(player, string):
-    player.listFriends()
-
-
-def msgFriend(player, string):
-    words = string.split(':', 1)
-    if len(words) < 2:
-        FantasyDemo.addChatMsg(-1, 'Invalid format - /help msgFriend for details', FDGUI.TEXT_COLOUR_SYSTEM)
-        return
-    recipient = words[0].strip()
-    message = words[1].strip()
-    if not len(message):
-        FantasyDemo.addChatMsg(-1, 'Invalid format - /help msgFriend for details', FDGUI.TEXT_COLOUR_SYSTEM)
-        return
-    friendsList = player.roster.findFriendsLike(recipient)
-    if not len(friendsList):
-        player.msgFriend(recipient.encode('utf8'), message)
-    elif len(friendsList) > 1:
-        FantasyDemo.addChatMsg(-1, "Found multiple friends that match '%s'.", FDGUI.TEXT_COLOUR_SYSTEM)
-        for friendItem in friendsList:
-            FantasyDemo.addChatMsg(-1, friendItem[0], FDGUI.TEXT_COLOUR_SYSTEM)
-
-    else:
-        friend = friendsList[0]
-        player.base.xmppMsgFriend(friend[0], friend[1], message)
-        recipient = friend[0] + ' [IM]'
-    FantasyDemo.addChatMsg(-1, 'You say to ' + recipient + ': ' + message, FDGUI.TEXT_COLOUR_YOU_SAY)
-
-
-tell = msgFriend
-t = msgFriend
-
-def teleport(player, dst):
-    try:
-        spaceName, pointName = str(dst).rsplit(' ', 1)
-    except ValueError:
-        try:
-            spaceName, pointName = str(dst).rsplit('/', 1)
-        except ValueError:
-            return
-
-    BigWorld.player().tryToTeleport(spaceName, pointName)
-    FantasyDemo.rds.fdgui.chatWindow.script.hideNow()
-
-
-def addNote(player, description):
-    if description == None or len(description) == 0:
-        FantasyDemo.addChatMsg(-1, 'Must provide a note description')
-    else:
-        print 'Adding a note:', description
-        if isinstance(description, unicode):
-            description = description.encode('utf8')
-        player.base.addNote(description)
-    return
-
-
-def getNotes(player, arg):
-    player.base.getNotes()

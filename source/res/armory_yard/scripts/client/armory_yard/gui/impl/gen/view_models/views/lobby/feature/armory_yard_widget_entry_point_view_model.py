@@ -1,57 +1,86 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
+# Python bytecode 3.7 (decompiled from Python 3.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/armory_yard_widget_entry_point_view_model.py
 from enum import Enum
 from frameworks.wulf import ViewModel
 
 class State(Enum):
-    BEFOREPROGRESSION = 'beforeProgression'
+    BEFORE_PROGRESSION = 'beforeProgression'
     ACTIVE = 'active'
-    POSTPROGRESSION = 'postProgression'
+    POST_PROGRESSION = 'postProgression'
     COMPLETED = 'completed'
     DISABLED = 'disabled'
 
 
 class ArmoryYardWidgetEntryPointViewModel(ViewModel):
-    __slots__ = ('onAction',)
+    """
+    View model for Armory Yard widget entry point.
+    """
+    __slots__ = ('on_action',)
 
     def __init__(self, properties=5, commands=1):
-        super(ArmoryYardWidgetEntryPointViewModel, self).__init__(properties=properties, commands=commands)
+        super().__init__(properties=properties, commands=commands)
 
-    def getState(self):
+    @property
+    def state(self):
+        """
+        Current state of the entry point.
+        :return: State
+        """
         return State(self._getString(0))
 
-    def setState(self, value):
+    @state.setter
+    def state(self, value: State):
         self._setString(0, value.value)
 
-    def getStartTime(self):
+    @property
+    def start_time(self):
+        """
+        Start time of the entry point.
+        :return: float
+        """
         return self._getNumber(1)
 
-    def setStartTime(self, value):
+    @start_time.setter
+    def start_time(self, value: float):
         self._setNumber(1, value)
 
-    def getEndTime(self):
+    @property
+    def end_time(self):
+        """
+        End time of the entry point.
+        :return: float
+        """
         return self._getNumber(2)
 
-    def setEndTime(self, value):
+    @end_time.setter
+    def end_time(self, value: float):
         self._setNumber(2, value)
 
-    def getCurrentTime(self):
+    @property
+    def current_time(self):
+        """
+        Current time.
+        :return: float
+        """
         return self._getNumber(3)
 
-    def setCurrentTime(self, value):
+    @current_time.setter
+    def current_time(self, value: float):
         self._setNumber(3, value)
 
-    def getIsRewardAvailable(self):
+    @property
+    def is_reward_available(self):
+        """
+        Indicates if the reward is available.
+        :return: bool
+        """
         return self._getBool(4)
 
-    def setIsRewardAvailable(self, value):
+    @is_reward_available.setter
+    def is_reward_available(self, value: bool):
         self._setBool(4, value)
 
     def _initialize(self):
-        super(ArmoryYardWidgetEntryPointViewModel, self)._initialize()
+        super()._initialize()
         self._addStringProperty('state')
-        self._addNumberProperty('startTime', 0)
-        self._addNumberProperty('endTime', 0)
-        self._addNumberProperty('currentTime', 0)
-        self._addBoolProperty('isRewardAvailable', False)
-        self.onAction = self._addCommand('onAction')
+        self._addNumberProperty('start

@@ -1,9 +1,25 @@
 # This is the entry point for the battle_royale application.
-# The script does not contain any code itself, but serves as a placeholder to import all modules.
+# The script imports all necessary modules and sets up the application.
 
-# The __init__.py file is required in a directory to make it a package,
-# allowing Python to import its submodules using a dot syntax.
+# Import required modules
+import logging
+import sys
+from importlib import import_module
 
-# By placing `pass` as the only statement in the script, we ensure that
-# the file is executable, but no action is taken when it is run.
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+logger = logging.getLogger(__name__)
 
+# Import game modules
+game_modules = ['game.settings', 'game.player', 'game.arena', 'game.gameplay']
+for module_name in game_modules:
+    try:
+        import_module(module_name)
+        logger.info(f'Successfully imported {module_name}')
+    except Exception as e:
+        logger.error(f'Failed to import {module_name}: {e}')
+        sys.exit(1)
+
+# Initialize game
+game = import_module('game.game').Game()
+game.start()

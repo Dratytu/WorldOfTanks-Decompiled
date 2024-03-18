@@ -22,7 +22,7 @@ class VehiclePrestigePoint(BigWorld.DynamicScriptComponent):
 
         :param args: Variable length argument list
         """
-        pass
+        pass # No implementation provided
 
     def onLeaveWorld(self, *args):
         """
@@ -31,5 +31,5 @@ class VehiclePrestigePoint(BigWorld.DynamicScriptComponent):
 
         :param args: Variable length argument list
         """
-        pass
+        pass # No implementation provided
 

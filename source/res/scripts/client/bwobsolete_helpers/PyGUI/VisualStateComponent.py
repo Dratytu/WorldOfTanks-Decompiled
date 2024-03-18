@@ -1,27 +1,47 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
+
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/VisualStateComponent.py
+
 import sys
 from bwdebug import ERROR_MSG
 import ResMgr
 
+# A class representing a visual state in a game component
 class VisualState(object):
 
     def onSave(self, dataSection):
+        """
+        Save the visual state to a data section.
+        :param dataSection: The data section to save to.
+        """
         pass
 
     def onLoad(self, dataSection):
+        """
+        Load the visual state from a data section.
+        :param dataSection: The data section to load from.
+        """
         pass
 
     def apply(self, componentScript):
+        """
+        Apply the visual state to a component script.
+        :param componentScript: The component script to apply to.
+        """
         pass
 
     def _readMappingSection(self, dataSection):
+        """
+        Read a mapping section from a data section.
+        :param dataSection: The data section to read from.
+        :return: A tuple of the mapping type and the mapping.
+        """
         mappingName = dataSection.asString.strip()
         mappingType = mappingName if mappingName else 'UV'
         mapping = [None,
-         None,
-         None,
-         None]
+                   None,
+                   None,
+                   None]
         mapping[0] = dataSection.readVector2('coords0')
         mapping[1] = dataSection.readVector2('coords1')
         mapping[2] = dataSection.readVector2('coords2')
@@ -30,20 +50,35 @@ class VisualState(object):
         return (mappingType, mapping)
 
     def _writeMappingSection(self, dataSection, mappingType, mapping):
+        """
+        Write a mapping section to a data section.
+        :param dataSection: The data section to write to.
+        :param mappingType: The type of mapping.
+        :param mapping: The mapping to write.
+        """
         dataSection.asString = mappingType
         dataSection.writeVector2('coords0', mapping[0])
         dataSection.writeVector2('coords1', mapping[1])
         dataSection.writeVector2('coords2', mapping[2])
         dataSection.writeVector2('coords3', mapping[3])
 
-
+# A class representing a component that has visual states
 class VisualStateComponent(object):
 
     def __init__(self, component, visualStateClassName):
+        """
+        Initialize the visual state component.
+        :param component: The component that this visual state component is for.
+        :param visualStateClassName: The name of the class that represents the visual states.
+        """
         self.visualStateClassName = visualStateClassName
         self._visualStates = {}
 
     def onSave(self, dataSection):
+        """
+        Save the visual state component to a data section.
+        :param dataSection: The data section to save to.
+        """
         dataSection.writeString('visualStates', self.visualStateClassName)
         visualStatesSection = dataSection._visualStates
         for stateName, state in self._visualStates.items():
@@ -51,6 +86,10 @@ class VisualStateComponent(object):
             state.onSave(stateSection)
 
     def onLoad(self, dataSection):
+        """
+        Load the visual state component from a data section.
+        :param dataSection: The data section to load from.
+        """
         if dataSection.has_key('visualStates'):
             visualStatesSection = dataSection._visualStates
             if visualStatesSection.has_key('external'):
@@ -75,6 +114,10 @@ class VisualStateComponent(object):
         return
 
     def setVisualState(self, stateName):
+        """
+        Set the visual state of the component.
+        :param stateName: The name of the visual state to set.
+        """
         state = self._visualStates.get(stateName, None)
         if state:
             state.apply(self)

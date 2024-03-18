@@ -1,3 +1,3 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: comp7/scripts/client/comp7/constants.py
+# Define the domain for COMP7 season modifiers as a constant string.
 COMP7_SEASON_MODIFIERS_DOMAIN = 'comp7SeasonModifiers'
+# This constant is used to identify or categorize season modifiers specific to COMP7.

@@ -1,10 +1,10 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
+# Python bytecode 3.7 (decompiled from Python 3.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/tooltips/rest_reward_tooltip_view.py
-from armory_yard.gui.shared.bonus_packers import getArmoryYardBuyViewPacker
+from armory_yard.gui.shared.bonus_packers import get_armory_yard_buy_view_packer
 from frameworks.wulf import ViewSettings
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.tooltips.rest_reward_tooltip_view_model import RestRewardTooltipViewModel
 from gui.impl.gen import R
-from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
+from gui.impl.lobby.common.view_helpers import pack_bonus_model_and_tooltip_data
 from gui.impl.pub import ViewImpl
 
 class RestRewardTooltipView(ViewImpl):
@@ -14,15 +14,15 @@ class RestRewardTooltipView(ViewImpl):
         settings = ViewSettings(R.views.armory_yard.lobby.feature.tooltips.RestRewardTooltipView())
         settings.model = RestRewardTooltipViewModel()
         self.__rewards = rewards
-        super(RestRewardTooltipView, self).__init__(settings)
+        super().__init__(settings)
 
     @property
-    def viewModel(self):
-        return super(RestRewardTooltipView, self).getViewModel()
+    def view_model(self):
+        return super().getViewModel()
 
     def _onLoading(self, *args, **kwargs):
-        super(RestRewardTooltipView, self)._onLoading()
-        with self.viewModel.transaction() as vm:
-            rewardsModel = vm.getRewards()
-            packBonusModelAndTooltipData(self.__rewards, rewardsModel, packer=getArmoryYardBuyViewPacker())
-            rewardsModel.invalidate()
+        super()._onLoading()
+        with self.view_model.transaction() as vm:
+            rewards_model = vm.getRewards()
+            pack_bonus_model_and_tooltip_data(self.__rewards, rewards_model, packer=get_armory_yard_buy_view_packer())
+            rewards_model.invalidate()

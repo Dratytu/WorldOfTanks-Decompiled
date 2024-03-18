@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/aih_constants.py
 
-
+# The CTRL_TYPE class defines different types of control modes for the game.
+# It includes three types: USUAL, OPTIONAL, and DEVELOPMENT.
 class CTRL_TYPE(object):
-    USUAL = 0
-    OPTIONAL = 1
-    DEVELOPMENT = 2
+    USUAL = 0  # Usual control mode.
+    OPTIONAL = 1  # Optional control mode.
+    DEVELOPMENT = 2  # Development control mode.
 
-
+# The ShakeReason enumeration defines various reasons for camera shake in the game.
+# It includes five reasons: OWN_SHOT, OWN_SHOT_DELAYED, HIT, HIT_NO_DAMAGE, and SPLASH.
 class ShakeReason(object):
     OWN_SHOT = 0
     OWN_SHOT_DELAYED = 1
@@ -15,93 +17,39 @@ class ShakeReason(object):
     HIT_NO_DAMAGE = 3
     SPLASH = 4
 
-
+# The CTRL_MODE_NAME class defines various control mode names for the game.
+# It includes 17 modes: ARCADE, STRATEGIC, ARTY, SNIPER, POSTMORTEM, DEBUG, CAT, VIDEO,
+# MAP_CASE, MAP_CASE_ARCADE, MAP_CASE_EPIC, RESPAWN_DEATH, DEATH_FREE_CAM, DUAL_GUN,
+# MAP_CASE_ARCADE_EPIC_MINEFIELD, VEHICLES_SELECTION, and SPG_ONLY_ARTY_MODE.
 class CTRL_MODE_NAME(object):
-    ARCADE = 'arcade'
-    STRATEGIC = 'strategic'
-    ARTY = 'arty'
-    SNIPER = 'sniper'
-    POSTMORTEM = 'postmortem'
-    DEBUG = 'debug'
-    CAT = 'cat'
-    VIDEO = 'video'
-    MAP_CASE = 'mapcase'
-    MAP_CASE_ARCADE = 'arcadeMapcase'
-    MAP_CASE_EPIC = 'epicMapcase'
-    RESPAWN_DEATH = 'respawn'
-    DEATH_FREE_CAM = 'deathfreecam'
-    DUAL_GUN = 'dualgun'
-    MAP_CASE_ARCADE_EPIC_MINEFIELD = 'arcadeEpicMinefieldMapcase'
-    VEHICLES_SELECTION = 'vehiclesSelection'
-    SPG_ONLY_ARTY_MODE = 'spgOnlyArtyMode'
-    ASSAULT_SPG = 'assaultSPG'
-    DEFAULT = ARCADE
+    ARCADE = 'arcade'  # Arcade control mode.
+    STRATEGIC = 'strategic'  # Strategic control mode.
+    ARTY = 'arty'  # Artillery control mode.
+    SNIPER = 'sniper'  # Sniper control mode.
+    POSTMORTEM = 'postmortem'  # Postmortem control mode.
+    DEBUG = 'debug'  # Debug control mode.
+    CAT = 'cat'  # Cat control mode.
+    VIDEO = 'video'  # Video control mode.
+    MAP_CASE = 'mapcase'  # Map case control mode.
+    MAP_CASE_ARCADE = 'arcadeMapcase'  # Arcade map case control mode.
+    MAP_CASE_EPIC = 'epicMapcase'  # Epic map case control mode.
+    RESPAWN_DEATH = 'respawn'  # Respawn death control mode.
+    DEATH_FREE_CAM = 'deathfreecam'  # Death free cam control mode.
+    DUAL_GUN = 'dualgun'  # Dual gun control mode.
+    MAP_CASE_ARCADE_EPIC_MINEFIELD = 'arcadeEpicMinefieldMapcase'  # Arcade epic minefield map case control mode.
+    VEHICLES_SELECTION = 'vehiclesSelection'  # Vehicles selection control mode.
+    SPG_ONLY_ARTY_MODE = 'spgOnlyArtyMode'  # SPG only arty mode control mode.
+    DEFAULT = ARCADE  # Default control mode (arcade).
 
-
+# The CTRL_MODES tuple contains all possible control mode names.
 CTRL_MODES = (CTRL_MODE_NAME.ARCADE,
- CTRL_MODE_NAME.STRATEGIC,
- CTRL_MODE_NAME.ARTY,
- CTRL_MODE_NAME.SNIPER,
- CTRL_MODE_NAME.POSTMORTEM,
- CTRL_MODE_NAME.DEBUG,
- CTRL_MODE_NAME.CAT,
- CTRL_MODE_NAME.VIDEO,
- CTRL_MODE_NAME.MAP_CASE,
- CTRL_MODE_NAME.MAP_CASE_ARCADE,
- CTRL_MODE_NAME.MAP_CASE_EPIC,
- CTRL_MODE_NAME.RESPAWN_DEATH,
- CTRL_MODE_NAME.DEATH_FREE_CAM,
- CTRL_MODE_NAME.DUAL_GUN,
- CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
- CTRL_MODE_NAME.VEHICLES_SELECTION,
- CTRL_MODE_NAME.SPG_ONLY_ARTY_MODE,
- CTRL_MODE_NAME.ASSAULT_SPG)
-GUN_MARKER_MIN_SIZE = 32.0
-SPG_GUN_MARKER_ELEMENTS_COUNT = 37
-SPG_GUN_MARKER_ELEMENTS_RATE = 10
-SPG_GUN_MARKER_MIN_SIZE = 50.0
-SPG_GUN_MARKER_MAX_SIZE = 100.0
-SPG_GUN_MARKER_SCALE_RATE = 10.0
-
-class GUN_MARKER_TYPE(int):
-    UNDEFINED = 0
-    CLIENT = 1
-    SERVER = 2
-    DUAL_ACC = 3
-
-
-class GUN_MARKER_FLAG(int):
-    UNDEFINED = 0
-    CONTROL_ENABLED = 1
-    CLIENT_MODE_ENABLED = 2
-    SERVER_MODE_ENABLED = 4
-    VIDEO_MODE_ENABLED = 8
-    ARTY_HIT_ENABLED = 16
-
-
-class SHOT_RESULT(int):
-    UNDEFINED = 0
-    NOT_PIERCED = 1
-    LITTLE_PIERCED = 2
-    GREAT_PIERCED = 3
-
-
-class STRATEGIC_CAMERA(int):
-    AERIAL = 0
-    TRAJECTORY = 1
-    DEFAULT = AERIAL
-
-
-class CHARGE_MARKER_STATE(int):
-    DIMMED = 0
-    LEFT_ACTIVE = 1
-    RIGHT_ACTIVE = 2
-    VISIBLE = 3
-    DEFAULT = DIMMED
-
-
-MAP_CASE_MODES = (CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
- CTRL_MODE_NAME.MAP_CASE,
- CTRL_MODE_NAME.MAP_CASE_ARCADE,
- CTRL_MODE_NAME.MAP_CASE_EPIC,
- CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
+              CTRL_MODE_NAME.STRATEGIC,
+              CTRL_MODE_NAME.ARTY,
+              CTRL_MODE_NAME.SNIPER,
+              CTRL_MODE_NAME.POSTMORTEM,
+              CTRL_MODE_NAME.DEBUG,
+              CTRL_MODE_NAME.CAT,
+              CTRL_MODE_NAME.VIDEO,
+              CTRL_MODE_NAME.MAP_CASE,
+              CTRL_MODE_NAME.MAP_CASE_ARCADE,
+              CTRL_MODE_NAME.MAP_

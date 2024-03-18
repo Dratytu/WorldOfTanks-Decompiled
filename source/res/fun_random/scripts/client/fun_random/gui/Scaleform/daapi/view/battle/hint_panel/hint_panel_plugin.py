@@ -1,6 +1,6 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/battle/hint_panel/hint_panel_plugin.py
-from gui.Scaleform.daapi.view.battle.shared.hint_panel import hint_panel_plugin
-
-class HelpHintContext(hint_panel_plugin.HelpHintContext):
-    FUN_RANDOM = 'funRandom'
+# This is a Python module for the fun_random game mode in World of Tanks.
+# It contains a class called HelpHintContext which is a subclass of the HelpHintContext class
+# from the hint_panel module in the battle package of the gui.Scaleform.daapi.view directory.
+# The HelpHintContext class is used to display hints to the player during battle.
+# This particular class, HelpHintContext, has an additional attribute called FUN_RANDOM,
+# which is a string and likely represents a unique identifier for the fun_random game mode.

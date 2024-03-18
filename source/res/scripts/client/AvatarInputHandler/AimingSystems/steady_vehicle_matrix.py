@@ -7,16 +7,16 @@ import Math
 from cgf_obsolete_script.py_component import Component
 
 class SteadyVehicleMatrixCalculator(Component):
-    # Provides output matrix and stabilized matrix for aiming systems
+    # This class provides output matrix and stabilized matrix for aiming systems
 
     @property
     def outputMProv(self):
-        # Output matrix provider
+        # Output matrix provider property
         return self.__outputMProv
 
     @property
     def stabilisedMProv(self):
-        # Stabilized matrix provider
+        # Stabilized matrix provider property
         return self.__stabilisedMProv
 
     def __init__(self):

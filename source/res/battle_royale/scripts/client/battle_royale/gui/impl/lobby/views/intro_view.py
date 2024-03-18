@@ -17,7 +17,6 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattleRoyaleController, IHangarSpaceSwitchController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
 
 # Define the IntroView class, which inherits from ViewImpl and IGlobalListener
 class IntroView(ViewImpl, IGlobalListener):

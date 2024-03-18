@@ -1,13 +1,9 @@
-# Python bytecode 2.7 (decompiled from Python 2.7)
-# Embedded file name: armory_yard/scripts/client/ArmoryYardPersonality.py
+# Python 2.7.15
 
 # Import necessary modules
-from armory_yard.gui.Scaleform import registerArmoryYardScaleform, registerArmoryYardTooltipsBuilders
-from armory_yard.gui.game_control import registerAYGameControllers, registerAYAwardControllers
-from armory_yard.gui.shared.gui_items.items_actions import registerActions
-from debug_utils import LOG_DEBUG # Import the LOG_DEBUG function for logging debug messages
+from debug_utils import LOG_DEBUG
 
-# The preInit function initializes various components of the Armory Yard module
+# Initialize the Armory Yard module
 def preInit():
     # Register Scaleform components
     registerArmoryYardScaleform()
@@ -21,17 +17,20 @@ def preInit():
     registerActions()
 
 
-# The init function logs a debug message when it is called
+# Initialize and log a debug message
 def init():
     LOG_DEBUG('init', __name__)
 
 
-# The start function does not contain any code
+# No-op function
 def start():
     pass
 
 
-# The fini function does not contain any code
+# No-op function
 def fini():
     pass
 
+
+# Register the initialization functions with the Armory Yard module
+armory_yard_init_funcs = (preInit, init, start, fini)

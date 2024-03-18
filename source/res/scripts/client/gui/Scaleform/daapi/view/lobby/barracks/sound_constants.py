@@ -1,12 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/sound_constants.py
+
+# Importing the CommonSoundSpaceSettings class from sound_gui_manager for creating a Barracks sound space.
 from sound_gui_manager import CommonSoundSpaceSettings
+
+# Importing the CONST_CONTAINER class from shared_utils to create a container for constants.
 from shared_utils import CONST_CONTAINER
 
-class SOUNDS(CONST_CONTAINER):
-    COMMON_SOUND_SPACE = 'barracks'
-    STATE_PLACE = 'STATE_hangar_place'
-    STATE_PLACE_BARRACKS = 'STATE_hangar_place_barracks'
-
-
-BARRACKS_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_BARRACKS}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')

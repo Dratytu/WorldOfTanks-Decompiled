@@ -1,13 +1,28 @@
-<VehicleFLRegenerationKitComponent.def>
-  <Properties>
-    <regenerationKit>
-      <Type>	REGENERATION_KIT_INFO	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </regenerationKit>
-  </Properties>
-  <CellMethods></CellMethods>
-  <ofEntity>
-    <Vehicle></Vehicle>
-  </ofEntity>
-  <DefaultKeyName>	VehicleFLRegenerationKitComponent	</DefaultKeyName>
-</VehicleFLRegenerationKitComponent.def>
+'<VehicleFLRegenerationKitComponent.def>
+'This is a definition file for the VehicleFLRegenerationKitComponent.
+'It contains properties, cell methods, and entity information.
+
+'<Properties>
+'This section defines the properties of the regeneration kit.
+'<regenerationKit>
+'This is a specific property of the regeneration kit.
+'<Type>	REGENERATION_KIT_INFO	</Type>
+'The type of the regeneration kit is set to RENERATION_KIT_INFO.
+'<Flags>	ALL_CLIENTS	</Flags>
+'The flags for this property are set to ALL_CLIENTS.
+'</regenerationKit>
+'</Properties>
+
+'<CellMethods></CellMethods>
+'This section is currently empty and does not contain any cell methods.
+
+'<ofEntity>
+'This section defines the entity that this component is a part of.
+'<Vehicle></Vehicle>
+'The component is a part of a vehicle entity.
+'</ofEntity>
+
+'<DefaultKeyName>	VehicleFLRegenerationKitComponent	</DefaultKeyName>
+'The default key name for this component is VehicleFLRegenerationKitComponent.
+'</VehicleFLRegenerationKitComponent.def>
+

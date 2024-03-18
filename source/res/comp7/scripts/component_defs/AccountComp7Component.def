@@ -1,5 +1,5 @@
-<AccountComp7Component.def>
-  <ofEntity>
-    <Account></Account>
+<AccountComp7Component.def> <!-- Defines the AccountComponent7 component -->
+  <ofEntity> <!-- Specifies the entity that this component operates on -->
+    <Account></Account> <!-- Indicates that this component works with Account entity objects -->
   </ofEntity>
 </AccountComp7Component.def>

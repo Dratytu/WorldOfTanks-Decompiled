@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/platoon/view/fun_platoon_members_view.py
 
-import logging
-from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher
-from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView
-from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview
+import logging # Importing the logging module for logging purposes
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher # Importing required mixins
+from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode # Importing the hasDesiredSubMode wrapper
+from gui.impl import backport # Importing backport for text and image localization
+from gui.impl.gen import R # Importing R for string localization
+from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView # Inheriting from SquadMembersView
+from gui.impl.lobby.platoon.view.subview.platoon_chat_subview import ChatSubview # Importing ChatSubview for adding as a subview
 
 # Initialize the logger for this module
 _logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ class FunRandomMembersView(SquadMembersView, FunAssetPacksMixin, FunSubModesWatc
     # The prebattle type for this view
     _prebattleType = PrebattleTypes.FUNRANDOM
 
-    @hasDesiredSubMode(defReturn='')
+    @hasDesiredSubMode(defReturn='') # Decorator to check for desired sub-mode before executing the method
     def _getTitle(self):
         # Get the localized name of the sub-mode
         subModeName = backport.text(self.getDesiredSubMode().getLocalsResRoot().userName())

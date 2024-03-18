@@ -2,20 +2,20 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar/carousel/handlers.py
 
 # Import necessary modules and libraries
-from logging import getLogger
-from stats_params import BATTLE_ROYALE_STATS_ENABLED
-from gui.shared import event_dispatcher as shared_events
-from gui.impl import backport
-from gui.impl.gen import R
-from helpers import dependency
-from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control import prbDispatcherProperty
-from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehicleCMHandler
-from gui.impl.gen.view_models.views.battle_royale.equipment_panel_cmp_rent_states import EquipmentPanelCmpRentStates
-from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController
+from logging import getLogger  # Import the getLogger function from the logging module
+from stats_params import BATTLE_ROYALE_STATS_ENABLED  # Import the BATTLE_ROYALE_STATS_ENABLED constant
+from gui.shared import event_dispatcher as shared_events  # Import shared_events from gui.shared
+from gui.impl import backport  # Import the backport module from gui.impl
+from gui.impl.gen import R  # Import the R constant from gui.impl.gen
+from helpers import dependency  # Import the dependency module from helpers
+from gui.Scaleform.locale.MENU import MENU  # Import the MENU constant from gui.Scaleform.locale.MENU
+from gui.prb_control import prbDispatcherProperty  # Import prbDispatcherProperty from gui.prb_control
+from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehicleCMHandler  # Subclass SimpleVehicleCMHandler
+from gui.impl.gen.view_models.views.battle_royale.equipment_panel_cmp_rent_states import EquipmentPanelCmpRentStates  # Import EquipmentPanelCmpRentStates from gui.impl.gen.view_models.views.battle_royale.equipment_panel_cmp_rent_states
+from skeletons.gui.game_control import IBattleRoyaleRentVehiclesController  # Dependency injection for IBattleRoyaleRentVehiclesController
 
 # Initialize the logger for this module
-_logger = getLogger(__name__)
+_logger = getLogger(__name__)  # Create a logger instance for this module
 
 # Define a class for VEHICLE constants
 class VEHICLE(object):
@@ -52,9 +52,9 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     # Initialize flash values with the given context
     def _initFlashValues(self, ctx):
-        self.vehInvID = int(ctx.inventoryId)
-        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
-        self.vehCD = vehicle.intCD if vehicle is not None else None
+        self.vehInvID = int(ctx.inventoryId)  # Set the vehicle inventory ID
+        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)  # Get the vehicle instance
+        self.vehCD = vehicle.intCD if vehicle is not None else None  # Set the vehicle CD
 
     # Clear flash values
     def _clearFlashValues(self):
@@ -63,10 +63,10 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     # Generate context menu options based on the given context
     def _generateOptions(self, ctx=None):
-        options = []
-        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
+        options = []  # Initialize the options list
+        vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())  # Get the vehicle instance
         if vehicle is None:
-            return options
+            return options  # Return an empty options list if there's no vehicle
         else:
             # If Battle Royale stats are enabled, add a "Show Stats" option
             if BATTLE_ROYALE_STATS_ENABLED:
@@ -83,16 +83,3 @@ class BRVehicleContextMenuHandler(SimpleVehicleCMHandler):
                 elif rentState in rentStates:
                     # If the vehicle is available for rent, add a "Take Rent" option
                     isEnough = self.__rentVehiclesController.isEnoughMoneyToPurchase(self.vehCD)
-                    isEnabled = rentState == EquipmentPanelCmpRentStates.STATE_RENT_AVAILABLE and isEnough
-                    days = self.__rentVehiclesController.getNextRentDaysTotal(self.vehCD)
-                    text = backport.text(R.strings.menu.battleRoyale.contextMenu.takeRent(), days=days)
-                    options.extend([self._makeItem(VEHICLE.TAKE_RENT, text, {'enabled': isEnabled})])
-            return options
-
-    # Handle the "Take Rent" action
-    def takeToRent(self):
-        self.__rentVehiclesController.purchaseRent(self.vehCD)
-
-    # Handle the "Show Stats" action
-    def showVehicleStats(self):
-        shared_events.showVehicleStats(self.getVehCD(), 'battleRoyale')

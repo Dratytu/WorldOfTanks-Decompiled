@@ -1,10 +1,12 @@
 ' This is the definition for the AccountFunRandomComponent.
-' It contains a single entity definition, which is an Account.
-' This component is likely used in conjunction with other components
-' to define more complex data structures or processes.
+' This component is a simple definition file that contains a single entity definition, which is an Account.
+' It is likely used in conjunction with other components to define more complex data structures or processes.
 
-<AccountFunRandomComponent.def>
-  '< This line indicates the start of the component definition.'
+' The syntax of this file is defined by the component definition language, which uses specific tags
+' to indicate the start and end of different sections of the file.
+
+'<AccountFunRandomComponent.def>
+' This line indicates the start of the component definition.
 
   '<ofEntity>'
     '< This tag indicates the start of an entity definition within the component.'
@@ -16,7 +18,7 @@
     '< This tag indicates the end of the Account entity definition.'
 
   '</ofEntity>'
-  '< This tag indicates the end of the entity definition within the component.'
+' This tag indicates the end of the entity definition within the component.
 
 '</AccountFunRandomComponent.def>'
 ' This line indicates the end of the component definition.

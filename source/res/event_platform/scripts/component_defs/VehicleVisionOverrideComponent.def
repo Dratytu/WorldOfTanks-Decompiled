@@ -1,7 +1,13 @@
+<!--- VehicleVisionOverrideComponent.def: Definition file for the Vehicle Vision Override Component --->
 <VehicleVisionOverrideComponent.def>
+  <!--- BaseMethods: Container for base methods used by the component --->
   <BaseMethods></BaseMethods>
+  <!--- CellMethods: Container for cell-specific methods used by the component --->
   <CellMethods></CellMethods>
+  <!--- ofEntity: Container for the component's behavior when applied to an entity --->
   <ofEntity>
+    <!--- Arena: Container for the component's behavior when applied to an arena entity --->
     <Arena></Arena>
   </ofEntity>
 </VehicleVisionOverrideComponent.def>
+

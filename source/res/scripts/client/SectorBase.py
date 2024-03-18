@@ -1,64 +1,88 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SectorBase.py
 
-import BigWorld
-import ResMgr
-import SoundGroups
-from helpers import dependency
-from FlagModel import FlagSettings, FlagModel
-from Math import Vector4, Vector3, Vector2, Matrix
-from skeletons.account_helpers.settings_core import ISettingsCore
-from account_helpers.settings_core.settings_constants import GRAPHICS
-import AnimationSequence
+import BigWorld # Import BigWorld module for creating and managing game entities
+import ResMgr # Import ResMgr module for managing game resources
+import SoundGroups # Import SoundGroups module for managing game sounds
+from helpers import dependency # Import dependency descriptor for managing object dependencies
+from FlagModel import FlagSettings, FlagModel # Import FlagSettings and FlagModel from FlagModel.py
+from Math import Vector4, Vector3, Vector2, Matrix # Import various vector and matrix classes from Math.py
+from skeletons.account_helpers.settings_core import ISettingsCore # Import ISettingsCore from skeletons.account_helpers.settings_core
+from account_helpers.settings_core.settings_constants import GRAPHICS # Import GRAPHICS from settings_constants.py
+import AnimationSequence # Import AnimationSequence module for managing animation sequences
 
 # A class to cache sector base settings
 class _SectorBaseSettingsCache(object):
+    """
+    A class for caching sector base settings read from a configuration file.
+    """
     def __init__(self, settings):
+        """
+        Initialize the settings cache with the provided settings data.
+
+        :param settings: A ResMgr.Section instance containing the settings data.
+        """
         self.initSettings(settings)
 
     def initSettings(self, settings):
-        self.flagModelName = settings.readString('flagModelName', '')
-        self.flagStaffModelName = settings.readString('flagstaffModelName', '')
-        self.radiusModel = settings.readString('radiusModel', '')
-        self.flagAnim = settings.readString('flagAnim', '')
-        self.flagStaffFlagHP = settings.readString('flagstaffFlagHP', '')
-        self.baseAttachedSoundEventName = settings.readString('wwsound', '')
-        self.flagBackgroundTex = settings.readString('flagBackgroundTex', '')
-        self.flagEmblemTex = settings.readString('flagEmblemTex', '')
-        self.flagEmblemTexCoords = settings.readVector4('flagEmblemTexCoords', Vector4())
-        self.flagScale = settings.readVector3('flagScale', Vector3())
-        self.flagNodeAliasName = settings.readString('flagNodeAliasName', '')
+        """
+        Initialize the settings cache with the provided settings data.
+
+        :param settings: A ResMgr.Section instance containing the settings data.
+        """
+        self.flagModelName = settings.readString('flagModelName', '') # Read the flag model name from the settings data
+        self.flagStaffModelName = settings.readString('flagstaffModelName', '') # Read the flagstaff model name from the settings data
+        self.radiusModel = settings.readString('radiusModel', '') # Read the radius model name from the settings data
+        self.flagAnim = settings.readString('flagAnim', '') # Read the flag animation name from the settings data
+        self.flagStaffFlagHP = settings.readString('flagstaffFlagHP', '') # Read the flagstaff flag health point name from the settings data
+        self.baseAttachedSoundEventName = settings.readString('wwsound', '') # Read the base attached sound event name from the settings data
+        self.flagBackgroundTex = settings.readString('flagBackgroundTex', '') # Read the flag background texture name from the settings data
+        self.flagEmblemTex = settings.readString('flagEmblemTex', '') # Read the flag emblem texture name from the settings data
+        self.flagEmblemTexCoords = settings.readVector4('flagEmblemTexCoords', Vector4()) # Read the flag emblem texture coordinates from the settings data
+        self.flagScale = settings.readVector3('flagScale', Vector3()) # Read the flag scale from the settings data
+        self.flagNodeAliasName = settings.readString('flagNodeAliasName', '') # Read the flag node alias name from the settings data
 
 # Global variable to store sector base settings
-ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
-_g_sectorBaseSettings = None
+ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml' # Define the environment effects configuration file path
+_g_sectorBaseSettings = None # Initialize the global sector base settings variable
 
 # The main SectorBase class
 class SectorBase(BigWorld.Entity):
-    _OVER_TERRAIN_HEIGHT = 0.5
-    _PLAYER_TEAM_PARAMS = {}
-    __settingsCore = dependency.descriptor(ISettingsCore)
+    """
+    The main SectorBase class representing a sector base entity in the game world.
+    """
+    _OVER_TERRAIN_HEIGHT = 0.5 # A constant for the height over terrain
+    _PLAYER_TEAM_PARAMS = {} # A dictionary for storing player team parameters
+    __settingsCore = dependency.descriptor(ISettingsCore) # A descriptor for the ISettingsCore dependency
 
     def __init__(self):
+        """
+        Initialize the SectorBase instance.
+        """
         # Initialize the base class
         super(SectorBase, self).__init__(self)
 
         # Initialize member variables
-        self.__flagModel = FlagModel()
-        self.__terrainSelectedArea = None
-        self.capturePercentage = 0
-        self.__isCapturedOnStart = False
-        self.__baseCaptureSoundObject = None
-        self._baseCaptureSirenSoundIsPlaying = False
+        self.__flagModel = FlagModel() # Initialize the flag model
+        self.__terrainSelectedArea = None # Initialize the terrain selected area
+        self.capturePercentage = 0 # Initialize the capture percentage
+        self.__isCapturedOnStart = False # Initialize the captured state on start
+        self.__baseCaptureSoundObject = None # Initialize the base capture sound object
+        self._baseCaptureSirenSoundIsPlaying = False # Initialize the base capture siren sound playing state
 
         # Initialize global sector base settings
         if _g_sectorBaseSettings is None:
-            settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/sectorBase')
-            _g_sectorBaseSettings = _SectorBaseSettingsCache(settingsData)
-            SectorBase._PLAYER_TEAM_PARAMS = ((4294901760L, 4286806526L, False), (4278255360L, 4278255360L, True))
+            settingsData = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/sectorBase') # Open the sector base settings section from the environment effects configuration file
+            _g_sectorBaseSettings = _SectorBaseSettingsCache(settingsData) # Initialize the global sector base settings with the settings data
+            SectorBase._PLAYER_TEAM_PARAMS = ((4294901760L, 4286806526L, False), (4278255360L, 4278255360L, True)) # Initialize the player team parameters
         return
 
     def prerequisites(self):
+        """
+        Perform necessary prerequisites for the sector base.
+
+        :return: A list of prerequisites.
+        """
         # Calculate capture percentage
         self.capturePercentage = float(self.pointsPercentage) / 100
 
@@ -66,54 +90,13 @@ class SectorBase(BigWorld.Entity):
         self.__isCapturedOnStart = self.isCaptured
 
         # Initialize sector base components
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
+        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent # Get the sector base component
         if sectorBaseComponent is not None:
-            sectorBaseComponent.addSectorBase(self)
+            sectorBaseComponent.addSectorBase(self) # Add the sector base to the sector base component
 
         # Initialize assembler for sector base components
-        assembler = BigWorld.CompoundAssembler(_g_sectorBaseSettings.flagStaffModelName, self.spaceID)
-        assembler.addRootPart(_g_sectorBaseSettings.flagStaffModelName, 'root')
+        assembler = BigWorld.CompoundAssembler(_g_sectorBaseSettings.flagStaffModelName, self.spaceID) # Initialize the assembler with the flag staff model name and space ID
+        assembler.addRootPart(_g_sectorBaseSettings.flagStaffModelName, 'root') # Add the root part to the assembler
 
         # Initialize scale matrix
-        scaleMatrix = Matrix()
-        scaleMatrix.setScale(_g_sectorBaseSettings.flagScale)
-
-        # Add parts to the assembler
-        assembler.addPart(_g_sectorBaseSettings.flagModelName, _g_sectorBaseSettings.flagStaffFlagHP, _g_sectorBaseSettings.flagNodeAliasName, scaleMatrix)
-
-        # Prepare return values
-        rv = [assembler, _g_sectorBaseSettings.radiusModel]
-
-        # Initialize animation sequence loader if necessary
-        if _g_sectorBaseSettings.flagAnim is not None:
-            loader = AnimationSequence.Loader(_g_sectorBaseSettings.flagAnim, self.spaceID)
-            rv.append(loader)
-
-        # Initialize matrix for positioning
-        mProv = Matrix()
-        mProv.translation = self.position
-
-        # Initialize base capture sound object
-        self.__baseCaptureSoundObject = SoundGroups.g_instance.WWgetSoundObject('base_' + str(self.baseID), mProv)
-        self.__baseCaptureSoundObject.play(_g_sectorBaseSettings.baseAttachedSoundEventName)
-
-        return rv
-
-    def onEnterWorld(self, prereqs):
-        # Calculate capture percentage
-        self.capturePercentage = float(self.pointsPercentage) / 100
-
-        # Set the initial captured state
-        if self.__isCapturedOnStart != self.isCaptured:
-            self.set_isCaptured(self.__isCapturedOnStart)
-
-        # Initialize sector base components
-        sectorBaseComponent = BigWorld.player().arena.componentSystem.sectorBaseComponent
-        if sectorBaseComponent is not None:
-            sectorBaseComponent.addSectorBase(self)
-
-        # Initialize assembler for sector base components
-        assembler = prereqs[_g_sectorBaseSettings.flagStaffModelName]
-
-        # Initialize flag settings
-        flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.space
+        scaleMatrix =
